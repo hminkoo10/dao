@@ -16,19 +16,35 @@ check = []
 bot = commands.Bot(command_prefix=(','))
 PRM = ['657773087571574784','564250827959566359','694406375228440606']
 token = "NzEzMDA3Mjk2NDc2NzQxNjQz.Xs5beA.pDkDd1FmNVNjlEc7eAyO8HJS3IQ"
+progress = "none"
+player1 = "none"
+player2 = "none"
+player1_card1 = 0
+player1_card2 = 0
+player1_card3 = 0
+player2_card1 = 0
+player2_card2 = 0
+player2_card3 = 0
+randomnum = "none"
+player1_bat = "none"
+player2_bat = "none"
+player1_result = "none"
+player2_result = "none"
 
 @bot.event
 async def on_ready():
     print(f'로그인 성공: {bot.user.name}!')
     print('정상작동중...')
-    messages = ["명의 사용자와 함께", "접두어 = ,", "ver.1.1.5", "개의 서버와 함께"]
+    os.system("python gathongi.py")
+    print('개똥이 실행 완료!')
+    messages = ["명의 사용자와 함께", "접두어 = ,", "ver.2.0.7", "개의 서버와 함께"]
     while True:
         if messages[0] == '명의 사용자와 함께':
-            await bot.change_presence(status=discord.Status.online, activity=discord.Game(name=f",도움 | {str(len(bot.users))}명의 사용자와 함께"))
+            await bot.change_presence(status=discord.Status.offline, activity=discord.Game(name=f",도움 | {str(len(bot.users))}명의 사용자와 함께"))
         elif messages[0] == '개의 서버와 함께':
-            await bot.change_presence(status=discord.Status.online, activity=discord.Game(name=f",도움 | {str(len(bot.guilds))}개의 서버와 함께"))
+            await bot.change_presence(status=discord.Status.offline, activity=discord.Game(name=f",도움 | {str(len(bot.guilds))}개의 서버와 함께"))
         else:
-            await bot.change_presence(status=discord.Status.online, activity=discord.Game(name=",도움 | " + messages[0]))
+            await bot.change_presence(status=discord.Status.offline, activity=discord.Game(name=",도움 | " + messages[0]))
         messages.append(messages.pop(0))
         await asyncio.sleep(3.5)
         if datetime.timedelta(hours=1):
@@ -424,7 +440,7 @@ async def 제곱(ctx, one, two):
 async def on_message(message):
     if message.content.startswith("도박 도움") or message.content.startswith("도박 방법"):
         embed = discord.Embed(color=0x00ff00)
-        embed.add_field(name="오렌지봇 도박 방법!", value="""
+        embed.add_field(name="다오봇 도박 방법!", value="""
         지금부터 도박하는 방법에 대해 말씀드릴게요!
         
         이 게임은 뽑은 카드의 수를 합쳐 나오는 수의 일의 자리가 큰 사람이 이기는 게임입니다!
@@ -467,7 +483,7 @@ async def on_message(message):
             
             progress = "invite"
             embed = discord.Embed(color=0x00ff00)
-            embed.add_field(name="오렌지봇 도박", value="""
+            embed.add_field(name="다요봇 도박", value="""
             {}님께서 {}님께 도박을 신청하였습니다.
             도박 신청을 수락하시려면 '**예**'를 입력해 주시고 거절하시려면 '**아니요**'를 입력해 주세요.
 
@@ -476,7 +492,7 @@ async def on_message(message):
             await message.channel.send(embed=embed)
         else:
             embed = discord.Embed(color=0x00ff00)
-            embed.add_field(name="오렌지봇 도박", value="""
+            embed.add_field(name="다오봇 도박", value="""
             현재 다른 플레이어들의 초대 및 게임이 진행중입니다.
             """, inline=False)
             await message.channel.send(embed=embed)
@@ -485,7 +501,7 @@ async def on_message(message):
         if progress == "invite":
             if message.author.display_name == player2:
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="오렌지봇 도박", value="""
+                embed.add_field(name="다오봇 도박", value="""
                 도박 신청이 거부되었습니다.
                 """, inline=False)
                 await message.channel.send(embed=embed)
@@ -506,7 +522,7 @@ async def on_message(message):
         if progress == "one_more_card":
             if message.author.display_name == player1 or message.author.display_name == player2:
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="오렌지봇 도박", value="""
+                embed.add_field(name="다오봇 도박", value="""
                 **서버**에서 **'배팅 <배팅할 랜지 코인(숫자만 입력)>'**을 입력하여 배팅을 해주세요.
                 """, inline=False)
                 await message.author.send(embed=embed)
@@ -515,13 +531,13 @@ async def on_message(message):
         if progress == "invite":
             if message.author.display_name == player2:
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="오렌지봇 도박", value="""
+                embed.add_field(name="다오봇 도박", value="""
                 도박 신청이 수락되었습니다.
                 """, inline=False)
                 await message.channel.send(embed=embed)
                 progress = "card"
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="오렌지봇 도박", value="""
+                embed.add_field(name="다오봇 도박", value="""
                 '카드 뽑기'를 입력하여 카드를 뽑으세요!
                 """, inline=False)
                 await message.channel.send(embed=embed)
@@ -534,12 +550,12 @@ async def on_message(message):
                 else:
                     progress = "one_more_card_1"
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="오렌지봇 도박", value="""
+                embed.add_field(name="다오봇 도박", value="""
                 한번 더 뽑은 당신의 카드는 {} 입니다!
                 """.format(player1_card3), inline=False)
                 await message.author.send(embed=embed)
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="오렌지봇 도박", value="""
+                embed.add_field(name="다오봇 도박", value="""
                 **서버**에서 **'배팅 <배팅할 랜지 코인(숫자만 입력)>'**을 입력하여 배팅을 해주세요.
                 """, inline=False)
                 await message.author.send(embed=embed)
@@ -551,12 +567,12 @@ async def on_message(message):
                 else:
                     progress = "one_more_card_1"
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="오렌지봇 도박", value="""
+                embed.add_field(name="다오봇 도박", value="""
                 한번 더 뽑은 당신의 카드는 {} 입니다!
                 """.format(player2_card3), inline=False)
                 await message.author.send(embed=embed)
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="오렌지봇 도박", value="""
+                embed.add_field(name="다오봇 도박", value="""
                 **서버**에서 **'배팅 <배팅할 랜지 코인(숫자만 입력)>'**을 입력하여 배팅을 해주세요.
                 """, inline=False)
                 await message.author.send(embed=embed)
@@ -574,7 +590,7 @@ async def on_message(message):
                 else:
                     progress = "card_1"
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="오렌지봇 도박", value="""
+                embed.add_field(name="다오봇 도박", value="""
                 당신의 카드는 {}, {} 입니다!
                 """.format(player1_card1, player1_card2), inline=False)
                 await message.author.send(embed=embed)
@@ -588,12 +604,12 @@ async def on_message(message):
                 else:
                     progress = "card_1"
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="오렌지봇 도박", value="""
+                embed.add_field(name="다오봇 도박", value="""
                 당신의 카드는 {}, {} 입니다!
                 """.format(player2_card1, player2_card2), inline=False)
                 await message.author.send(embed=embed)
         embed = discord.Embed(color=0x00ff00)
-        embed.add_field(name="오렌지봇 도박", value="""
+        embed.add_field(name="다오봇 도박", value="""
         한 장 더 뽑으시려면 '**예**'를 입력해 주시고 바로 베팅을 하시려면 '**아니요**'를 입력해 주세요.
         """, inline=False)
         await message.author.send(embed=embed)
@@ -604,17 +620,17 @@ async def on_message(message):
                 choice = message.content.split(" ")
                 player1_bat = choice[1]
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="오렌지봇 도박", value="""
+                embed.add_field(name="다오봇 도박", value="""
                 {}님께서 랜지 코인 {}개를 배팅하셨습니다.
                 """.format(player1, player1_bat), inline=False)
                 await message.channel.send(embed=embed)
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="오렌지봇 도박", value="""
+                embed.add_field(name="다오봇 도박", value="""
                 랜지 코인 {}개가 정상적으로 배팅되었습니다.
                 """.format(player1_bat), inline=False)
                 await message.author.send(embed=embed)
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="오렌지봇 도박", value="도박 결과를 입력해 누가 승리했는지 확인하세요!", inline=False)
+                embed.add_field(name="다오봇 도박", value="도박 결과를 입력해 누가 승리했는지 확인하세요!", inline=False)
                 await message.author.send(embed=embed)
                 if progress == "bat_1":
                     progress = "result"
@@ -624,17 +640,17 @@ async def on_message(message):
                 choice = message.content.split(" ")
                 player2_bat = choice[1]
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="오렌지봇 도박", value="""
+                embed.add_field(name="다오봇 도박", value="""
                 {}님께서 랜지 코인 {}개를 배팅하셨습니다.
                 """.format(player2, player2_bat), inline=False)
                 await message.channel.send(embed=embed)
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="오렌지봇 도박", value="""
+                embed.add_field(name="다오봇 도박", value="""
                 랜지 코인 {}개가 정상적으로 배팅되었습니다.
                 """.format(player2_bat), inline=False)
                 await message.author.send(embed=embed)
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="오렌지봇 도박", value="도박 결과를 입력해 누가 승리했는지 확인하세요!", inline=False)
+                embed.add_field(name="다오봇 도박", value="도박 결과를 입력해 누가 승리했는지 확인하세요!", inline=False)
                 await message.author.send(embed=embed)
                 if progress == "bat_1":
                     progress = "result"
@@ -646,7 +662,7 @@ async def on_message(message):
             if player1_bat != 0 and player2_bat != 0:
                 progress = "none"
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="오렌지봇 도박", value="""
+                embed.add_field(name="다오봇 도박", value="""
                 3초 뒤 결과가 공개됩니다.
                 """, inline=False)
                 await message.channel.send(embed=embed)
@@ -656,26 +672,26 @@ async def on_message(message):
                 player2_result = player2_card1 + player2_card2 + player2_card3
                 player2_result = player2_result % 10
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="오렌지봇 도박", value="""
+                embed.add_field(name="다오봇 도박", value="""
                 {}님의 카드는 {}, {}, {} 입니다.
                 """.format(player1, player1_card1, player1_card2, player1_card3), inline=False)
                 await message.channel.send(embed=embed)
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="오렌지봇 도박", value="""
+                embed.add_field(name="다오봇 도박", value="""
                 {}님의 카드는 {}, {}, {} 입니다.
                 """.format(player2, player2_card1, player2_card2, player2_card3), inline=False)
                 await message.channel.send(embed=embed)
                 if player1_result > player2_result:
                     embed = discord.Embed(color=0x00ff00)
-                    embed.add_field(name="오렌지봇 도박", value="{}님의 승리입니다! 축하드립니다 {}님!".format(player1, player1), inline=False)
+                    embed.add_field(name="다오봇 도박", value="{}님의 승리입니다! 축하드립니다 {}님!".format(player1, player1), inline=False)
                     await message.channel.send(embed=embed)
                 if player1_result < player2_result:
                     embed = discord.Embed(color=0x00ff00)
-                    embed.add_field(name="오렌지봇 도박", value="{}님의 승리입니다! 축하드립니다 {}님!".format(player2, player2), inline=False)
+                    embed.add_field(name="다오봇 도박", value="{}님의 승리입니다! 축하드립니다 {}님!".format(player2, player2), inline=False)
                     await message.channel.send(embed=embed)
                 if player1_result == player2_result:
                     embed = discord.Embed(color=0x00ff00)
-                    embed.add_field(name="오렌지봇 도박", value="무승부입니다 ㅠ 배팅한 코인의 반을 서로 가져갑니다.", inline=False)
+                    embed.add_field(name="다오봇 도박", value="무승부입니다 ㅠ.ㅠ 배팅한 코인의 반을 서로 가져갑니다.", inline=False)
                     await message.channel.send(embed=embed)
                 progress = "none"
                 player1 = "none"
@@ -694,7 +710,7 @@ async def on_message(message):
 @bot.listen()
 async def on_message(message):
     if message.content.startswith("도박 종료"):
-        if message.author.id == 564250827959566359 or message.author.display_name == player1 or message.author.display_name == player2:
+        if message.author.id == 657773087571574784 or message.author.display_name == player1 or message.author.display_name == player2:
             await message.channel.send(embed=discord.Embed(description="도박이 강제 종료되었습니다.", color=0xffa500))
             progress = "none"
             player1 = "none"
@@ -720,4 +736,9 @@ async def 초대링크생성(ctx, user:discord.Member):
     cheofldzm = user.id
     embed = discord.Embed(description = f"[이거 입니다! 그런데 사람은 아니겠죠? :zany_face:](https://discord.com/api/oauth2/authorize?client_id={cheofldzm}&permissions=8&scope=bot)",color=0xe67e22)
     await ctx.send(embed=embed)
+@bot.command()
+async def 확인(ctx, user:discord.Member):
+    info = await dbkrpy.CheckVote.get_response("dbkrpy eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg", user.id)
+    dbkr = dbkrpy.CheckVote(info)
+    await ctx.send(dbkr)
 bot.run(token)
