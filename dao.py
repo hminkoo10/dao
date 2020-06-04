@@ -38,14 +38,14 @@ async def on_ready():
     print('정상작동중...')
     os.system("python gathongi.py")
     print('개똥이 실행 완료!')
-    messages = ["명의 사용자와 함께", "접두어 = ,", "ver.2.0.7", "개의 서버와 함께"]
+    messages = ["명의 사용자와 함께", "접두어 = ,", "ver.2.3.7", "개의 서버와 함께"]
     while True:
         if messages[0] == '명의 사용자와 함께':
-            await bot.change_presence(status=discord.Status.offline, activity=discord.Game(name=f",도움 | {str(len(bot.users))}명의 사용자와 함께"))
+            await bot.change_presence(status=discord.Status.online, activity=discord.Game(name=f",도움 | {str(len(bot.users))}명의 사용자와 함께"))
         elif messages[0] == '개의 서버와 함께':
-            await bot.change_presence(status=discord.Status.offline, activity=discord.Game(name=f",도움 | {str(len(bot.guilds))}개의 서버와 함께"))
+            await bot.change_presence(status=discord.Status.online, activity=discord.Game(name=f",도움 | {str(len(bot.guilds))}개의 서버와 함께"))
         else:
-            await bot.change_presence(status=discord.Status.offline, activity=discord.Game(name=",도움 | " + messages[0]))
+            await bot.change_presence(status=discord.Status.online, activity=discord.Game(name=",도움 | " + messages[0]))
         messages.append(messages.pop(0))
         await asyncio.sleep(3.5)
         if datetime.timedelta(hours=1):
@@ -224,12 +224,8 @@ async def 로또(ctx):
     await ctx.channel.send(random.choice(로또))
 @bot.command()
 async def dm(ctx, user:discord.Member, *, msg):
-    await user.send(ctx.author.mention)
-    await user.send(ctx.author)
-    await user.send('님이 이렇게 전해달라는군요!')
-    await user.send(msg)
-    await ctx.channel.send('DM을 보냈어요! 메시지 내용')
-    await ctx.channel.send(msg)
+    await user.send(str(ctx.author.mention) + str("\n") + str(ctx.author) + str("\n") + str("님이 이렇게 전해달라는군요!") + str("\n") + str(msg))
+    await ctx.channel.send(str("DM을 보냈어요! 메시지 내용") + str("\n") + str(msg))
 #@bot.command()
 #async def 가위바위보()
 #    await ctx.channel.send('가위 바위 보중에 1개를 입력하세요')
@@ -316,7 +312,7 @@ async def 공지보내기(ctx, *, msg):
 #                
 #            i += 1
 @bot.command()
-async def 킥(ctx, user:discord.Member, *, msg):
+async def 킥(ctx, user:discord.Member):
     await ctx.guild.kick(user)
 @bot.listen()
 async def on_message(message):
@@ -358,7 +354,7 @@ async def 리로드(ctx):
         await bot.change_presence(status=discord.Status.dnd, activity=discord.Game(name="재부팅"))
         time.sleep(2)
         await ctx.send("리로드 완료!")
-        os.system("python dao.py")
+        os.system("python dao/ dao.py")
         exit()
 #        await ctx.send("모든 모듈을 리로드했어요!")
 #        imp.reload(discord)
@@ -740,8 +736,26 @@ async def 초대링크생성(ctx, user:discord.Member):
     await ctx.send(embed=embed)
 @bot.command()
 async def 확인(ctx):
-    info = await dbkrpy.CheckVote.get_response("dbkrpy eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg", ctx.author.id)
+    info = await dbkrpy.CheckVote.get_response("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg", ctx.author.id)
     dbkr = dbkrpy.CheckVote(info)
     await ctx.send(dbkr)
     await ctx.sned(info)
+@bot.listen()
+async def on_message(message):
+    if message.content.startswith(","):
+        dice = ["y","n","n","n","n","n","n","n","n","n","n","n","n","n"]
+        yesorno = random.choice(dice)
+        if yesorno == "y":
+            embed = discord.Embed(description = "[[광고]다오를 초대해주세요!](https://discord.com/oauth2/authorize?client_id=713007296476741643&scope=bot&permissions=8)", color=0xff0000)
+            await message.channel.send(embed=embed)
+            embed = discord.Embed(description = "[[광고]다오한테 좋아요를 눌러주세요!](https://koreanbots.dev/bots/713007296476741643)", color=0xff0000)
+            await message.channel.send(embed=embed)
+@bot.command()
+async def 핑(ctx):
+    embed = discord.Embed(title=":ping_pong:퐁!",color=0x00ff00,description="이 기준은 디스코드 api핑 기준입니다.") #임베드 변수 지정
+    embed.add_field(name="디코 api기준 핑", value=("퐁! {0}ms".format(round(bot.latency*1000))), inline=False) #field add
+    await ctx.send(embed=embed)
+@bot.command()
+async def ping(ctx):
+    await ctx.send(f'My ping is {bot.latency}!')
 bot.run(token)
