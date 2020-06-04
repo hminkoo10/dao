@@ -16,6 +16,7 @@ check = []
 bot = commands.Bot(command_prefix=(','))
 PRM = ['657773087571574784','564250827959566359','694406375228440606']
 token = "NzEzMDA3Mjk2NDc2NzQxNjQz.Xs5beA.pDkDd1FmNVNjlEc7eAyO8HJS3IQ"
+DBKR_token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg"
 progress = "none"
 player1 = "none"
 player2 = "none"
@@ -158,8 +159,9 @@ async def 공지(ctx, *, text):
             await ctx.channel.send('관리자권한이 없습니다. (실행 요구 권한 : admin)')
 @bot.command()
 async def 보유서버(ctx):
-    for guild in bot.guilds:
-        await ctx.channel.send(guild)
+    if str(ctx.author.id) in PRM:
+        for guild in bot.guilds:
+            await ctx.channel.send(guild)
 @bot.command()
 async def 관리자보유서버(ctx):
     await ctx.channel.send(bot.guilds)
@@ -737,8 +739,9 @@ async def 초대링크생성(ctx, user:discord.Member):
     embed = discord.Embed(description = f"[이거 입니다! 그런데 사람은 아니겠죠? :zany_face:](https://discord.com/api/oauth2/authorize?client_id={cheofldzm}&permissions=8&scope=bot)",color=0xe67e22)
     await ctx.send(embed=embed)
 @bot.command()
-async def 확인(ctx, user:discord.Member):
-    info = await dbkrpy.CheckVote.get_response("dbkrpy eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg", user.id)
+async def 확인(ctx):
+    info = await dbkrpy.CheckVote.get_response("dbkrpy eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg", ctx.author.id)
     dbkr = dbkrpy.CheckVote(info)
     await ctx.send(dbkr)
+    await ctx.sned(info)
 bot.run(token)
