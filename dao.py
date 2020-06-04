@@ -61,7 +61,7 @@ async def 건의링크(ctx):
 async def 도움전달(ctx, user:discord.Member):
     embed = discord.Embed(title="도움말",color=0xe67e22,description="서버 관리봇, 개똥이.접두어:개똥아") #임베드 변수 지정
     embed.add_field(name="초대링크", value="- ``,초대링크, 초대코드``로 확인", inline=False) #field add
-    embed.add_field(name="보유서버", value="- ``,보유서버``로 확인", inline=False)#field add
+    embed.add_field(name="~~보유서버~~ 본 기능은 koreanbots에 의하여 막힌 기능입니다.", value="- ``,보유서버``로 확인", inline=False)#field add
     embed.add_field(name="매시지 삭제", value="- ``,삭제 (수)``로 확인", inline=False)
     embed.add_field(name="모두 삭제", value="- ``,clear``로 확인", inline=False)
     embed.add_field(name="메시지 전달", value="-``,dm @맨션 내용``으로 확인", inline=False)
@@ -354,7 +354,7 @@ async def 리로드(ctx):
         await bot.change_presence(status=discord.Status.dnd, activity=discord.Game(name="재부팅"))
         time.sleep(2)
         await ctx.send("리로드 완료!")
-        os.system("python dao/ dao.py")
+        os.system("python dao.py")
         exit()
 #        await ctx.send("모든 모듈을 리로드했어요!")
 #        imp.reload(discord)
