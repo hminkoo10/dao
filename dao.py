@@ -72,6 +72,7 @@ async def 도움전달(ctx, user:discord.Member):
     embed.add_field(name="출석체크", value="- ``출석체크, ㅊㅊ``으로 확인 ``출석 리스트``로 확인", inline=False)
     embed.add_field(name="정보", value="- ``,정보(맨션)``로 확인", inline=False)
     embed.add_field(name="타이머", value="- ``,타이머 (초) (제목)``로 확인", inline=False)
+    embed.add_field(name="DM보내기", value="- ``,우체국 @맨션 내용``로 확인", inline=False)
     embed.add_field(name="다오 서포터", value="- ``https://discord.gg/PKGMwSB``", inline=False)
     embed.add_field(name="공지 (only 서버관리자)", value="- ``,공지 내용``", inline=False)
     embed.set_footer(text=(ctx.author.name), icon_url=ctx.author.avatar_url)
@@ -90,6 +91,7 @@ async def 도움(ctx):
     embed.add_field(name="출석체크", value="- ``출석체크, ㅊㅊ``으로 확인 ``출석 리스트``로 확인", inline=False)
     embed.add_field(name="정보", value="- ``,정보(맨션)``로 확인", inline=False)
     embed.add_field(name="타이머", value="- ``,타이머 (초) (제목)``로 확인", inline=False)
+    embed.add_field(name="DM보내기", value="- ``,우체국 @맨션 내용``로 확인", inline=False)
     embed.add_field(name="다오 서포터", value="- ``https://discord.gg/PKGMwSB``", inline=False)
     embed.add_field(name="공지 (only 서버관리자)", value="- ``,공지 내용``", inline=False)
     embed.set_footer(text=(ctx.author.name), icon_url=ctx.author.avatar_url)
@@ -227,7 +229,7 @@ async def 로또(ctx):
     로또 = ['꽝','꽝','꽝','당첨!','꽝','꽝','당첨!','당첨!','꽝','꽝','꽝','꽝','꽝',]
     await ctx.channel.send(random.choice(로또))
 @bot.command()
-async def 보내(ctx, user:discord.Member, *, msg):
+async def 우체국(ctx, user:discord.Member, *, msg):
     #first_date = datetime('&y년 %m월 %d일 %p%I (%H시)시 %M분 %S초 보냄')
     first_date = time.asctime()
     embed = discord.Embed(color=0x00EBFF)
@@ -336,8 +338,11 @@ async def 킥(ctx, user:discord.Member, *, text):
         await ctx.send("관리자 권한이 없어요!")
 @bot.command()
 async def 밴(ctx, user:discord.Member, *, text):
-    await ctx.guild.ban(user, reason=text)
-    await ctx.send(f"{user}님을 밴 했어요! \n 밴사유:{text}")
+    if ctx.author.guild_permissions.administrator:
+        await ctx.guild.ban(user, reason=text)
+        await ctx.send(f"{user}님을 밴 했어요! \n 밴사유:{text}")
+    else:
+        await ctx.send("관리자 권한이 없어요!")
 @bot.command()
 async def 언밴(ctx):
     user = ["4:22"]
@@ -808,10 +813,16 @@ async def ping(ctx):
     await ctx.send(ll)
 @bot.command()
 async def 역할생성(ctx, *, text):
-    await ctx.guild.create_role(name=text)
-    await ctx.send(f"{text}역할을 생성했어요! \n 역할을 전달하시려면 ,역할전달 @맨션 {text} 입니다!")
+    if ctx.author.guild_permissions.administrator:
+        await ctx.guild.create_role(name=text)
+        await ctx.send(f"{text}역할을 생성했어요! \n 역할을 전달하시려면 ,역할전달 @맨션 {text} 입니다!")
+    else:
+        await ctx.send("관리자권한이 없어요!")
 @bot.command()
 async def 역할삭제(ctx, *, text):
-    await ctx.guild.delete_role(name=text)
-    await ctx.send(f"{text}역할을 삭제했어요!")
+    if ctx.author.guild_permissions.administrator:
+        await ctx.guild.delete_role(name=text)
+        await ctx.send(f"{text}역할을 삭제했어요!")
+    else:
+        await ctx.send("관리자권한이 없어요!")
 bot.run(token)
