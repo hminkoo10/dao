@@ -8,7 +8,7 @@ import turtle
 import turtle as t
 import os
 import asyncio
-import datetime
+import datetime as pydatetime
 
 notice = list()
 tkdyd = []
@@ -32,6 +32,10 @@ player2_bat = "none"
 player1_result = "none"
 player2_result = "none"
 
+async def main():
+    userid = "713007296476741643"
+    info = await dbkrpy.CheckVote.get_response(token,userid)
+    print(dbkypy.CheckVote(info).check)
 @bot.event
 async def on_ready():
     print(f'로그인 성공: {bot.user.name}!')
@@ -223,9 +227,21 @@ async def 로또(ctx):
     로또 = ['꽝','꽝','꽝','당첨!','꽝','꽝','당첨!','당첨!','꽝','꽝','꽝','꽝','꽝',]
     await ctx.channel.send(random.choice(로또))
 @bot.command()
-async def dm(ctx, user:discord.Member, *, msg):
-    await user.send(str(ctx.author.mention) + str("\n") + str(ctx.author) + str("\n") + str("님이 이렇게 전해달라는군요!") + str("\n") + str(msg))
-    await ctx.channel.send(str("DM을 보냈어요! 메시지 내용") + str("\n") + str(msg))
+async def 보내(ctx, user:discord.Member, *, msg):
+    #first_date = datetime('&y년 %m월 %d일 %p%I (%H시)시 %M분 %S초 보냄')
+    first_date = time.asctime()
+    embed = discord.Embed(color=0x00EBFF)
+    embed.set_author(name="우체국에서 편지왔어요~")
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+    embed.set_image(url="http://bitly.kr/mailarrive")
+    embed.add_field(name="보낸 사람", value=ctx.message.author.name, inline=False)
+    embed.add_field(name="보낸 유저 아이디", value=ctx.message.author.id, inline=False)
+    embed.add_field(name="보낸 채널 아이디", value=ctx.message.channel.id, inline=False)
+    embed.add_field(name="보낸 채널 이름", value=ctx.message.channel.name, inline=False)
+    embed.add_field(name="전할 내용", value=msg)
+    embed.set_author(name=f"작성일:{first_date}", icon_url=ctx.author.avatar_url)
+    await user.send(ctx.message.author.mention, embed=embed)
+    await ctx.send("우체부가 아주 잘 전해준다고 했어요!")
 #@bot.command()
 #async def 가위바위보()
 #    await ctx.channel.send('가위 바위 보중에 1개를 입력하세요')
@@ -312,8 +328,21 @@ async def 공지보내기(ctx, *, msg):
 #                
 #            i += 1
 @bot.command()
-async def 킥(ctx, user:discord.Member):
-    await ctx.guild.kick(user)
+async def 킥(ctx, user:discord.Member, *, text):
+    if ctx.author.guild_permissions.administrator:
+        await ctx.guild.kick(user, reason=text)
+        await ctx.send(f"{user}님을 킥 했어요! \n 킥사유:{text}")
+    else:
+        await ctx.send("관리자 권한이 없어요!")
+@bot.command()
+async def 밴(ctx, user:discord.Member, *, text):
+    await ctx.guild.ban(user, reason=text)
+    await ctx.send(f"{user}님을 밴 했어요! \n 밴사유:{text}")
+@bot.command()
+async def 언밴(ctx):
+    user = ["4:22"]
+    await ctx.guild.unban(user)
+    await ctx.send(f"{user}님을 언밴 했어요!")
 @bot.listen()
 async def on_message(message):
     if message.content.startswith(",학습"):
@@ -389,7 +418,7 @@ async def 역할전달(ctx, user:discord.Member, txt):
     else:
         await ctx.send("관리자권한이 없음")
 @bot.command()
-async def 역할가져가기(ctx, user:discord.Member, txt):
+async def 역할빼기(ctx, user:discord.Member, txt):
     if ctx.author.guild_permissions.administrator:
         b = txt
         role = discord.utils.get(ctx.guild.roles, name=f"{b}")
@@ -738,7 +767,7 @@ async def 초대링크생성(ctx, user:discord.Member):
 async def 확인(ctx):
     info = await dbkrpy.CheckVote.get_response("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg", ctx.author.id)
     dbkr = dbkrpy.CheckVote(info)
-    await ctx.send(dbkr)
+    await ctx.send(dbkr.check)
     await ctx.sned(info)
 @bot.listen()
 async def on_message(message):
@@ -752,10 +781,37 @@ async def on_message(message):
             await message.channel.send(embed=embed)
 @bot.command()
 async def 핑(ctx):
-    embed = discord.Embed(title=":ping_pong:퐁!",color=0x00ff00,description="이 기준은 디스코드 api핑 기준입니다.") #임베드 변수 지정
-    embed.add_field(name="디코 api기준 핑", value=("퐁! {0}ms".format(round(bot.latency*1000))), inline=False) #field add
-    await ctx.send(embed=embed)
+    if (round(bot.latency*1000)) > 230:
+            embed = discord.Embed(color=0x00ff00)
+            embed = discord.Embed(title=":ping_pong:퐁!", description="""
+            현재 디스코드 api핑: {0}ms
+            상태: 매우 나쁨:no_entry:""".format(round(bot.latency*1000)), color=0xff0000)
+            await ctx.channel.send(embed=embed)
+    if (round(bot.latency*1000)) < 230:
+            embed = discord.Embed(color=0x00ff00)
+            embed = discord.Embed(title=":ping_pong:퐁!", description="""
+            현재 디스코드 api핑: {0}ms
+            상태: 양호:white_check_mark:""".format(round(bot.latency*1000)), color=0x00ff00)
+            await ctx.channel.send(embed=embed)
+    if (round(bot.latency*1000)) < 185:
+            embed = discord.Embed(color=0x00ff00)
+            embed = discord.Embed(title=":ping_pong:퐁!", description="""
+            현재 디스코드 api핑: {0}ms
+            상태: 매우 좋음:green_heart:""".format(round(bot.latency*1000)), color=0x0000ff)
+            await ctx.channel.send(embed=embed)
 @bot.command()
 async def ping(ctx):
-    await ctx.send(f'My ping is {bot.latency}!')
+    tso = ger_get_now_timestamp()
+    await ctx.send('pong!')
+    tst = get_now_timestamp()
+    ll = float(tso) - float(tst)
+    await ctx.send(ll)
+@bot.command()
+async def 역할생성(ctx, *, text):
+    await ctx.guild.create_role(name=text)
+    await ctx.send(f"{text}역할을 생성했어요! \n 역할을 전달하시려면 ,역할전달 @맨션 {text} 입니다!")
+@bot.command()
+async def 역할삭제(ctx, *, text):
+    await ctx.guild.delete_role(name=text)
+    await ctx.send(f"{text}역할을 삭제했어요!")
 bot.run(token)
