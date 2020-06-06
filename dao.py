@@ -9,6 +9,8 @@ import turtle as t
 import os
 import asyncio
 import datetime as pydatetime
+from captcha.image import ImageCaptcha
+import qrcode
 
 notice = list()
 tkdyd = []
@@ -31,7 +33,7 @@ player1_bat = "none"
 player2_bat = "none"
 player1_result = "none"
 player2_result = "none"
-admin = ['657773087571574784','564250827959566359','712290125505363980']
+admin = ['657773087571574784','564250827959566359','712290125505363980','310247242546151434']
 
 async def main():
     userid = "713007296476741643"
@@ -53,8 +55,6 @@ async def on_ready():
             await bot.change_presence(status=discord.Status.online, activity=discord.Game(name=",도움 | " + messages[0]))
         messages.append(messages.pop(0))
         await asyncio.sleep(3.5)
-        if datetime.timedelta(hours=1):
-            check = []
 @bot.command()
 async def 안녕(ctx):
     await ctx.channel.send((ctx.author.mention) + '님 안녕하세요!:hugging: :hugging_face:')
@@ -122,15 +122,11 @@ async def 사랑해(ctx):
     await ctx.channel.send('https://tenor.com/view/milk-and-mocha-kiss-love-in-love-gif-11453877')
     await ctx.channel.send('근데... 사랑하면 좋아요즘 주세요!')
 @bot.command()
-async def 초대링크(ctx):
-    await ctx.channel.send('https://tenor.com/view/cat-loading-error-angry-fuck-gif-8985245')
-    time.sleep(5)
-    await ctx.channel.send('https://discord.com/api/oauth2/authorize?client_id=713007296476741643&permissions=8&scope=bot')
-@bot.command()
-async def 초대코드(ctx):
-    await ctx.channel.send('https://tenor.com/view/cat-loading-error-angry-fuck-gif-8985245')
-    time.sleep(5)
-    await ctx.channel.send('https://discord.com/api/oauth2/authorize?client_id=713007296476741643&permissions=8&scope=bot')
+async def 초대(ctx):
+    embed = discord.Embed(description = f"[다오봇 초대링크](https://discord.com/api/oauth2/authorize?client_id=713007296476741643&permissions=8&scope=bot)", color=0xf1c40f)
+    embed.set_image(url="https://cdn.discordapp.com/attachments/702088239502065704/718732359704248380/3e5bae5149803302.png")
+    await ctx.send(embed=embed)
+    await ctx.sned("QR코드가 포함되어 있습니다!")
 @bot.command()
 async def 테스트(ctx, *, text):
     for guild in bot.guild, member:
@@ -774,10 +770,26 @@ async def 초대링크생성(ctx, user:discord.Member):
     await ctx.send(embed=embed)
 @bot.command()
 async def 확인(ctx):
-    info = await dbkrpy.CheckVote.get_response("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg", ctx.author.id)
-    dbkr = dbkrpy.CheckVote(info)
-    await ctx.send(dbkr.check)
-    await ctx.sned(info)
+    captcha = ImageCaptcha()
+    msg = ""
+    a = ""
+    for i in range(6):
+        a += str(random.randint(0, 9))
+
+    name = str(ctx.author) + str(".png")
+    captcha.write(a, name)
+
+    await ctx.channel.send(file=discord.File(name))
+
+    if msg.content.startswith == (a):
+        await ctx.channel.send("인증을 완료했어요!")
+        info = await dbkrpy.CheckVote.get_response("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg", ctx.author.id)
+        dbkr = dbkrpy.CheckVote(info)
+        await ctx.channel.send(dbkr.check)
+        await ctx.channel.send(info)
+    else:
+        await ctx.chennel.send("오답이예요! 다시 시도해 보세요~")
+        return
 @bot.listen()
 async def on_message(message):
     if message.content.startswith(","):
@@ -829,8 +841,39 @@ async def 역할삭제(ctx, *, text):
         await ctx.send(f"{text}역할을 삭제했어요!")
     else:
         await ctx.send("관리자권한이 없어요!")
-@bot.command()
-async def eval(ctx, *, code):
+@bot.command(name="eval")
+async def eval_(ctx, *, code):
     if str(ctx.author.id) in admin:
         await ctx.send(eval(code))
+@bot.command()
+async def 유저수동기화(ctx, *, text):
+    await text.edit(name="유저")
+@bot.command()
+async def qr코드생성(ctx, *, link):
+    qr = qrcode.QRCode(
+	    version=1,
+	    error_correction=qrcode.constants.ERROR_CORRECT_L,
+	    box_size=10,
+	    border=4,
+    )
+    qr.add_data(link)
+    qr.make(fit=True)
+
+    img = qr.make_image(fill_color="black", back_color="white")
+    # img.save("qrcode.jpg")
+    img.save(str(link) + str('.png'))
+    await ctx.author.send(file=discord.File(name))
+    await ctx.send("DM으로 전송했어요!")
+@bot.command()
+async def 제작자(ctx):
+    await ctx.send(admin)
+@bot.command()
+async def 암호생성(ctx, *, text):
+    captcha = ImageCaptcha()
+    msg = ""
+    a = text
+    name = str(ctx.author) + str(".png")
+    captcha.write(a, name)
+
+    await ctx.channel.send(file=discord.File(name))
 bot.run(token)
