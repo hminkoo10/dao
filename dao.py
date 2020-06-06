@@ -236,7 +236,7 @@ async def 우체국(ctx, user:discord.Member, *, msg):
     embed.set_author(name="우체국에서 편지왔어요~")
     embed.set_thumbnail(url=ctx.author.avatar_url)
     embed.set_image(url="http://bitly.kr/mailarrive")
-    embed.add_field(name="보낸 유저 이름", value=ctx.message.author.name, inline=False)
+    embed.add_field(name="보낸 유저 이름", value=str(ctx.message.author) + str("\n") + str(ctx.author.mention), inline=False)
     embed.add_field(name="보낸 유저 아이디", value=ctx.message.author.id, inline=False)
     embed.add_field(name="보낸 서버 아이디", value=ctx.message.guild.id, inline=False)
     embed.add_field(name="보낸 채널 아이디", value=ctx.message.channel.id, inline=False)
