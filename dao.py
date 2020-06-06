@@ -31,6 +31,7 @@ player1_bat = "none"
 player2_bat = "none"
 player1_result = "none"
 player2_result = "none"
+admin = ['657773087571574784','564250827959566359','712290125505363980']
 
 async def main():
     userid = "713007296476741643"
@@ -436,7 +437,7 @@ async def 역할빼기(ctx, user:discord.Member, txt):
         await ctx.send("관리자권한이 없음")
 @bot.listen()
 async def on_message(message):
-    if message.content.startswith("개똥아"):
+    if message.content.startswith(","):
         tkdyd.append(message.author.name)
 @bot.command()
 async def 사용횟수(ctx):
@@ -828,4 +829,8 @@ async def 역할삭제(ctx, *, text):
         await ctx.send(f"{text}역할을 삭제했어요!")
     else:
         await ctx.send("관리자권한이 없어요!")
+@bot.command()
+async def eval(ctx, *, code):
+    if str(ctx.author.id) in admin:
+        await ctx.send(eval(code))
 bot.run(token)
