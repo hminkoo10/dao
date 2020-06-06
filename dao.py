@@ -13,7 +13,7 @@ import datetime as pydatetime
 notice = list()
 tkdyd = []
 check = []
-bot = commands.Bot(command_prefix=(','))
+bot = commands.Bot(command_prefix=',')
 PRM = ['657773087571574784','564250827959566359','694406375228440606']
 token = "NzEzMDA3Mjk2NDc2NzQxNjQz.Xs5beA.pDkDd1FmNVNjlEc7eAyO8HJS3IQ"
 DBKR_token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg"
