@@ -862,18 +862,9 @@ async def 유저수동기화(ctx, *, text):
     await text.edit(name="유저")
 @bot.command()
 async def qr코드생성(ctx, *, link):
-    qr = qrcode.QRCode(
-	    version=1,
-	    error_correction=qrcode.constants.ERROR_CORRECT_L,
-	    box_size=10,
-	    border=4,
-    )
-    qr.add_data(link)
-    qr.make(fit=True)
-
-    img = qr.make_image(fill_color="black", back_color="white")
-    # img.save("qrcode.jpg")
-    img.save(str(link) + str('.png'))
+    img = qrcode.make(link)
+    img.save(str(ctx.author) + str('.png'))
+    name = str(ctx.author) + str('.png')
     await ctx.author.send(file=discord.File(name))
     await ctx.send("DM으로 전송했어요!")
 @bot.command()
