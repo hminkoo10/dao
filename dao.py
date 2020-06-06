@@ -11,6 +11,8 @@ import asyncio
 import datetime as pydatetime
 from captcha.image import ImageCaptcha
 import qrcode
+import youtube_dl
+import re
 
 notice = list()
 tkdyd = []
@@ -33,7 +35,17 @@ player1_bat = "none"
 player2_bat = "none"
 player1_result = "none"
 player2_result = "none"
+que = {}
+playerlist = {}
+playlist = list() #재생목록 리스트
 admin = ['657773087571574784','564250827959566359','712290125505363980','310247242546151434']
+
+def queue(id): #음악 재생용 큐
+	if que[id] != []:
+		player = que[id].pop(0)
+		playerlist[id] = player
+		del playlist[0]
+		player.start()
 
 async def main():
     userid = "713007296476741643"
