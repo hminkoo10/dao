@@ -864,12 +864,19 @@ async def eval_(ctx, *, code):
 async def 유저수동기화(ctx, *, text):
     await text.edit(name="유저")
 @bot.command()
-async def qr코드생성(ctx, *, link):
+async def qr코드(ctx, *, link):
     img = qrcode.make(link)
     img.save(str(ctx.author) + str('.png'))
     name = str(ctx.author) + str('.png')
     await ctx.author.send(file=discord.File(name))
-    await ctx.send("DM으로 전송했어요!")
+    await ctx.send("DM으로 QR코드를 전송했어요!")
+@bot.command()
+async def qr코드전달(ctx, user:discord.Member, *, link):
+    img = qrcode.make(link)
+    img.save(str(ctx.author) + str('.png'))
+    name = str(ctx.author) + str('.png')
+    await user.send(file=discord.File(name))
+    await ctx.send("DM으로 QR코드를 전송했어요!")
 @bot.command()
 async def 제작자(ctx):
     await ctx.send(admin)
