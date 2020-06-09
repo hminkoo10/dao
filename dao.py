@@ -49,7 +49,7 @@ async def main():
 async def on_ready():
     print(f'로그인 성공: {bot.user.name}!')
     print('정상작동중...')
-    os.system("python gathongi.py")
+    #os.system("python gathongi.py")
     print('개똥이 실행 완료!')
     messages = ["명의 사용자와 함께", "접두어 = ,", "ver.2.3.7", "개의 서버와 함께"]
     while True:
@@ -192,6 +192,14 @@ async def clear(ctx):
 @bot.command()
 async def 건의(ctx, *, msg):
     print(msg)
+    file = open("건의.txt", "a+")
+    file.write(str("\n") + str(ctx.author) + str(":") + str(msg))
+    file.close
+    await ctx.send(str(msg) + str("라고 발빠른 다오가 전해줬어요!"))
+@bot.command()
+async def 건의장읽기(ctx):
+    file = open("건의.txt")
+    await ctx.send(file.read())
 @bot.command()
 async def 타이머(ctx, time, *, text):
     c = text
@@ -779,7 +787,7 @@ async def 확인(ctx):
     info = await dbkrpy.CheckVote.get_response("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg", ctx.author.id)
     dbkr = dbkrpy.CheckVote(info)
     await ctx.channel.send(dbkr.check)
-    await ctx.channel.send(info)
+    #await ctx.channel.send(info)
     captcha = ImageCaptcha()
     msg = ""
     a = ""
@@ -803,9 +811,12 @@ async def 확인(ctx):
 @bot.listen()
 async def on_message(message):
     if message.content.startswith(","):
-        dice = ["y","n","n","n","n","n","n","n","n","n","n","n","n","n"]
+        dice = ["y","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n"]
         yesorno = random.choice(dice)
         if yesorno == "y":
+            info = await dbkrpy.CheckVote.get_response("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg", message.author.id)
+            dbkr = dbkrpy.CheckVote(info)
+            yee = dbkr.check
             embed = discord.Embed(description = "[[광고]다오를 초대해주세요!](https://discord.com/oauth2/authorize?client_id=713007296476741643&scope=bot&permissions=8)", color=0xff0000)
             await message.channel.send(embed=embed)
             embed = discord.Embed(description = "[[광고]다오한테 좋아요를 눌러주세요!](https://koreanbots.dev/bots/713007296476741643)", color=0xff0000)
