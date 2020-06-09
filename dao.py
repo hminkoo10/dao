@@ -776,6 +776,10 @@ async def 초대링크생성(ctx, user:discord.Member):
     await ctx.send(embed=embed)
 @bot.command()
 async def 확인(ctx):
+    info = await dbkrpy.CheckVote.get_response("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg", ctx.author.id)
+    dbkr = dbkrpy.CheckVote(info)
+    await ctx.channel.send(dbkr.check)
+    await ctx.channel.send(info)
     captcha = ImageCaptcha()
     msg = ""
     a = ""
@@ -888,5 +892,10 @@ async def 암호생성(ctx, *, text):
 @bot.command()
 async def 타이핑(message):
     async with message.typing():
-        print("타이핑중")
+        import typing
+        em = "<:dummy:709371261024862278>"
+        await ctx.send(em)
+@bot.command()
+async def 이모지아이디(ctx, *, emoji):
+    await bot.get_emoji(id)
 bot.run(token)
