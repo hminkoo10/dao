@@ -14,8 +14,6 @@ import asyncio
 import datetime as pydatetime
 from captcha.image import ImageCaptcha
 import qrcode
-import youtube_dl
-import re
 
 notice = list()
 tkdyd = []
@@ -42,13 +40,6 @@ que = {}
 playerlist = {}
 playlist = list() #재생목록 리스트
 admin = ['657773087571574784','564250827959566359','712290125505363980','310247242546151434']
-
-def queue(id): #음악 재생용 큐
-	if que[id] != []:
-		player = que[id].pop(0)
-		playerlist[id] = player
-		del playlist[0]
-		player.start()
 
 async def main():
     userid = "713007296476741643"
@@ -221,9 +212,9 @@ async def 주사위(ctx):
 #    def check(reaction, user):
 #        return user == ctx.author and str(reaction.emoji) == var_a  # :grin: 라는 반응을 추가했는지 인식하는코드
 #    try:
-#       user = await client.wait_for('reaction_add', timeout=7, check=check)  # 반응 추가할때까지 기다리는 코드. timeout=7은 7초 기다리면 타임아웃 오류를 발생시키는걸 의미.
-#       except asyncio.TimeoutError:
-#           await ctx.channel.send("타임 아웃!")
+#        user = await bot.wait_for('reaction_add', timeout=7, check=check)  # 반응 추가할때까지 기다리는 코드. timeout=7은 7초 기다리면 타임아웃 오류를 발생시키는걸 의미.
+#        if except asyncio.TimeoutError:
+#        await ctx.channel.send("타임 아웃!")
 #    else:
 #        await ctx.channel.send("오! 잘 찾아왔어요!")
 @bot.command()
@@ -889,4 +880,13 @@ async def 암호생성(ctx, *, text):
     captcha.write(a, name)
 
     await ctx.channel.send(file=discord.File(name))
+#@bot.listen()
+#async def on_message(message):
+#    if message.content.startswith(","):
+#        async with message.typing():
+#            print("타이핑중")
+@bot.command()
+async def 타이핑(message):
+    async with message.typing():
+        print("타이핑중")
 bot.run(token)
