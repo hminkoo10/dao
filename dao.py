@@ -197,6 +197,13 @@ async def 건의(ctx, *, msg):
     file.close
     await ctx.send(str(msg) + str("라고 발빠른 다오가 전해줬어요!"))
 @bot.command()
+async def 건의장초기화(ctx):
+    print(msg)
+    file = open("건의.txt", "w")
+    file.write("")
+    file.close
+    await ctx.send("건의장을 초기화 했어요!")
+@bot.command()
 async def 건의장읽기(ctx):
     file = open("건의.txt")
     await ctx.send(file.read())
@@ -428,7 +435,7 @@ async def 정보(ctx, user:discord.Member):
     embed.set_image(url=user.avatar_url)
     await ctx.send(embed=embed)
 @bot.command()
-async def 역할전달(ctx, user:discord.Member, txt):
+async def 역할전달(ctx, user:discord.Member, *, txt):
     if ctx.author.guild_permissions.administrator:
         b = txt
         role = discord.utils.get(ctx.guild.roles, name=f"{b}")
@@ -437,7 +444,7 @@ async def 역할전달(ctx, user:discord.Member, txt):
     else:
         await ctx.send("관리자권한이 없음")
 @bot.command()
-async def 역할빼기(ctx, user:discord.Member, txt):
+async def 역할빼기(ctx, user:discord.Member, *, txt):
     if ctx.author.guild_permissions.administrator:
         b = txt
         role = discord.utils.get(ctx.guild.roles, name=f"{b}")
