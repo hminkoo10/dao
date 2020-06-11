@@ -265,8 +265,8 @@ async def 우체국(ctx, user:discord.Member, *, msg):
     embed.set_footer(text=(f"작성일:{first_date}"), icon_url=ctx.author.avatar_url)
     await user.send(ctx.message.author.mention, embed=embed)
     await ctx.send("우체부가 아주 잘 전해준다고 했어요!")
-@bot.command(name=택배)
-async def 택배_(ctx, user:discord.Member, *, msg):
+@bot.command()
+async def 택배(ctx, user:discord.Member, *, msg):
     #first_date = datetime('&y년 %m월 %d일 %p%I (%H시)시 %M분 %S초 보냄')
     first_date = time.asctime()
     embed = discord.Embed(color=0x00EBFF)
