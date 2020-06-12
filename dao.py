@@ -190,6 +190,54 @@ async def clear(ctx):
     else:
         await ctx.channel.send('메시지 관리권한이 없습니다(요구권한 : 메시지관리 권한)')
 @bot.command()
+async def on_ready(message):
+    if message.content.startswith(",건의"):
+        author = bot.get_user(int(657773087571574784))
+        choice = message.content.split(" ")
+        msg = message.content[4: ]
+        msgsender = message.author.display_name
+        msgguild = message.guild
+        msgchannel = message.channel.name
+
+        if msg[0:4] == "http" or msg[0:5] == "https" or msg[0:3] == "www":
+            embed = discord.Embed(color=0x00ff00)
+            embed.add_field(name="다오봇 건의", value="""
+            건의장이 전송되지 않았습니다!
+            건의장 미전송 사유: 링크 사용
+            """, inline=False)
+            embed.set_thumbnail(url="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FdhFXEV%2FbtqEOaCVWlv%2FxbKPxv8Mskgsvlf3jwiEIK%2Fimg.png")
+            await message.channel.send(embed=embed)
+        elif msg == "":
+            embed = discord.Embed(color=0x00ff00)
+            embed.add_field(name="다오봇 건의", value="""
+            건의장이 전송되지 않았습니다!
+            건의장 미전송 사유: 내용 없음
+            """, inline=False)
+            embed.set_thumbnail(url="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FdhFXEV%2FbtqEOaCVWlv%2FxbKPxv8Mskgsvlf3jwiEIK%2Fimg.png")
+            await message.channel.send(embed=embed)
+        else:
+            embed = discord.Embed(color=0x00ff00)
+            embed.add_field(name="다오봇 건의", value="""
+            피슝! 건의장이 도착했어요!
+            건의장 내용: {}
+            건의한 사람: {}
+            건의장을 보낸 서버: {}
+            건의장을 보낸 채널: {}
+            """.format(msg, msgsender, msgguild, msgchannel), inline=False)
+            embed.set_thumbnail(url="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FdhFXEV%2FbtqEOaCVWlv%2FxbKPxv8Mskgsvlf3jwiEIK%2Fimg.png")
+            await author.send(embed=embed)
+
+            embed = discord.Embed(color=0x00ff00)
+            embed.add_field(name="다오봇 건의", value="""
+            건의장이 정상적으로 전송되었습니다!
+            건의장 내용: {}
+            건의한 사람: {}
+            건의장을 보낸 서버: {}
+            건의장을 보낸 채널: {}
+            """.format(msg, msgsender, msgguild, msgchannel), inline=False)
+            embed.set_thumbnail(url="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FdhFXEV%2FbtqEOaCVWlv%2FxbKPxv8Mskgsvlf3jwiEIK%2Fimg.png")
+            await message.channel.send(embed=embed)
+@bot.command()
 async def 건의(ctx, *, msg):
     print(msg)
     file = open("건의.txt", "a+")
@@ -198,7 +246,6 @@ async def 건의(ctx, *, msg):
     await ctx.send(str(msg) + str("라고 발빠른 다오가 전해줬어요!"))
 @bot.command()
 async def 건의장초기화(ctx):
-    print(msg)
     file = open("건의.txt", "w")
     file.write("")
     file.close
@@ -505,7 +552,7 @@ async def 제곱(ctx, one, two):
     await ctx.send(f"{s}**{t}={r} 입니다!")
 @bot.listen()
 async def on_message(message):
-    if message.content.startswith("도박 도움") or message.content.startswith("도박 방법"):
+    if message.content.startswith(",도박도움") or message.content.startswith(",도박방법"):
         embed = discord.Embed(color=0x00ff00)
         embed.add_field(name="다오봇 도박 방법!", value="""
         지금부터 도박하는 방법에 대해 말씀드릴게요!
@@ -526,7 +573,7 @@ async def on_message(message):
         await message.author.send(embed=embed)
 @bot.listen()
 async def on_message(message):
-    if message.content.startswith("도박신청"):
+    if message.content.startswith(",도박신청"):
         global progress
         global player2
         global player1
@@ -605,7 +652,7 @@ async def on_message(message):
                 progress = "card"
                 embed = discord.Embed(color=0x00ff00)
                 embed.add_field(name="다오봇 도박", value="""
-                '카드 뽑기'를 입력하여 카드를 뽑으세요!
+                ',카드 뽑기'를 입력하여 카드를 뽑으세요!
                 """, inline=False)
                 await message.channel.send(embed=embed)
         if progress == "one_more_card" or progress == "one_more_card_1":
@@ -645,7 +692,7 @@ async def on_message(message):
                 await message.author.send(embed=embed)
                 
 
-    if message.content.startswith("카드 뽑기"):
+    if message.content.startswith(",카드 뽑기"):
         if progress == "card" or progress == "card_1":
             if message.author.display_name == player1:
                 randomnum = random.randrange(1,14)
@@ -681,7 +728,7 @@ async def on_message(message):
         """, inline=False)
         await message.author.send(embed=embed)
 
-    if message.content.startswith("배팅"):
+    if message.content.startswith(",배팅"):
         if progress == "bat" or progress == "bat_1":
             if message.author.display_name == player1:
                 choice = message.content.split(" ")
@@ -724,7 +771,7 @@ async def on_message(message):
                 else:
                     progress = "bat_1"
         
-    if message.content.startswith("도박 결과"): 
+    if message.content.startswith(",도박 결과"): 
         if progress == "result":
             if player1_bat != 0 and player2_bat != 0:
                 progress = "none"
