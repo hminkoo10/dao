@@ -16,6 +16,7 @@ from captcha.image import ImageCaptcha
 import qrcode
 
 notice = list()
+channel = list()
 tkdyd = []
 check = []
 bot = commands.Bot(command_prefix=',')
@@ -39,7 +40,7 @@ player2_result = "none"
 que = {}
 playerlist = {}
 playlist = list() #재생목록 리스트
-admin = ['657773087571574784','564250827959566359','712290125505363980','310247242546151434']
+admin = ['657773087571574784','564250827959566359','712290125505363980','310247242546151434','694406375228440606']
 
 async def main():
     userid = "713007296476741643"
@@ -70,7 +71,7 @@ async def 건의링크(ctx):
     await ctx.channel.send('https://discord.gg/PKGMwSB')
 @bot.command()
 async def 도움전달(ctx, user:discord.Member):
-    embed = discord.Embed(title="도움말",color=0xe67e22,description="서버 관리봇, 개똥이.접두어:개똥아") #임베드 변수 지정
+    embed = discord.Embed(title="도움말",color=0xe67e22,description="서버 관리봇, 뮤직봇, 도박, 음악 모든게 다 있는, 다오.접두어:,") #임베드 변수 지정
     embed.add_field(name="초대링크", value="- ``,초대링크, 초대코드``로 확인", inline=False) #field add
     embed.add_field(name="~~보유서버~~ 본 기능은 koreanbots에 의하여 막힌 기능입니다.", value="- ``,보유서버``로 확인", inline=False)#field add
     embed.add_field(name="매시지 삭제", value="- ``,삭제 (수)``로 확인", inline=False)
@@ -89,7 +90,7 @@ async def 도움전달(ctx, user:discord.Member):
     await ctx.send("DM으로 전송했어요!")
 @bot.command()
 async def 도움(ctx):
-    embed = discord.Embed(title="도움말",color=0xe67e22,description="서버 관리봇, 개똥이.접두어:개똥아") #임베드 변수 지정
+    embed = discord.Embed(title="도움말",color=0xe67e22,description="서버 관리봇, 뮤직봇, 도박, 음악 모든게 다 있는, 다오.접두어:,") #임베드 변수 지정
     embed.add_field(name="초대링크", value="- ``,초대링크, 초대코드``로 확인", inline=False) #field add
     embed.add_field(name="보유서버", value="- ``,보유서버``로 확인", inline=False)#field add
     embed.add_field(name="매시지 삭제", value="- ``,삭제 (수)``로 확인", inline=False)
@@ -876,19 +877,19 @@ async def 확인(ctx):
     else:
         await ctx.chennel.send("오답이예요! 다시 시도해 보세요~")
         return
-@bot.listen()
-async def on_message(message):
-    if message.content.startswith(","):
-        dice = ["y","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n"]
-        yesorno = random.choice(dice)
-        if yesorno == "y":
-            info = await dbkrpy.CheckVote.get_response("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg", message.author.id)
-            dbkr = dbkrpy.CheckVote(info)
-            yee = dbkr.check
-            embed = discord.Embed(description = "[[광고]다오를 초대해주세요!](https://discord.com/oauth2/authorize?client_id=713007296476741643&scope=bot&permissions=8)", color=0xff0000)
-            await message.channel.send(embed=embed)
-            embed = discord.Embed(description = "[[광고]다오한테 좋아요를 눌러주세요!](https://koreanbots.dev/bots/713007296476741643)", color=0xff0000)
-            await message.channel.send(embed=embed)
+#@bot.listen()
+#async def on_message(message):
+#    if message.content.startswith(","):
+#        dice = ["y","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n","n"]
+#        yesorno = random.choice(dice)
+#        if yesorno == "y":
+#            info = await dbkrpy.CheckVote.get_response("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg", message.author.id)
+#            dbkr = dbkrpy.CheckVote(info)
+#            yee = dbkr.check
+#            embed = discord.Embed(description = "[[광고]다오를 초대해주세요!](https://discord.com/oauth2/authorize?client_id=713007296476741643&scope=bot&permissions=8)", color=0xff0000)
+#            await message.channel.send(embed=embed)
+#            embed = discord.Embed(description = "[[광고]다오한테 좋아요를 눌러주세요!](https://koreanbots.dev/bots/713007296476741643)", color=0xff0000)
+#            await message.channel.send(embed=embed)
 @bot.command()
 async def 핑(ctx):
     if (round(bot.latency*1000)) > 230:
@@ -977,4 +978,88 @@ async def 타이핑(message):
 @bot.command()
 async def 이모지아이디(ctx, *, emoji):
     await bot.get_emoji(id)
+#@bot.command()
+#async def on_error(event, *args, **kwargs):
+#	if event == "on_message": #on_message에서 발생했을때 작동합니다.
+#    	message = *args[0] #args값에는 여러개가 들어올수도 있으니, 첫번째껏만 잡아줍니다.
+#    	exc = sys.exc_info() #sys를 활용해서 에러를 확인합니다.
+#        await ctx.channel.send(str(exc[0].__name__) + "" + str(exc[1])) #그 에러를 출력합니다.
+#	return
+#@bot.listen()
+#async def on_message_delete(message):
+#    if message.server.id == '708518643171983422' or message.server.id == '708518643171983422' or message.server.id == '720143008804241410':
+#	await message.channel.send("메세지 삭제 감지(" + str(message.author) + "): " + message.content)
+#	return
+@bot.command()
+async def on_member_join(member):
+    await member.guild.get_channel(702088239502065704).send(member.mention + "님이 새롭게 접속했습니다. 환영해주세요!")
+    return
+@bot.listen()
+async def on_guild_join(guild):
+	await guild.guild.get_channel(712933494489088041).send("새로운 서버에 접속!" + str(guild))
+	return
+@bot.listen()
+async def on_member_ban(guild, user):
+	await guild.channel.send(f"{user}님이 밴 되었습니다")
+	return
+@bot.listen()
+async def on_member_unban(guild, user):
+	await guild.channel.send(f"{user}님이 언밴 되었습니다")
+	return
+@bot.listen()
+async def on_message(message):
+	if message.content.startswith(',가위바위보'):
+		rsp = ["가위","바위","보"]
+		embed = discord.Embed(title="가위바위보",description="가위바위보를 합니다 3초내로 (가위/바위/보)를 써주세요!", color=0x00aaaa)
+		channel = message.channel
+		msg1 = await message.channel.send(embed=embed)
+		def check(m):
+			return m.author == message.author and m.channel == channel
+		try:
+			msg2 = await bot.wait_for('message', timeout=7.5, check=check)
+		except asyncio.TimeoutError:
+			await msg1.delete()
+			embed = discord.Embed(title="가위바위보",description="앗 7초가 지났네요...!", color=0x00aaaa)
+			await message.channel.send(embed=embed)
+			return
+		else:
+			await msg1.delete()
+			bot_rsp = str(random.choice(rsp))
+			user_rsp  = str(msg2.content)
+			answer = ""
+			if bot_rsp == user_rsp:
+				answer = "저는 " + bot_rsp + "을 냈고, 당신은 " + user_rsp + "을 내셨내요.\n" + "아쉽지만 비겼습니다."
+			elif (bot_rsp == "가위" and user_rsp == "바위") or (bot_rsp == "보" and user_rsp == "가위") or (bot_rsp == "바위" and user_rsp == "보"):
+				answer = "저는 " + bot_rsp + "을 냈고, 당신은 " + user_rsp + "을 내셨내요.\n" + "아쉽지만 제가 졌습니다."
+			elif (bot_rsp == "바위" and user_rsp == "가위") or (bot_rsp == "가위" and user_rsp == "보") or (bot_rsp == "보" and user_rsp == "바위"):
+				answer = "저는 " + bot_rsp + "을 냈고, 당신은 " + user_rsp + "을 내셨내요.\n" + "제가 이겼습니다!"
+			else:
+				embed = discord.Embed(title="가위바위보",description="앗, 가위, 바위, 보 중에서만 내셔야죠...", color=0x00aaaa)
+				await message.channel.send(embed=embed)
+				return
+			embed = discord.Embed(title="가위바위보",description=answer, color=0x00aaaa)
+			await message.channel.send(embed=embed)
+			return
+@bot.command()
+async def tts(ctx, *, bom):
+    await ctx.channel.send(f"{bom}",tts=True)
+@bot.command()
+async def 서버나가(ctx, imd):
+    if str(ctx.author.id) in admin:
+        await (ctx.guild.id).leave()
+        await ctx.send("OK")
+@bot.command()
+async def 초대목록(ctx):
+    await (ctx.guild.id).invites()
+#@bot.command()
+#async def 언밴(ctx, user):
+#    await (ctx.guild.id).unban(user, reason=None)
+@bot.listen()
+async def on_message(message):
+    if message.content.startswith(",서버초대링크생성"):
+        await (message.channel.id).invites()
+@bot.command()
+async def id확인(ctx, il):
+    imm = il.name
+    await ctx.send(str(imm))
 bot.run(token)
