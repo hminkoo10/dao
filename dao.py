@@ -17,6 +17,7 @@ import qrcode
 
 notice = list()
 channel = list()
+dict1 = {}
 tkdyd = []
 check = []
 bot = commands.Bot(command_prefix=',')
@@ -52,7 +53,7 @@ async def on_ready():
     print('정상작동중...')
     #os.system("python gathongi.py")
     print('개똥이 실행 완료!')
-    messages = ["명의 사용자와 함께", "접두어 = ,", "ver.2.3.7", "개의 서버와 함께"]
+    messages = ["명의 사용자와 함께", "접두어 = ,", "ver.3.3.7", "개의 서버와 함께"]
     while True:
         if messages[0] == '명의 사용자와 함께':
             await bot.change_presence(status=discord.Status.online, activity=discord.Game(name=f",도움 | {str(len(bot.users))}명의 사용자와 함께"))
@@ -81,6 +82,7 @@ async def 도움전달(ctx, user:discord.Member):
     embed.add_field(name="정보", value="- ``,정보(맨션)``로 확인", inline=False)
     embed.add_field(name="타이머", value="- ``,타이머 (초) (제목)``로 확인", inline=False)
     embed.add_field(name="DM보내기", value="- ``,우체국 @맨션 내용``로 확인", inline=False)
+    embed.add_field(name="학습기능", value="``학습 (1) (2)``를 하고 ``,(1)``로 확인",inline=False)
     embed.add_field(name="다오 서포터", value="- ``https://discord.gg/PKGMwSB``", inline=False)
     embed.add_field(name="공지 (only 서버관리자)", value="- ``,공지 내용``", inline=False)
     embed.set_footer(text=(ctx.author.name), icon_url=ctx.author.avatar_url)
@@ -100,6 +102,7 @@ async def 도움(ctx):
     embed.add_field(name="정보", value="- ``,정보(맨션)``로 확인", inline=False)
     embed.add_field(name="타이머", value="- ``,타이머 (초) (제목)``로 확인", inline=False)
     embed.add_field(name="DM보내기", value="- ``,우체국 @맨션 내용``로 확인", inline=False)
+    embed.add_field(name="학습기능", value="``학습 (1) (2)``를 하고 ``,(1)``로 확인",inline=False)
     embed.add_field(name="다오 서포터", value="- ``https://discord.gg/PKGMwSB``", inline=False)
     embed.add_field(name="공지 (only 서버관리자)", value="- ``,공지 내용``", inline=False)
     embed.set_footer(text=(ctx.author.name), icon_url=ctx.author.avatar_url)
@@ -1062,4 +1065,17 @@ async def on_message(message):
 async def id확인(ctx, il):
     imm = il.name
     await ctx.send(str(imm))
+@bot.command()
+async def 학습(ctx, one, *, two):
+    dict1[one] = two + "\n" + f"``{ctx.author}님이 알려주셨어요!``"
+    file = open("학습기록.txt", "a+")
+    file.write(str("\n") + str(ctx.author) + str(":") + str(one) + str(":") + str(two))
+    file.close
+    await ctx.send("OK")
+@bot.listen()
+async def on_message(message):
+    if message.content.startswith(","):
+        hi = message.content[1:]
+        send = dict1[hi]
+        await message.channel.send(send)
 bot.run(token)
