@@ -1078,4 +1078,12 @@ async def on_message(message):
         hi = message.content[1:]
         send = dict1[hi]
         await message.channel.send(send)
+@bot.command()
+async def 지워(ctx, text):
+    if str(ctx.author.id) in admin:
+        del dict1[text]
+        await ctx.send("OK")
+@bot.command()
+async def 학습확인(ctx):
+    await ctx.send(dict1)
 bot.run(token)
