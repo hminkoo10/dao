@@ -14,7 +14,7 @@ import asyncio
 import datetime as pydatetime
 from captcha.image import ImageCaptcha
 import qrcode
-import calender
+import calendar
 
 notice = list()
 channel = list()
@@ -1047,11 +1047,14 @@ async def on_message(message):
 @bot.command()
 async def tts(ctx, *, bom):
     await ctx.channel.send(f"{bom}",tts=True)
-@bot.command()
-async def 서버나가(ctx, imd):
-    if str(ctx.author.id) in admin:
-        await (ctx.guild.id).leave()
-        await ctx.send("OK")
+@bot.listen()
+async def on_message(message):
+    if message.content.startswith("서버나가"):
+        if str(ctx.author.id) in admin:
+            imd = massage.content[4:]
+            to_leave = bot.get_guild(imd)
+            await bot.leave_server(to_leave)
+            await message.channel.send("OK")
 @bot.command()
 async def 초대목록(ctx):
     await (ctx.guild.id).invites()
@@ -1089,5 +1092,6 @@ async def 학습확인(ctx):
     await ctx.send(dict1)
 @bot.command()
 async def 달력(ctx, num):
-    await ctx.send(calender.calender(num))
+    cale = (calendar.calendar(num))
+    print(f"{cale}")
 bot.run(token)
