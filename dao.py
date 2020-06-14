@@ -14,6 +14,7 @@ import asyncio
 import datetime as pydatetime
 from captcha.image import ImageCaptcha
 import qrcode
+import calender
 
 notice = list()
 channel = list()
@@ -1086,4 +1087,7 @@ async def 지워(ctx, text):
 @bot.command()
 async def 학습확인(ctx):
     await ctx.send(dict1)
+@bot.command()
+async def 달력(ctx, num):
+    await ctx.send(calender.calender(num))
 bot.run(token)
