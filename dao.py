@@ -19,7 +19,7 @@ import calendar
 notice = list()
 channel = list()
 dict1 = {}
-dict2
+dict2 = {}
 tkdyd = []
 check = []
 bot = commands.Bot(command_prefix=',')
