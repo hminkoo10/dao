@@ -1102,6 +1102,7 @@ async def 비속어추가(ctx, *, one):
         file = open("비속어.txt", "a+")
         file.write(str("\n") + str(ctx.author) + str(":") + str(one))
         file.close
+
         file = open("비속어디셔너리.txt", "a+")
         file.write(dict2)
         file.close
@@ -1125,4 +1126,7 @@ async def 비속어삭제(ctx, text):
 async def 비속어확인(ctx):
     file = open("비속어사용.txt")
     await ctx.send(file.read())
+@bot.command()
+async def 크레딧(ctx):
+    await ctx.send("음악 도움: Minibox")
 bot.run(token)
