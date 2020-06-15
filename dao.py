@@ -19,6 +19,7 @@ import calendar
 notice = list()
 channel = list()
 dict1 = {}
+dict2
 tkdyd = []
 check = []
 bot = commands.Bot(command_prefix=',')
@@ -1094,4 +1095,34 @@ async def 학습확인(ctx):
 async def 달력(ctx, num):
     cale = (calendar.calendar(num))
     print(f"{cale}")
+@bot.command()
+async def 비속어추가(ctx, *, one):
+    if str(ctx.author.id) in admin:
+        dict2[one] = '비속어를 사용했어요 :angry: ! \n사용한 비속어 : ' + one
+        file = open("비속어.txt", "a+")
+        file.write(str("\n") + str(ctx.author) + str(":") + str(one))
+        file.close
+        file = open("비속어디셔너리.txt", "a+")
+        file.write(dict2)
+        file.close
+        await ctx.send("OK")
+@bot.listen()
+async def on_message(message):
+    if message.content.startswith(""):
+        hi = message.content[0:]
+        send = dict2[hi]
+        await message.channel.purge(limit=1)
+        await message.channel.send(str(send) + str("\n비속어 사용자 : ") + str(message.author))
+        file = open("비속어사용.txt", "a+")
+        file.write(str("\n") + str(message.author) + str(":") + str(send))
+        file.close
+@bot.command()
+async def 비속어삭제(ctx, text):
+    if str(ctx.author.id) in admin:
+        del dict2[text]
+        await ctx.send("OK")
+@bot.command()
+async def 비속어확인(ctx):
+    file = open("비속어사용.txt")
+    await ctx.send(file.read())
 bot.run(token)
