@@ -1137,13 +1137,13 @@ async def 밴처리(ctx, user:discord.Member, *, text):
 @bot.command()
 async def 뮤트(ctx, user:discord.Member):
     try:
-        if ctx.author.guild_permissions.administrator:
+        if ctx.author.guild_permissions.manage_roles:
             member = user.name
             role = discord.utils.get(ctx.guild.roles, name="뮤트")
             await user.add_roles(role)
             await ctx.send(f"{member}님이 뮤트당했습니다\n본 기능은 시험중이며 역할설정은 관리자가 해야됩니다")
         else:
-            await ctx.send("관리자권한이 없어요")
+            await ctx.send("역할관리권한이 없어요")
     except:
         role = discord.utils.get(ctx.guild.roles, name="뮤트")
         await ctx.guild.create_role(name="뮤트")
