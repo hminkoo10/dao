@@ -182,7 +182,7 @@ async def 관리자보유서버(ctx):
     await ctx.channel.send(bot.guilds)
 @bot.command()
 async def 말해(ctx, *, text):
-    await ctx.channel.send(text)
+    await ctx.channel.send(f"{text}\n``{ctx.author.name}님이 따라하라고 명령했습니다``")
 @bot.command()
 async def 삭제(ctx, *, amount=999999999999999999999):
     if ctx.author.guild_permissions.manage_messages:
@@ -1047,7 +1047,7 @@ async def on_message(message):
 			return
 @bot.command()
 async def tts(ctx, *, bom):
-    await ctx.channel.send(f"{bom}",tts=True)
+    await ctx.channel.send(f"{bom}\n{ctx.author.name}님이 커맨드를 사용했습니다",tts=True)
 @bot.listen()
 async def on_message(message):
     if message.content.startswith("서버나가"):
