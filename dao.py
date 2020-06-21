@@ -17,6 +17,8 @@ import qrcode
 import calendar
 import smtplib
 from email.mime.text import MIMEText
+import requests
+from bs4 import BeautifulSoup    
 
 notice = list()
 channel = list()
@@ -51,6 +53,9 @@ async def main():
     userid = "713007296476741643"
     info = await dbkrpy.CheckVote.get_response(token,userid)
     print(dbkypy.CheckVote(info).check)
+
+def setup(bot):
+    bot.add_cog(Corona(bot))
 @bot.event
 async def on_ready():
     print(f'로그인 성공: {bot.user.name}!')
@@ -75,26 +80,6 @@ async def 안녕(ctx):
 async def 건의링크(ctx):
     await ctx.channel.send('https://discord.gg/PKGMwSB')
 @bot.command()
-async def 도움전달(ctx, user:discord.Member):
-    embed = discord.Embed(title="도움말",color=0xe67e22,description="서버 관리봇, 뮤직봇, 도박, 음악 모든게 다 있는, 다오.접두어:,") #임베드 변수 지정
-    embed.add_field(name="초대링크", value="- ``,초대링크, 초대코드``로 확인", inline=False) #field add
-    embed.add_field(name="~~보유서버~~ 본 기능은 koreanbots에 의하여 막힌 기능입니다.", value="- ``,보유서버``로 확인", inline=False)#field add
-    embed.add_field(name="매시지 삭제", value="- ``,삭제 (수)``로 확인", inline=False)
-    embed.add_field(name="모두 삭제", value="- ``,clear``로 확인", inline=False)
-    embed.add_field(name="메시지 전달", value="-``,dm @맨션 내용``으로 확인", inline=False)
-    embed.add_field(name="출석체크", value="- ``출석체크, ㅊㅊ``으로 확인 ``출석 리스트``로 확인", inline=False)
-    embed.add_field(name="정보", value="- ``,정보(맨션)``로 확인", inline=False)
-    embed.add_field(name="타이머", value="- ``,타이머 (초) (제목)``로 확인", inline=False)
-    embed.add_field(name="DM보내기", value="- ``,우체국 @맨션 내용``로 확인", inline=False)
-    embed.add_field(name="학습기능", value="``학습 (1) (2)``를 하고 ``,(1)``로 확인",inline=False)
-    embed.add_field(name="다오 서포터", value="- ``https://discord.gg/PKGMwSB``", inline=False)
-    embed.add_field(name="공지 (only 서버관리자)", value="- ``,공지 내용``", inline=False)
-    embed.set_footer(text=(ctx.author.name), icon_url=ctx.author.avatar_url)
-    await user.send(embed=embed)
-    embed = discord.Embed(description = "[다오 서포터 <----- 클릭!!](https://discord.com/invite/PKGMwSB)",color=0xe67e22)
-    await user.send(embed=embed)
-    await ctx.send("DM으로 전송했어요!")
-@bot.command()
 async def 도움(ctx):
     embed = discord.Embed(title="도움말",color=0xe67e22,description="서버 관리봇, 뮤직봇, 도박, 음악 모든게 다 있는, 다오.접두어:,") #임베드 변수 지정
     embed.add_field(name="초대링크", value="- ``,초대링크, 초대코드``로 확인", inline=False) #field add
@@ -107,6 +92,8 @@ async def 도움(ctx):
     embed.add_field(name="타이머", value="- ``,타이머 (초) (제목)``로 확인", inline=False)
     embed.add_field(name="DM보내기", value="- ``,우체국 @맨션 내용``로 확인", inline=False)
     embed.add_field(name="학습기능", value="``학습 (1) (2)``를 하고 ``,(1)``로 확인",inline=False)
+    embed.add_field(name="코로나 현황", value="``,코로나현황``로 확인",inline=False)
+    embed.add_field(name="16진수 변환", value="``,color (빨강) (파랑) (노랑)``로 확인",inline=False)
     embed.add_field(name="다오 서포터", value="- ``https://discord.gg/PKGMwSB``", inline=False)
     embed.add_field(name="공지 (only 서버관리자)", value="- ``,공지 내용``", inline=False)
     embed.set_footer(text=(ctx.author.name), icon_url=ctx.author.avatar_url)
@@ -1159,7 +1146,42 @@ async def 메일(ctx, mail, *, text):
     s.login('hmin.koo10@gmail.com', 'shfkcbkedznofzkf')
     msg = MIMEText(f'{ctx.author} : {text}')
     msg['Subject'] = f'안녕하세요 디스코드 다오봇입니다 {ctx.author}님이 메일을 전해달라고 하네요'
-    s.sendmail("hmin.koo10@gmail.com", f"{mail}\n위 메시지는 디스코드에서 다오가 보낸 메시지 입니다", msg.as_string())
+    s.sendmail("discord.dao.bot@gmail.com", f"{mail}\n위 메시지는 디스코드에서 다오가 보낸 메시지 입니다", msg.as_string())
     s.quit()
     await ctx.send(f"{mail}님 한테 {text}라고 {ctx.author.mention}님이 메일을 전달했어요!")
+@bot.command()
+async def color(ctx, red, green, blue):
+    nextmode = 0
+    colorfind = red.isdecimal()
+    if colorfind == True:
+        if int(red) > -1 and int(red) < 256:
+            nextmode = 1
+        else: await ctx.send("값이 너무 크거나 작습니다. 0부터 255 사이의 수를 입력하세요.")
+    else: await ctx.send("올바르지 않은 값입니다. 0부터 255 사이의 수를 입력하세요.")
+    if nextmode == 1:
+        colorfind = green.isdecimal()
+        if colorfind == True:
+            if int(green) > -1 and int(green) < 256:
+                nextmode = 2
+            else: await ctx.send("값이 너무 크거나 작습니다. 0부터 255 사이의 수를 입력하세요.")
+        else: await ctx.send("올바르지 않은 값입니다. 0부터 255 사이의 수를 입력하세요.")
+    if nextmode == 2:
+        colorfind = blue.isdecimal()
+        if colorfind == True:
+            if int(blue) > -1 and int(blue) < 256:
+                nextmode = 3
+                await ctx.send("임베드!")
+            else: await ctx.send("값이 너무 크거나 작습니다. 0부터 255 사이의 수를 입력하세요.")
+        else: await ctx.send("올바르지 않은 값입니다. 0부터 255 사이의 수를 입력하세요.")
+    hexred = hex(int(red))
+    hexgreen = hex(int(green))
+    hexblue = hex(int(blue))
+    if len(hexred) == 3: hexred = (str("0x0") + str(hexred[2]))
+    if len(hexgreen) == 3: hexgreen = (str("0x0") + str(hexgreen[2]))
+    if len(hexblue) == 3: hexred = (str("0x0") + str(hexblue[2]))
+    if nextmode == 3:
+        hexcolor = (str("#")+ str(hexred[2:].upper()) + str(hexgreen[2:].upper()) + str(hexblue[2:].upper()))
+        hexcolor2 = (str("0x")+ str(hexred[2:].upper()) + str(hexgreen[2:].upper()) + str(hexblue[2:].upper()))
+    embed = discord.Embed(color=int(hexcolor2, base=16), title=hexcolor, description = None)
+    await ctx.send(embed=embed)
 bot.run(token)
