@@ -15,6 +15,8 @@ import datetime as pydatetime
 from captcha.image import ImageCaptcha
 import qrcode
 import calendar
+import smtplib
+from email.mime.text import MIMEText
 
 notice = list()
 channel = list()
@@ -1150,4 +1152,14 @@ async def 뮤트(ctx, user:discord.Member):
         await user.add_roles("Muted")
         member = user.name
         await ctx.send(f"{member}님이 뮤트당하였습니다\n본 기능은 시험중이며 역할설정은 관리자가 해야됩니다")
+@bot.command()
+async def 메일(ctx, mail, *, text):
+    s = smtplib.SMTP('smtp.gmail.com', 587)
+    s.starttls()
+    s.login('hmin.koo10@gmail.com', 'shfkcbkedznofzkf')
+    msg = MIMEText(f'{ctx.author} : {text}')
+    msg['Subject'] = f'안녕하세요 디스코드 다오봇입니다 {ctx.author}님이 메일을 전해달라고 하네요'
+    s.sendmail("hmin.koo10@gmail.com", f"{mail}\n위 메시지는 디스코드에서 다오가 보낸 메시지 입니다", msg.as_string())
+    s.quit()
+    await ctx.send(f"{mail}님 한테 {text}라고 {ctx.author.mention}님이 메일을 전달했어요!")
 bot.run(token)
