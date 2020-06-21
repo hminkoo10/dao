@@ -1,4 +1,4 @@
-import discord
+import discord,random
 from bs4 import BeautifulSoup
 import requests
 
@@ -9,6 +9,7 @@ client = discord.Client()
 @client.event
 async def on_message(message):
     if message.content == ",코로나현황":
+        yesorno = ['y','n']
         response = requests.get('https://search.naver.com/search.naver?sm=tab_hty.top&where=nexearch&query=코로나')
         readerhtml = response.text
         soup = BeautifulSoup(readerhtml, 'lxml')
@@ -26,7 +27,11 @@ async def on_message(message):
         coembed.add_field(name="격리해제", value=f'{free}명', inline=True)
         coembed.add_field(name="검사중", value=f'{checking}명', inline=True)
         coembed.add_field(name="사망자", value=f'{die}명', inline=True)
-        coembed.set_image(url='https://cdn.discordapp.com/attachments/715886051776004097/724133198140932136/200225__1.png')
+        yesorno2 = random.choice(yesorno)
+        if yesorno2 == 'y':
+            coembed.set_image(url='https://cdn.discordapp.com/attachments/715886051776004097/724133198140932136/200225__1.png')
+        else:
+            coembed.set_image(url='https://cdn.discordapp.com/attachments/715886051776004097/724176186426785822/19__.jpg')
+        await message.channel.send(yesorno2)
         await message.channel.send(embed = coembed)
-
 client.run(token)

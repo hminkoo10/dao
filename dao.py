@@ -972,13 +972,13 @@ async def 타이핑(message):
 @bot.command()
 async def 이모지아이디(ctx, *, emoji):
     await bot.get_emoji(id)
-#@bot.command()
-#async def on_error(event, *args, **kwargs):
-#	if event == "on_message": #on_message에서 발생했을때 작동합니다.
-#    	message = *args[0] #args값에는 여러개가 들어올수도 있으니, 첫번째껏만 잡아줍니다.
-#    	exc = sys.exc_info() #sys를 활용해서 에러를 확인합니다.
-#        await ctx.channel.send(str(exc[0].__name__) + "" + str(exc[1])) #그 에러를 출력합니다.
-#	return
+@bot.listen()
+async def on_error(event, args, **kwargs):
+    if event == "on_message": #on_message에서 발생했을때 작동합니다.
+        message = args[0] #args값에는 여러개가 들어올수도 있으니, 첫번째껏만 잡아줍니다.
+        exc = sys.exc_info() #sys를 활용해서 에러를 확인합니다.
+        message.channel.send(str(exc[0].__name__) + "" + str(exc[1])) #그 에러를 출력합니다.
+        return
 #@bot.listen()
 #async def on_message_delete(message):
 #    if message.server.id == '708518643171983422' or message.server.id == '708518643171983422' or message.server.id == '720143008804241410':
