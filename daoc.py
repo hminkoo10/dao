@@ -26,6 +26,7 @@ async def on_message(message):
         coembed.add_field(name="격리해제", value=f'{free}명', inline=True)
         coembed.add_field(name="검사중", value=f'{checking}명', inline=True)
         coembed.add_field(name="사망자", value=f'{die}명', inline=True)
+        coembed.set_image(url='https://cdn.discordapp.com/attachments/715886051776004097/724133198140932136/200225__1.png')
         await message.channel.send(embed = coembed)
 
 client.run(token)

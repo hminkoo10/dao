@@ -1182,6 +1182,6 @@ async def color(ctx, red, green, blue):
     if nextmode == 3:
         hexcolor = (str("#")+ str(hexred[2:].upper()) + str(hexgreen[2:].upper()) + str(hexblue[2:].upper()))
         hexcolor2 = (str("0x")+ str(hexred[2:].upper()) + str(hexgreen[2:].upper()) + str(hexblue[2:].upper()))
-    embed = discord.Embed(color=int(hexcolor2, base=16), title=hexcolor, description = None)
+    embed = discord.Embed(color=int(hexcolor2, base=16), title=hexcolor, description = None)    
     await ctx.send(embed=embed)
 bot.run(token)
