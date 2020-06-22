@@ -1,11 +1,15 @@
 import discord,random
 from bs4 import BeautifulSoup
 import requests
+import urllib
 
 token = "NzEzMDA3Mjk2NDc2NzQxNjQz.XuWK4w.1D-nap9ca7zYP__JuEwdxiQ4ZEU"
 
 client = discord.Client()
 
+@client.event
+async def on_ready():
+    print('------------------------------------')
 @client.event
 async def on_message(message):
     if message.content == ",코로나현황":
@@ -34,4 +38,19 @@ async def on_message(message):
             coembed.set_image(url='https://cdn.discordapp.com/attachments/715886051776004097/724176186426785822/19__.jpg')
         await message.channel.send(yesorno2)
         await message.channel.send(embed = coembed)
+    if message.content.startswith(",구글링"):
+        text = message.content[5:]
+        await message.channel.send(f"{text}검색중!")
+        #url = f'https://search.naver.com/search.naver?sm=tab_hty.top&where=nexearch&query={text}'
+        #url = 'https://search.naver.com/search.naver?sm=tab_hty.top&where=nexearch&query=%EB%85%B8%EB%9E%98+%EB%AA%A8%EC%9D%8C%EC%A7%91&oquery=%EB%B8%94%EB%A1%9C%EA%B7%B8&tqi=UYu2hwp0JXossmkVJudssssst6Z-346222'
+        url = text
+        await message.channel.send(f'검색주소 : {url}')
+        html = urllib.request.urlopen(url).read()
+        soup = BeautifulSoup(html, 'html.parser')
+
+        title = soup.find_all(class_='sh_blog_title')
+
+        for i in title:
+            await message.channel.send(i.attrs['title'])
+            await message.channel.send(i.attrs['href'])
 client.run(token)

@@ -17,8 +17,8 @@ import qrcode
 import calendar
 import smtplib
 from email.mime.text import MIMEText
-import requests
-from bs4 import BeautifulSoup    
+import urllib,requests
+from bs4 import BeautifulSoup
 
 notice = list()
 channel = list()
@@ -1184,4 +1184,15 @@ async def color(ctx, red, green, blue):
         hexcolor2 = (str("0x")+ str(hexred[2:].upper()) + str(hexgreen[2:].upper()) + str(hexblue[2:].upper()))
     embed = discord.Embed(color=int(hexcolor2, base=16), title=hexcolor, description = None)    
     await ctx.send(embed=embed)
+@bot.command()
+async def 구글링(ctx, *, text):
+    url = f'https://search.naver.com/search.naver?sm=tab_hty.top&where=nexearch&query={text}'
+    html = urllib.request.urlopen(url).read()
+    soup = BeautifulSoup(html, 'html.parser')
+
+    title = soup.find_all(class_='sh_blog_title')
+
+    for i in title:
+        await ctx.send(i.attrs['title'])
+        await ctx.send(i.attrs['href'])
 bot.run(token)
