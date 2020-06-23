@@ -19,6 +19,7 @@ import smtplib
 from email.mime.text import MIMEText
 import urllib,requests
 from bs4 import BeautifulSoup
+import ast
 
 notice = list()
 channel = list()
@@ -56,6 +57,21 @@ async def main():
 
 def setup(bot):
     bot.add_cog(Corona(bot))
+
+def insert_returns(body):
+    # insert return stmt if the last expression is a expression statement
+    if isinstance(body[-1], ast.Expr):
+        body[-1] = ast.Return(body[-1].value)
+        ast.fix_missing_locations(body[-1])
+
+    # for if statements, we insert returns into the body and the orelse
+    if isinstance(body[-1], ast.If):
+        insert_returns(body[-1].body)
+        insert_returns(body[-1].orelse)
+
+    # for with blocks, again we insert returns into the body
+    if isinstance(body[-1], ast.With):
+        insert_returns(body[-1].body)
 @bot.event
 async def on_ready():
     print(f'로그인 성공: {bot.user.name}!')
@@ -1143,10 +1159,10 @@ async def 뮤트(ctx, user:discord.Member):
 async def 메일(ctx, mail, *, text):
     s = smtplib.SMTP('smtp.gmail.com', 587)
     s.starttls()
-    s.login('hmin.koo10@gmail.com', 'shfkcbkedznofzkf')
+    s.login('discord.dao.bot.0564.hminkoo10@gmail.com', 'orqikrcirwvzrwgv')
     msg = MIMEText(f'{ctx.author} : {text}')
     msg['Subject'] = f'안녕하세요 디스코드 다오봇입니다 {ctx.author}님이 메일을 전해달라고 하네요'
-    s.sendmail("discord.dao.bot@gmail.com", f"{mail}\n위 메시지는 디스코드에서 다오가 보낸 메시지 입니다", msg.as_string())
+    s.sendmail("discord.dao.bot.0564.hminkoo10@gmail.com", f"{mail}\n위 메시지는 디스코드에서 다오가 보낸 메시지 입니다", msg.as_string())
     s.quit()
     await ctx.send(f"{mail}님 한테 {text}라고 {ctx.author.mention}님이 메일을 전달했어요!")
 @bot.command()
@@ -1195,4 +1211,56 @@ async def 구글링(ctx, *, text):
     for i in title:
         await ctx.send(i.attrs['title'])
         await ctx.send(i.attrs['href'])
+@bot.command()
+async def eval_(ctx, *, cmd):
+    """Evaluates input.
+    Input is interpreted as newline seperated statements.
+    If the last statement is an expression, that is the return value.
+    Usable globals:
+      - `bot`: the bot instance
+      - `discord`: the discord module
+      - `commands`: the discord.ext.commands module
+      - `ctx`: the invokation context
+      - `__import__`: the builtin `__import__` function
+    Such that `>eval 1 + 1` gives `2` as the result.
+    The following invokation will cause the bot to send the text '9'
+    to the channel of invokation and return '3' as the result of evaluating
+    >eval ```
+    a = 1 + 2
+    b = a * 2
+    await ctx.send(a + b)
+    a
+    ```
+    """
+    fn_name = "_eval_expr"
+
+    cmd = cmd.strip("` ")
+
+    # add a layer of indentation
+    cmd = "\n".join(f"    {i}" for i in cmd.splitlines())
+
+    # wrap in async def body
+    body = f"async def {fn_name}():\n{cmd}"
+
+    parsed = ast.parse(body)
+    body = parsed.body[0].body
+
+    insert_returns(body)
+
+    env = {
+        'bot': ctx.bot,
+        'discord': discord,
+        'commands': commands,
+        'ctx': ctx,
+        '__import__': __import__
+    }
+    exec(compile(parsed, filename="<ast>", mode="exec"), env)
+
+    result = (await eval(f"{fn_name}()", env))
+    await ctx.send(result)
+@bot.command()
+async def 수정(ctx, one, two, *, three):
+    edit = await ctx.send(one)
+    await asyncio.sleep(int(f"{two}"))
+    await edit.edit(content=three)
 bot.run(token)
