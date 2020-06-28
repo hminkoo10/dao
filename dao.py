@@ -20,6 +20,8 @@ from email.mime.text import MIMEText
 import urllib,requests
 from bs4 import BeautifulSoup
 import ast
+import traceback
+import sys
 
 notice = list()
 channel = list()
@@ -1112,16 +1114,16 @@ async def 비속어추가(ctx, *, one):
         file.write(dict2)
         file.close
         await ctx.send("OK")
-@bot.listen()
-async def on_message(message):
-    if message.content.startswith(""):
-        hi = message.content[0:]
-        send = dict2[hi]
-        await message.channel.purge(limit=1)
-        await message.channel.send(str(send) + str("\n비속어 사용자 : ") + str(message.author))
-        file = open("비속어사용.txt", "a+")
-        file.write(str("\n") + str(message.author) + str(":") + str(send))
-        file.close
+#@bot.listen()
+#async def on_message(message):
+#    if message.content.startswith(""):
+#        hi = message.content[0:]
+#        send = dict2[hi]
+#        await message.channel.purge(limit=1)
+#        await message.channel.send(str(send) + str("\n비속어 사용자 : ") + str(message.author))
+#        file = open("비속어사용.txt", "a+")
+#        file.write(str("\n") + str(message.author) + str(":") + str(send))
+#        file.close
 @bot.command()
 async def 비속어삭제(ctx, text):
     if str(ctx.author.id) in admin:
@@ -1186,7 +1188,7 @@ async def color(ctx, red, green, blue):
         if colorfind == True:
             if int(blue) > -1 and int(blue) < 256:
                 nextmode = 3
-                await ctx.send("임베드!")
+                await ctx.send("출력중...")
             else: await ctx.send("값이 너무 크거나 작습니다. 0부터 255 사이의 수를 입력하세요.")
         else: await ctx.send("올바르지 않은 값입니다. 0부터 255 사이의 수를 입력하세요.")
     hexred = hex(int(red))
@@ -1213,54 +1215,65 @@ async def 구글링(ctx, *, text):
         await ctx.send(i.attrs['href'])
 @bot.command()
 async def eval_(ctx, *, cmd):
-    """Evaluates input.
-    Input is interpreted as newline seperated statements.
-    If the last statement is an expression, that is the return value.
-    Usable globals:
-      - `bot`: the bot instance
-      - `discord`: the discord module
-      - `commands`: the discord.ext.commands module
-      - `ctx`: the invokation context
-      - `__import__`: the builtin `__import__` function
-    Such that `>eval 1 + 1` gives `2` as the result.
-    The following invokation will cause the bot to send the text '9'
-    to the channel of invokation and return '3' as the result of evaluating
-    >eval ```
-    a = 1 + 2
-    b = a * 2
-    await ctx.send(a + b)
-    a
-    ```
-    """
-    fn_name = "_eval_expr"
+    if str(ctx.author.id) in admin:
+        """Evaluates input.
+        Input is interpreted as newline seperated statements.
+        If the last statement is an expression, that is the return value.
+        Usable globals:
+          - `bot`: the bot instance
+          - `discord`: the discord module
+          - `commands`: the discord.ext.commands module
+          - `ctx`: the invokation context
+          - `__import__`: the builtin `__import__` function
+        Such that `>eval 1 + 1` gives `2` as the result.
+        The following invokation will cause the bot to send the text '9'
+        to the channel of invokation and return '3' as the result of evaluating
+        >eval ```
+        a = 1 + 2
+        b = a * 2
+        await ctx.send(a + b)
+        a
+        ```
+        """
+        fn_name = "_eval_expr"
 
-    cmd = cmd.strip("` ")
+        cmd = cmd.strip("` ")
 
     # add a layer of indentation
-    cmd = "\n".join(f"    {i}" for i in cmd.splitlines())
+        cmd = "\n".join(f"    {i}" for i in cmd.splitlines())
 
     # wrap in async def body
-    body = f"async def {fn_name}():\n{cmd}"
+        body = f"async def {fn_name}():\n{cmd}"
 
-    parsed = ast.parse(body)
-    body = parsed.body[0].body
+        parsed = ast.parse(body)
+        body = parsed.body[0].body
 
-    insert_returns(body)
+        insert_returns(body)
 
-    env = {
-        'bot': ctx.bot,
-        'discord': discord,
-        'commands': commands,
-        'ctx': ctx,
-        '__import__': __import__
-    }
-    exec(compile(parsed, filename="<ast>", mode="exec"), env)
+        env = {
+            'bot': ctx.bot,
+            'discord': discord,
+            'commands': commands,
+            'ctx': ctx,
+            '__import__': __import__
+        }
+        exec(compile(parsed, filename="<ast>", mode="exec"), env)
 
-    result = (await eval(f"{fn_name}()", env))
-    await ctx.send(result)
+        result = (await eval(f"{fn_name}()", env))
+        await ctx.send(result)
 @bot.command()
 async def 수정(ctx, one, two, *, three):
     edit = await ctx.send(one)
     await asyncio.sleep(int(f"{two}"))
     await edit.edit(content=three)
+@bot.command()
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CommandNotFound):
+        await ctx.send('없는 명령어입니다! ,help나 ,도움을 입력 해 보세요!')
+    else:
+        tb = traceback.format_exception(type(error), error, error.traceback)
+        errlist = [line.rstrip() for line in tb]
+        errstr = '\n'.join(errlist)
+        embed = discord.Embed(title='오류발생!', description = errstr)
+        await ctx.send(embed=embed)
 bot.run(token)
