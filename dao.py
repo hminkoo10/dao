@@ -51,7 +51,7 @@ player2_result = "none"
 que = {}
 playerlist = {}
 playlist = list() #재생목록 리스트
-admin = ['657773087571574784','564250827959566359','712290125505363980','310247242546151434','694406375228440606']
+admin = ['657773087571574784','564250827959566359','712290125505363980','247305812123320321','694406375228440606']
 
 async def main():
     userid = "713007296476741643"
@@ -1269,21 +1269,31 @@ async def 수정(ctx, one, two, *, three):
     await edit.edit(content=three)
 @bot.command()
 async def on_command_error(ctx, error):
-    if isinstance(error, commands.CommandNotFound):
-        await ctx.send('없는 명령어입니다! ,help나 ,도움을 입력 해 보세요!')
-    else:
-        tb = traceback.format_exception(type(error), error, error.traceback)
-        errlist = [line.rstrip() for line in tb]
-        errstr = '\n'.join(errlist)
-        embed = discord.Embed(title='오류발생!', description = errstr)
-        await ctx.send(embed=embed)
+    ex = error
+    """
+    #embed = discord.Embed(
+            title='**:x: 명령어 없어 :x:**',
+            description=f"- 발신자 : <@{ctx.author.id}>\n- 수신내용 : ``{ctx.message.content}``\n- 내용 : ``{ex}``",
+            colour=discord.Colour.red()
+        )
+    #embed.set_footer(icon_url=ctx.author.avatar_url,
+                         text=f'{str(ctx.author.name)} | 새로운명령어: {ctx.message.content} | {datetime.datetime.today()}')
+    #await ctx.channel.send(embed=embed)
+    """
+    msg = ctx.message.content[4: ]
+    embed = discord.Embed(title=f"**SYSTEAM ERROR**", color = 0xff0000)
+    embed.set_footer(icon_url=ctx.author.avatar_url, text=f'{str(ctx.author.mention)}오류 실행 명령어: {ctx.message.content} | {datetime.datetime.today()}')
 @bot.command(name="exec")
 async def exec_(ctx, *, code):
-    os.system(code)
-    b = os.system(code)
-    if b == 0:
-        a = subprocess.check_output(code, shell=True)
-        await ctx.send(f'```cmd\n{a}\n```')
-    else:
-        await ctx.send('```diff\n-ERROR!!-\n```')
+    if str(ctx.author.id) in admin:
+        os.system(code)
+        b = os.system(code)
+        if b == 0:
+            a = subprocess.check_output(code, shell=True)
+            bbb = a.decode('EUC-KR', 'backslashreplace')
+            await ctx.send(f'```cmd\n{bbb}\n```')
+        else:
+            await ctx.send('```diff\n-ERROR!!-\n```')
+            sss = subprocess.check_output(code, shell=True)
+            await ctx.send(f"오류코드:\n```cmd\n{sss}\n```")
 bot.run(token)
