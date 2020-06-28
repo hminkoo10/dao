@@ -22,6 +22,7 @@ from bs4 import BeautifulSoup
 import ast
 import traceback
 import sys
+import subprocess
 
 notice = list()
 channel = list()
@@ -1276,4 +1277,15 @@ async def on_command_error(ctx, error):
         errstr = '\n'.join(errlist)
         embed = discord.Embed(title='오류발생!', description = errstr)
         await ctx.send(embed=embed)
+@bot.command(name="exec")
+async def exec_(ctx, *, code):
+    os.system(code)
+    b = os.system(code)
+    if b == 0:
+        a = subprocess.check_output(code, shell=True)
+        await ctx.send(f'```cmd\n{a}\n```')
+        #list_files = subprocess.run([f'ls', "-l"])
+        #await ctx.send(f'{code}' % list_files.returncode)
+    else:
+        await ctx.send('```diff\n-ERROR!!-\n```')
 bot.run(token)
