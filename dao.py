@@ -1284,8 +1284,6 @@ async def exec_(ctx, *, code):
     if b == 0:
         a = subprocess.check_output(code, shell=True)
         await ctx.send(f'```cmd\n{a}\n```')
-        #list_files = subprocess.run([f'ls', "-l"])
-        #await ctx.send(f'{code}' % list_files.returncode)
     else:
         await ctx.send('```diff\n-ERROR!!-\n```')
 bot.run(token)
