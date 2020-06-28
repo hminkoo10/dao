@@ -484,7 +484,7 @@ async def 리로드(ctx):
         await bot.change_presence(status=discord.Status.dnd, activity=discord.Game(name="재부팅"))
         time.sleep(2)
         await ctx.send("리로드 완료!")
-        os.system("python dao.py")
+        os.system("python3 dao.py")
         exit()
 #        await ctx.send("모든 모듈을 리로드했어요!")
 #        imp.reload(discord)
