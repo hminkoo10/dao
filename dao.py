@@ -22,6 +22,7 @@ from bs4 import BeautifulSoup
 import ast
 import traceback
 import sys
+from googletrans import Translator
 import subprocess
 
 notice = list()
@@ -113,6 +114,9 @@ async def 도움(ctx):
     embed.add_field(name="학습기능", value="``학습 (1) (2)``를 하고 ``,(1)``로 확인",inline=False)
     embed.add_field(name="코로나 현황", value="``,코로나현황``로 확인",inline=False)
     embed.add_field(name="16진수 변환", value="``,color (빨강) (파랑) (노랑)``로 확인",inline=False)
+    embed.add_field(name="영화순위(상위 10개)", value="``,영화순위``로 확인", inline=False)
+    embed.add_field(name="날씨", value="``,날씨 (지역)``로 확인", inline=False)
+    embed.add_field(name="번역", value="``,번역 (번역할 언어) (번역될 언어) (번역될 낱말)``로 확인\n^^ 예시 : ,번역 ko en 안녕\n값 : Hello", inline=False)
     embed.add_field(name="다오 서포터", value="- ``https://discord.gg/PKGMwSB``", inline=False)
     embed.add_field(name="공지 (only 서버관리자)", value="- ``,공지 내용``", inline=False)
     embed.set_footer(text=(ctx.author.name), icon_url=ctx.author.avatar_url)
@@ -1292,10 +1296,15 @@ async def exec_(ctx, *, code):
         if b == 0:
             a = subprocess.check_output(code, shell=True)
             bbb = a.decode('EUC-KR', 'backslashreplace')
-            embed = discord.Embed(title=f'정상동작 <a:okay:726967334861799514>', color = 0x0000ff, description = f'실행코드\n```ini\n{code}\n```\n\n실행값\n```cmd\n{bbb}\n```')
+            embed = discord.Embed(title=f'정상동작 <a:okay:726967334861799514>', color = 0x0000ff, description = f'실행코드\n```cmd\n{code}\n```\n\n실행값\n```cmd\n{bbb}\n```')
             await zzzzz.edit(embed = embed)
         else:
             await ctx.send(f'```diff\n-ERROR!!-\n```')
             sss = subprocess.check_output(code, shell=True)
             await ctx.send(f"오류코드:\n```cmd\n{sss}\n```")
+@bot.command()
+async def 번역(ctx, lano, lant, *, text):
+    translator = Translator()
+    result = translator.translate(text=text, src=lano, dest=lant)
+    await ctx.send(embed=discord.Embed(title=f'{text} ---> {result.text}', color = 0x3498db))
 bot.run(token)
