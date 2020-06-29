@@ -1307,4 +1307,49 @@ async def 번역(ctx, lano, lant, *, text):
     translator = Translator()
     result = translator.translate(text=text, src=lano, dest=lant)
     await ctx.send(embed=discord.Embed(title=f'{text} ---> {result.text}', color = 0x3498db))
+@bot.command()
+async def 업타임text(self, ctx):
+    import base64, datetime
+    from bs4 import BeautifulSoup
+    from urllib import parse
+    import time, random, json
+    from run import START
+    from tools.requests import reqjson
+    import psutil, cpuinfo
+    uptime = round(time.time() - START)
+    if uptime >= 86400:
+        ut1 = uptime // 86400
+        ut2 = uptime % 86400
+        ut3 = ut2 // 3600
+        ut4 = ut2 % 3600
+        ut5 = ut4 // 60
+        ut6 = ut4 % 60
+        await ctx.send(f'{ut1}일 {ut3}시간 {ut5}분 {ut6}초 동안 작동됨')
+    elif uptime >= 3600:
+        ut1 = uptime // 3600
+        ut2 = uptime % 3600
+        ut3 = ut2 // 60
+        ut4 = ut2 % 60
+        await ctx.send(f'{ut1}시간 {ut3}분 {ut4}초 동안 작동됨')
+    elif uptime >= 60:
+        ut1 = uptime // 60
+        ut2 = uptime % 60
+        await ctx.send(f'{ut1}분 {ut2}초 동안 작동됨')
+    elif uptime < 60:
+        await ctx.send(f'{uptime}초 동안 작동됨')
+@bot.command()
+async def 업타임(ctx):
+    if str(ctx.author.id) in admin:
+        embed = discord.Embed(title="checking... <a:loadding:726965248762052708>", color=0xff0000)
+        zzzzz = await ctx.send(embed=embed)
+        b = os.system('uptime')
+        if b == 0:
+            a = subprocess.check_output(code, shell=True)
+            bbb = a.decode('EUC-KR', 'backslashreplace')
+            embed = discord.Embed(title=f'정상동작 <a:okay:726967334861799514>', color = 0x0000ff, description = f'실행명령어\n```cmd\nuptime\n```\n\n실행값\n```cmd\n{bbb}\n```')
+            await zzzzz.edit(embed = embed)
+        else:
+            await ctx.send(f'```diff\n-ERROR!!-\n```')
+            sss = subprocess.check_output(code, shell=True)
+            await ctx.send(f"오류코드:\n```cmd\n{sss}\n```")
 bot.run(token)
