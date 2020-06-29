@@ -1008,12 +1008,13 @@ async def on_error(event, args, **kwargs):
 #	await message.channel.send("메세지 삭제 감지(" + str(message.author) + "): " + message.content)
 #	return
 @bot.command()
-async def on_member_join(member):
-    await member.guild.get_channel(702088239502065704).send(member.mention + "님이 새롭게 접속했습니다. 환영해주세요!")
-    return
+async def on_member_leaves(member):
+    if member.message.guild.id == 701974089421553806:
+        await bot.get_channel(712933494489088041).send(f"{member.author.mention}님이 오셨어요! 환영 해 주세요!")
+        return
 @bot.listen()
 async def on_guild_join(guild):
-	await guild.guild.get_channel(712933494489088041).send("새로운 서버에 접속!" + str(guild))
+	await guild.message.channel.send("새로운 서버에 접속!" + str(guild))
 	return
 @bot.listen()
 async def on_member_ban(guild, user):
@@ -1352,4 +1353,7 @@ async def 업타임(ctx):
             await ctx.send(f'```diff\n-ERROR!!-\n```')
             sss = subprocess.check_output(code, shell=True)
             await ctx.send(f"오류코드:\n```cmd\n{sss}\n```")
+@bot.listen()
+async def on_reaction_add(reaction, user):
+    await reaction.message.add_reaction(reaction.emoji)
 bot.run(token)
