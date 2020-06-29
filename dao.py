@@ -1286,14 +1286,16 @@ async def on_command_error(ctx, error):
 @bot.command(name="exec")
 async def exec_(ctx, *, code):
     if str(ctx.author.id) in admin:
-        os.system(code)
+        embed = discord.Embed(title="execing... <a:loadding:726965248762052708>", color=0xff0000)
+        zzzzz = await ctx.send(embed=embed)
         b = os.system(code)
         if b == 0:
             a = subprocess.check_output(code, shell=True)
             bbb = a.decode('EUC-KR', 'backslashreplace')
-            await ctx.send(f'```cmd\n{bbb}\n```')
+            embed = discord.Embed(title=f'정상동작 <a:okay:726967334861799514>', color = 0x0000ff, description = f'실행코드\n```ini\n{code}\n```\n\n실행값\n```cmd\n{bbb}\n```')
+            await zzzzz.edit(embed = embed)
         else:
-            await ctx.send('```diff\n-ERROR!!-\n```')
+            await ctx.send(f'```diff\n-ERROR!!-\n```')
             sss = subprocess.check_output(code, shell=True)
             await ctx.send(f"오류코드:\n```cmd\n{sss}\n```")
 bot.run(token)
