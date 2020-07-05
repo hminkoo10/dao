@@ -1356,4 +1356,47 @@ async def 업타임(ctx):
 @bot.listen()
 async def on_reaction_add(reaction, user):
     await reaction.message.add_reaction(reaction.emoji)
+@bot.command()
+async def 하트(ctx, user:discord.Member):
+    info = await dbkrpy.CheckVote.get_response("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg", user.id)
+    dbkr = dbkrpy.CheckVote(info)
+    await ctx.channel.send(dbkr.check)
+@bot.listen()
+async def on_member_join(member):
+    syschannel = member.guild.system_channel.id 
+    try:
+        embed=discord.Embed(
+            title=f'멤버 입장',
+            description=f'{member.mention}님이 {member.guild}에 들어오셨습니다.\n현재 서버 인원수: {str(len(member.guild.members))}명',
+            colour=0x00f000
+        )
+        embed.set_thumbnail(url=member.avatar_url)
+        await bot.get_channel(syschannel).send(embed=embed)
+    except:
+        return None
+
+@bot.listen
+async def on_member_remove(member):
+    syschannel = member.guild.system_channel.id 
+    try:
+        embed=discord.Embed(
+            title=f'멤버 퇴장',
+            description=f'{member.mention}님이{member.guild}에 퇴장 했습니다.\n현재 서버 인원수: {str(len(member.guild.members))}명',
+            colour=discord.Colour.red()
+        )
+        embed.set_thumbnail(url=member.avatar_url)
+        await bot.get_channel(syschannel).send(embed=embed)
+    except:
+        return None
+@bot.listen()
+async def on_guild_join(guild):
+    await guild.owner.send(f'`{bot.user.name}`를 {guild.name}에 초대해주셔서 감사드립니다!\n앞으로 {bot.user.name}는 더 발전하겠습니다 \n https://koreanbots.dev/bots/713007296476741643 여기서 하트추가를 눌러주세요!')
+@bot.command()
+async def 전체공지(ctx, *, msg):
+    for guild in bot.guilds:
+      try:
+        await guild.channels[0].send(msg)
+        print("성공")
+      except:
+        print("실패..")
 bot.run(token)
