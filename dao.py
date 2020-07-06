@@ -1423,4 +1423,45 @@ async def on_message(message):
                         for reply in data['response']['replies']:
                             if 'text' in reply:
                                 await message.channel.send(reply['text'])
+@bot.listen()
+async def on_message(message):
+    if message.content.startswith(',전체 임베드 공지'):
+                if str(message.author.id) != '657773087571574784':
+                    await message.channel.send('나 해킹해봐', '관리자 기능')
+                    return None
+                import datetime
+                msg=message.content[11:]
+                now=datetime.datetime.now()
+                embed=discord.Embed(
+                    title=msg.split('/')[0],
+                    description=msg.split('/')[1],
+                    colour=0xff00
+                ).set_footer(icon_url=message.author.avatar_url, text=f' {str(message.author.display_name)} - 인증됨 | {str(now.year)}년 {str(now.month)}월 {str(now.day)}일')
+                for i in bot.guilds:
+                    arr=[0]
+                    alla=False
+                    flag=True
+                    z=0
+                    for j in i.channels:
+                        arr.append(j.id)
+                        z+=1
+                        if '📢봇_공지' in j.name or '봇-공지' in j.name or '봇-공지사항' in j.name or '공지-봇' in j.name or '봇_공지' in j.name or '봇공지' in j.name:
+                            if str(j.type)=='text':
+                                try:
+                                    await j.send(embed=embed)
+                                    alla=True
+                                except:
+                                    pass
+                                break
+                    if alla==False:
+                        try:
+                            chan=i.channels[1]
+                        except:
+                            pass
+                        if str(chan.type)=='text':
+                            try:
+                                await chan.send(embed=embed)
+                            except:
+                                pass
+                await message.channel.send('공지 전송을 완료했습니다')
 bot.run(token)
