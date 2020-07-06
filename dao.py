@@ -24,6 +24,7 @@ import traceback
 import sys
 from googletrans import Translator
 import subprocess
+import aiohttp
 
 notice = list()
 channel = list()
@@ -1399,4 +1400,27 @@ async def 전체공지(ctx, *, msg):
         print("성공")
       except:
         print("실패..")
+@bot.listen()
+async def on_message(message):
+    if message.content.startswith(","):
+                pingpongurl = "https://builder.pingpong.us/api/builder/5ea0f0cbe4b0e921afb16f6d/integration/v0.2/custom"
+                pingpongauth = "Basic a2V5OjFhMzJlOGQxM2U3MWM2YTMyYWUwNjkyZDZkOTczNjhj" 
+                msg = message.content[1:]
+                header = {
+                     'Authorization': pingpongauth,
+                    'Content-Type': 'application/json'
+                }
+                param = {
+                    'request': {
+                        'query': msg
+                    }
+                }
+                async with aiohttp.ClientSession(headers=header) as session:
+                    async with session.post(pingpongurl+f'/{message.author.id}', json=param) as res:
+                        data = await res.json()
+                        assert 'response' in data
+                        assert 'replies' in data['response']
+                        for reply in data['response']['replies']:
+                            if 'text' in reply:
+                                await message.channel.send(reply['text'])
 bot.run(token)
