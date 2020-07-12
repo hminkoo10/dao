@@ -25,8 +25,11 @@ import sys
 from googletrans import Translator
 import subprocess
 import aiohttp
+import json
+from numpyencoder import NumpyEncoder
 
-notice = list()
+notice = [
+    ]
 channel = list()
 dict1 = {}
 dict2 = {}
@@ -374,37 +377,40 @@ async def on_message(message):
 @bot.command()
 async def 공지채널설정(ctx, channel: discord.TextChannel):
     if ctx.message.author.id == 657773087571574784:
+        json_string = json.dumps(notice)
+        #channels = str(channel)
+        #print(type(channels))
         if channel in notice:
             await ctx.send("이미 등록됨")
         else:
-            notice.append(channel)
+            channels = str(channel.id)
+            notice.append(channels)
+            #json_string = json.dumps(notice, cls=str)
+            #print(json_string)
+            with open("data_server.json", "w+", encoding='utf-8-sig') as f:
+                json_string = json.dump(notice, f, indent=2, ensure_ascii=False)
+            #print(json_string)
+            #jstring = json.dumps(notice, indent=4)
+            #f = open("data_server.json", "w")
+            #f.write(jstring)
+            #f.close()
+            await ctx.send("json data저장")
             await ctx.send("완료")
-    else:
-        if ctx.author.guild_permissions.administrator:
-            if channel in notice:
-                await ctx.send("이미 등록됨")
-            else:
-                notice.append(channel)
-                await ctx.send("완료")
-        else:
-            await ctx.send("관리자권한이 없습니다")
+
 @bot.command()
 async def 공지보내기(ctx, *, msg):
     if ctx.message.author.id == 657773087571574784:
+        with open('data_server.json', 'r') as f:
+            jstring = open("data_server.json", "r", encoding='utf-8-sig').read()
+            notice = json.loads(jstring)
         for i in notice:
-            embed = discord.Embed(title="@here",color=0x9b59b6,description="공지") #임베드 변수 지정
-            embed.add_field(name="made by hminkoo10#6898", value=(msg), inline=False) #field add
-            embed.set_footer(text=ctx.author.name + "-인증됨(PRM)", icon_url=ctx.author.avatar_url)
-            await i.send(embed=embed)
-    else:
-        if ctx.author.guild_permissions.administrator:
-            for i in notice:
-                embed = discord.Embed(title="@here",color=0x9b59b6,description="공지") #임베드 변수 지정
-                embed.add_field(name="made by hminkoo10#6898", value=(msg), inline=False) #field add
+            getchannel = bot.get_channel(i)
+            for e in getchannel:
+                embed = discord.Embed(title="다오봇 공지",color=0x9b59b6,description=None) #임베드 변수 지정
+                embed.add_field(name="공지내용\n=================", value=(msg), inline=False) #field add
                 embed.set_footer(text=ctx.author.name + "-인증됨(PRM)", icon_url=ctx.author.avatar_url)
-                await i.send(embed=embed)
-        else:
-            await ctx.channel.send("관리자 권한이 없습니다")
+                await e.send(embed=embed)
+
 #@bot.listen()
 #async def on_message(message):
 #    if message.content.startswith(""):
@@ -1095,7 +1101,10 @@ async def 학습(ctx, one, *, two):
 async def on_message(message):
     if message.content.startswith(","):
         hi = message.content[1:]
-        send = dict1[hi]
+        try:
+            send = dict1[hi]
+        except:
+            send = None
         await message.channel.send(send)
 @bot.command()
 async def 지워(ctx, text):
@@ -1402,10 +1411,10 @@ async def 전체공지(ctx, *, msg):
         print("실패..")
 @bot.listen()
 async def on_message(message):
-    if message.content.startswith(","):
+    if message.content.startswith("다오야 "):
                 pingpongurl = "https://builder.pingpong.us/api/builder/5ea0f0cbe4b0e921afb16f6d/integration/v0.2/custom"
                 pingpongauth = "Basic a2V5OjFhMzJlOGQxM2U3MWM2YTMyYWUwNjkyZDZkOTczNjhj" 
-                msg = message.content[1:]
+                msg = message.content[4:]
                 header = {
                      'Authorization': pingpongauth,
                     'Content-Type': 'application/json'
