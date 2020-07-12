@@ -1464,4 +1464,12 @@ async def on_message(message):
                             except:
                                 pass
                 await message.channel.send('공지 전송을 완료했습니다')
+@bot.command()
+async def 슬로우모드(ctx, edittime):
+    if ctx.author.guild_permissions.manage_channels:
+        await ctx.channel.edit(slowmode_delay=int(edittime))
+        await ctx.send(f"슬로우모드를 {edittime}으로 지정했어요!")
+    else:
+        await ctx.send("관리자권한이 없어요!")
+        
 bot.run(token)
