@@ -31,7 +31,7 @@ from numpyencoder import NumpyEncoder
 notice = [
     ]
 channel = list()
-with open('data_server.json', 'r') as f:
+with open('data_learn.json', 'r') as f:
     jstring = open("data_learn.json", "r", encoding='utf-8-sig').read()
     dict1 = json.loads(jstring)
 dict2 = {}
