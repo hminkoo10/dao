@@ -31,11 +31,14 @@ from numpyencoder import NumpyEncoder
 notice = [
     ]
 channel = list()
-dict1 = {}
+with open('data_server.json', 'r') as f:
+    jstring = open("data_learn.json", "r", encoding='utf-8-sig').read()
+    dict1 = json.loads(jstring)
 dict2 = {}
 tkdyd = []
 check = []
 bot = commands.Bot(command_prefix=',')
+dao = commands.Bot(command_prefix=';')
 PRM = ['657773087571574784','564250827959566359','694406375228440606']
 token = "NzEzMDA3Mjk2NDc2NzQxNjQz.XuWK4w.1D-nap9ca7zYP__JuEwdxiQ4ZEU"
 DBKR_token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg"
@@ -398,18 +401,25 @@ async def 공지채널설정(ctx, channel: discord.TextChannel):
             await ctx.send("완료")
 
 @bot.command()
-async def 공지보내기(ctx, *, msg):
+async def 공지보내기(ctx, *, msg, pass_context=True):
     if ctx.message.author.id == 657773087571574784:
         with open('data_server.json', 'r') as f:
             jstring = open("data_server.json", "r", encoding='utf-8-sig').read()
             notice = json.loads(jstring)
+            getchannel = []
         for i in notice:
-            getchannel = bot.get_channel(i)
-            for e in getchannel:
-                embed = discord.Embed(title="다오봇 공지",color=0x9b59b6,description=None) #임베드 변수 지정
-                embed.add_field(name="공지내용\n=================", value=(msg), inline=False) #field add
-                embed.set_footer(text=ctx.author.name + "-인증됨(PRM)", icon_url=ctx.author.avatar_url)
-                await e.send(embed=embed)
+            await bot.wait_until_ready()
+            getchannel.append(bot.get_channel(int(i)))
+        for e in getchannel:
+                await ctx.send("전송시도중")
+                try:
+                    embed = discord.Embed(title="다오봇 공지",color=0x9b59b6,description=None) #임베드 변수 지정
+                    embed.add_field(name="공지내용\n=================", value=(msg), inline=False) #field add
+                    embed.set_footer(text=ctx.author.name + "-인증됨(PRM)", icon_url=ctx.author.avatar_url)
+                    await e.send(embed=embed)
+                    await ctx.send("성공")
+                except:
+                    await ctx.send("실패")
 
 #@bot.listen()
 #async def on_message(message):
@@ -1092,14 +1102,20 @@ async def id확인(ctx, il):
     await ctx.send(str(imm))
 @bot.command()
 async def 학습(ctx, one, *, two):
-    dict1[one] = two + "\n" + f"``{ctx.author}님이 알려주셨어요!``"
+    dict1[one] = two + '\n' f'``{ctx.author}님이 알려주셨어요!``'
     file = open("학습기록.txt", "a+")
     file.write(str("\n") + str(ctx.author) + str(":") + str(one) + str(":") + str(two))
     file.close
+    with open("data_learn.json", "w+", encoding='utf-8-sig') as f:
+        json_string = json.dump(dict1, f, indent=2, ensure_ascii=False)
+    await ctx.send("json데이터 저장중")
     await ctx.send("OK")
 @bot.listen()
 async def on_message(message):
     if message.content.startswith(","):
+        with open('data_server.json', 'r') as f:
+            jstring = open("data_learn.json", "r", encoding='utf-8-sig').read()
+        dict1 = json.loads(jstring)
         hi = message.content[1:]
         try:
             send = dict1[hi]
@@ -1110,6 +1126,9 @@ async def on_message(message):
 async def 지워(ctx, text):
     if str(ctx.author.id) in admin:
         del dict1[text]
+        with open("data_learn.json", "w+", encoding='utf-8-sig') as f:
+            json_string = json.dump(dict1, f, indent=2, ensure_ascii=False)
+        await ctx.send("json DB저장중")
         await ctx.send("OK")
 @bot.command()
 async def 학습확인(ctx):
@@ -1480,5 +1499,8 @@ async def 슬로우모드(ctx, edittime):
         await ctx.send(f"슬로우모드를 {edittime}으로 지정했어요!")
     else:
         await ctx.send("관리자권한이 없어요!")
-        
+#@bot.command()
+@dao.command()
+async def 테스팅(ctx):
+    await ctx.send('테스팅')
 bot.run(token)
