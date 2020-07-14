@@ -27,6 +27,9 @@ import subprocess
 import aiohttp
 import json
 from numpyencoder import NumpyEncoder
+import giphy_client #cmd에 'pip install giphy_client'
+from giphy_client.rest import ApiException
+import os
 
 notice = [
     ]
@@ -36,6 +39,7 @@ with open('data_learn.json', 'r') as f:
     dict1 = json.loads(jstring)
 dict2 = {}
 tkdyd = []
+giphy_token = 'uBpiTkQ9beqY4NayRkx6sz9bMSTkRpDE'
 check = []
 bot = commands.Bot(command_prefix=',')
 dao = commands.Bot(command_prefix=';')
@@ -60,6 +64,25 @@ que = {}
 playerlist = {}
 playlist = list() #재생목록 리스트
 admin = ['657773087571574784','564250827959566359','712290125505363980','247305812123320321','694406375228440606']
+api_instance = giphy_client.DefaultApi()
+
+def search_gifs(query):
+    try:
+        return api_instance.gifs_search_get(giphy_token, query,
+                                            limit=5, rating='r',
+                                            lang=["en","ru","ua","kr"]
+                                               )
+
+    except ApiException:
+        pass
+def gif_response(emotion):
+    try:
+        gifs = search_gifs(emotion)
+        lst = list(gifs.data)
+        gif = random.choices(lst)
+        return gif[0].url
+    except IndexError:
+        pass
 
 async def main():
     userid = "713007296476741643"
@@ -1503,4 +1526,33 @@ async def 슬로우모드(ctx, edittime):
 @dao.command()
 async def 테스팅(ctx):
     await ctx.send('테스팅')
+@bot.command()
+async def 내보내기(ctx, *, file):
+    if str(ctx.author.id) in admin:
+        await ctx.send(f"{file}을 내보내는 중입니다!")
+        try:
+            await ctx.send(file=discord.File(f'{file}'))
+        except:
+            await ctx.send("파일이 없는거 같은데여...")
+@bot.command()
+async def 파일생성(ctx, filee, *, text):
+    if str(ctx.author.id) in admin:
+        await ctx.send(f"{filee}을 생성하는 중입니다!")
+        try:
+            file = open(f"{filee}", "w+", encoding='utf-8-sig')
+            file.write(f'{text}')
+            file.close
+        except:
+            await ctx.send("알수없는 오류로 파일을 생성하지 못했어요...")
+        try:
+            await ctx.send(file=discord.File(f'{filee}'))
+        except:
+            await ctx.send("알수없는 오류로 파일을 못 내보냈어요...")
+@bot.listen()
+async def on_message(message):
+    if message.content.startswith(',gif'): #명령어
+        if gif_response(message.content[5:]) != None:
+            await message.channel.send(gif_response(message.content[5:]))
+        else:
+            await message.channel.send('관련 gif를 찾지 못하였습니다.')
 bot.run(token)
