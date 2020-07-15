@@ -1588,5 +1588,5 @@ async def on_message(message):
         if msg.content == a:
             await message.channel.send("인증이 완료되었어요!")
         else:
-            await message.channel.send("어... 혹시 봇이세여?")
+            await message.channel.send("어... 혹시 봇이세여?\n||오답||")
 bot.run(token)
