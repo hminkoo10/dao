@@ -31,8 +31,9 @@ import giphy_client #cmd에 'pip install giphy_client'
 from giphy_client.rest import ApiException
 import os
 
-notice = [
-    ]
+with open('data_server.json', 'r') as f:
+    jstring = open("data_server.json", "r", encoding='utf-8-sig').read()
+    notice = json.loads(jstring)
 channel = list()
 with open('data_learn.json', 'r') as f:
     jstring = open("data_learn.json", "r", encoding='utf-8-sig').read()
