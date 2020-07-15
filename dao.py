@@ -148,11 +148,13 @@ async def 도움(ctx):
     embed.add_field(name="영화순위(상위 10개)", value="``,영화순위``로 확인", inline=False)
     embed.add_field(name="날씨", value="``,날씨 (지역)``로 확인", inline=False)
     embed.add_field(name="번역", value="``,번역 (번역할 언어) (번역될 언어) (번역될 낱말)``로 확인\n^^ 예시 : ,번역 ko en 안녕\n값 : Hello", inline=False)
-    embed.add_field(name="다오 서포터", value="- ``https://discord.gg/PKGMwSB``", inline=False)
+    embed.add_field(name="gif검색", value="``,gif (검색 할 내용)``로 확인", inline=False)
+    embed.add_field(name="슬로우모드(only 서버관리자", value="``,슬로우모드 (초)``로 확인", inline=False)
+    embed.add_field(name="다오 서포터", value="- ``https://blow.ga/팀-슷칼리토``", inline=False)
     embed.add_field(name="공지 (only 서버관리자)", value="- ``,공지 내용``", inline=False)
     embed.set_footer(text=(ctx.author.name), icon_url=ctx.author.avatar_url)
     await ctx.author.send(embed=embed)
-    embed = discord.Embed(description = "[다오 서포터 <----- 클릭!!](https://discord.com/invite/PKGMwSB)",color=0xe67e22)
+    embed = discord.Embed(description = "[다오 서포터 <----- 클릭!!](https://blow.ga/팀-슷칼리토)",color=0xe67e22)
     await ctx.author.send(embed=embed)
     await ctx.send("DM으로 전송했어요!")
 @bot.command()
@@ -1556,4 +1558,35 @@ async def on_message(message):
             await message.channel.send(gif_response(message.content[5:]))
         else:
             await message.channel.send('관련 gif를 찾지 못하였습니다.')
+@bot.listen()
+async def on_message(message):
+    if message.content.startswith(",캡챠"):
+        Image_captcha = ImageCaptcha()
+        msg = ""
+        a = ""
+        for i in range(6):
+            a += str(random.randint(0, 9))
+
+        name = str(message.author) + ".png"
+        Image_captcha.write(a, name)
+
+        await message.channel.send(file=discord.File(name))
+        def check(msg):
+            return msg.author == message.author and msg.channel == message.channel
+
+        try:
+            msg = await bot.wait_for("message", timeout=12.5, check=check)
+        except:
+            if msg.content == a:
+                await message.channel.send("인증이 완료되었어요!")
+            elif msg.content != a:
+                await message.channel.send("어... 혹시 봇이세여?")
+            else:
+                await message.channel.send("시관초과입니다!\n||혹시 봇이신가여||")
+            return
+
+        if msg.content == a:
+            await message.channel.send("인증이 완료되었어요!")
+        else:
+            await message.channel.send("어... 혹시 봇이세여?")
 bot.run(token)
