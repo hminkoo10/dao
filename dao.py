@@ -952,24 +952,30 @@ async def 확인(ctx):
 #            await message.channel.send(embed=embed)
 @bot.command()
 async def 핑(ctx):
+    time1 = time.time()
     if (round(bot.latency*1000)) > 230:
             embed = discord.Embed(color=0x00ff00)
             embed = discord.Embed(title=":ping_pong:퐁!", description="""
             현재 디스코드 api핑: {0}ms
             상태: 매우 나쁨:no_entry:""".format(round(bot.latency*1000)), color=0xff0000)
-            await ctx.channel.send(embed=embed)
     if (round(bot.latency*1000)) < 230:
             embed = discord.Embed(color=0x00ff00)
             embed = discord.Embed(title=":ping_pong:퐁!", description="""
             현재 디스코드 api핑: {0}ms
             상태: 양호:white_check_mark:""".format(round(bot.latency*1000)), color=0x00ff00)
-            await ctx.channel.send(embed=embed)
     if (round(bot.latency*1000)) < 185:
             embed = discord.Embed(color=0x00ff00)
             embed = discord.Embed(title=":ping_pong:퐁!", description="""
             현재 디스코드 api핑: {0}ms
             상태: 매우 좋음:green_heart:""".format(round(bot.latency*1000)), color=0x0000ff)
-            await ctx.channel.send(embed=embed)
+    edit = await ctx.send(embed=discord.Embed(title='핑!', color=0x0ff00))
+    time2 = time.time()
+    time4 = float(time2) - float(time1)
+    time5 = str(time4)
+    time6 = time5[2:5]
+    time7 = f'{time6}ms'
+    embed.add_field(name="디스코드 메시지 핑", value=f'{time7}')
+    await edit.edit(embed=embed)
 @bot.command()
 async def ping(ctx):
     tso = ger_get_now_timestamp()
