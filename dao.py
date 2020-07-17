@@ -38,6 +38,13 @@ channel = list()
 with open('data_learn.json', 'r') as f:
     jstring = open("data_learn.json", "r", encoding='utf-8-sig').read()
     dict1 = json.loads(jstring)
+with open('data_money.json', 'r') as f:
+    jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
+    money = json.loads(jstring)
+with open('data_money_cool.json', 'r') as f:
+    jstring = open("data_money_cool.json", "r", encoding='utf-8-sig').read()
+    money_cool = json.loads(jstring)
+
 dict2 = {}
 tkdyd = []
 giphy_token = 'uBpiTkQ9beqY4NayRkx6sz9bMSTkRpDE'
@@ -51,6 +58,7 @@ progress = "none"
 player1 = "none"
 player2 = "none"
 player1_card1 = 0
+money_cool = {}
 player1_card2 = 0
 player1_card3 = 0
 player2_card1 = 0
@@ -1563,7 +1571,8 @@ async def on_message(message):
         if gif_response(message.content[5:]) != None:
             await message.channel.send(gif_response(message.content[5:]))
         else:
-            await message.channel.send('관련 gif를 찾지 못하였습니다.')
+            await message.channel.send
+            ('관련 gif를 찾지 못하였습니다.')
 @bot.listen()
 async def on_message(message):
     if message.content.startswith(",캡챠"):
@@ -1595,4 +1604,78 @@ async def on_message(message):
             await message.channel.send("인증이 완료되었어요!")
         else:
             await message.channel.send("어... 혹시 봇이세여?\n||오답||")
+@bot.command()
+async def 돈줘(ctx):
+    try:
+        with open('data_money_cool.json', 'r') as f:
+            jstring = open("data_money_cool.json", "r", encoding='utf-8-sig').read()
+            money_cool = json.loads(jstring)
+        abcd = float(money_cool[str(ctx.author)]) - time.time()
+        if float(abcd) <= float('-1800'):
+            money_test = float(random.randint(0, 1000))
+            with open('data_money.json', 'r') as f:
+                jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
+                money = json.loads(jstring)
+            money_money = float(money[str(ctx.author)])
+            money_money += money_test
+            money[str(ctx.author)] = money_money
+            money_cool[str(ctx.author)] = time.time()
+            with open("data_money.json", "w+", encoding='utf-8-sig') as f:
+                json_string = json.dump(money, f, indent=2, ensure_ascii=False)
+            await ctx.send(f"{money_test}원을 지급했습니다!")
+            with open("data_money_cool.json", "w+", encoding='utf-8-sig') as f:
+                json_string = json.dump(money_cool, f, indent=2, ensure_ascii=False)
+        else:
+            if str(ctx.author.id) in admin:
+                await ctx.send(f"쿨타임이 안지났어요!\n쿨타임 : 30분\n||{abcd}||\n||hint : -1800||")
+            else:
+                await ctx.send("쿨타임이 안지났어요!\n쿨타임 : 30분")
+    except:
+        money_test = float(random.randint(0, 1000))
+        with open('data_money.json', 'r') as f:
+            jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
+            money = json.loads(jstring)
+        money[str(ctx.author)] = money_test
+        money_cool[str(ctx.author)] = time.time()
+        with open("data_money.json", "w+", encoding='utf-8-sig') as f:
+            json_string = json.dump(money, f, indent=2, ensure_ascii=False)
+        with open("data_money_cool.json", "w+", encoding='utf-8-sig') as f:
+            json_string = json.dump(money_cool, f, indent=2, ensure_ascii=False)
+        await ctx.send(f"{money_test}원을 지급했습니다!")
+@bot.command()
+async def 관리자_돈추가(ctx, user: discord.Member, money1):
+    if str(ctx.author.id) in admin:
+        money[str(user)] += float(money1)
+        with open("data_money.json", "w+", encoding='utf-8-sig') as f:
+            json_string = json.dump(money, f, indent=2, ensure_ascii=False)
+        await ctx.send(f"{user}님의 돈에서 {money1}원을 추가했어요!")
+@bot.command()
+async def 관리자_돈설정(ctx, user: discord.Member, money1):
+    if str(ctx.author.id) in admin:
+        money[str(user)] = float(money1)
+        with open("data_money.json", "w+", encoding='utf-8-sig') as f:
+            json_string = json.dump(money, f, indent=2, ensure_ascii=False)
+        await ctx.send(f"{user}님의 돈에서 {money1}원으로 설정했어요!")
+@bot.command()
+async def 관리자_돈빼기(ctx, user: discord.Member, money1):
+    if str(ctx.author.id) in admin:
+        money[str(user)] -= float(money1)
+        with open("data_money.json", "w+", encoding='utf-8-sig') as f:
+            json_string = json.dump(money, f, indent=2, ensure_ascii=False)
+        await ctx.send(f"{user}님의 돈에서 {money1}원을 뺏어요!")
+@bot.command()
+async def 내돈(ctx):
+    with open('data_money.json', 'r') as f:
+        jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
+        money = json.loads(jstring)
+    user_money = money[str(ctx.author)]
+    await ctx.send(f'지금 내 돈은 {user_money}원이예요!')
+@bot.command()
+async def 훔쳐보기(ctx, user: discord.Member):
+    with open('data_money.json', 'r') as f:
+        jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
+        money = json.loads(jstring)
+    user_money = money[str(user)]
+    await ctx.send(f'지금 {user}님 돈은 {user_money}원이예요!')
 bot.run(token)
+
