@@ -69,6 +69,8 @@ player1_bat = "none"
 player2_bat = "none"
 player1_result = "none"
 player2_result = "none"
+item_money = {'증가벽돌': '1500'}
+증가벽돌 = {}
 que = {}
 playerlist = {}
 playlist = list() #재생목록 리스트
@@ -1645,6 +1647,9 @@ async def 돈줘(ctx):
 @bot.command()
 async def 관리자_돈추가(ctx, user: discord.Member, money1):
     if str(ctx.author.id) in admin:
+        with open('data_money.json', 'r') as f:
+            jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
+            money = json.loads(jstring)
         money[str(user)] += float(money1)
         with open("data_money.json", "w+", encoding='utf-8-sig') as f:
             json_string = json.dump(money, f, indent=2, ensure_ascii=False)
@@ -1652,6 +1657,9 @@ async def 관리자_돈추가(ctx, user: discord.Member, money1):
 @bot.command()
 async def 관리자_돈설정(ctx, user: discord.Member, money1):
     if str(ctx.author.id) in admin:
+        with open('data_money.json', 'r') as f:
+            jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
+            money = json.loads(jstring)
         money[str(user)] = float(money1)
         with open("data_money.json", "w+", encoding='utf-8-sig') as f:
             json_string = json.dump(money, f, indent=2, ensure_ascii=False)
@@ -1659,6 +1667,9 @@ async def 관리자_돈설정(ctx, user: discord.Member, money1):
 @bot.command()
 async def 관리자_돈빼기(ctx, user: discord.Member, money1):
     if str(ctx.author.id) in admin:
+        with open('data_money.json', 'r') as f:
+            jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
+            money = json.loads(jstring)
         money[str(user)] -= float(money1)
         with open("data_money.json", "w+", encoding='utf-8-sig') as f:
             json_string = json.dump(money, f, indent=2, ensure_ascii=False)
@@ -1677,5 +1688,55 @@ async def 훔쳐보기(ctx, user: discord.Member):
         money = json.loads(jstring)
     user_money = money[str(user)]
     await ctx.send(f'지금 {user}님 돈은 {user_money}원이예요!')
+@bot.command()
+async def 돈전달(ctx, user: discord.Member, money2):
+    with open('data_money.json', 'r') as f:
+        jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
+        money = json.loads(jstring)
+    ababb = money[str(ctx.author)] - float(money2)
+    if ababb <= float('-1'):
+        await ctx.send("자기 돈보다 더 큰데요?")
+    else:
+        money[str(ctx.author)] -= float(money2)
+        with open("data_money.json", "w+", encoding='utf-8-sig') as f:
+            json_string = json.dump(money, f, indent=2, ensure_ascii=False)
+        with open('data_money.json', 'r') as f:
+            jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
+            money = json.loads(jstring)
+        money[str(user)] += float(money2)
+        with open("data_money.json", "w+", encoding='utf-8-sig') as f:
+            json_string = json.dump(money, f, indent=2, ensure_ascii=False)
+        user_money = money[str(ctx.author)]
+        await ctx.send(f'{user}님한테 {money2}원을 전달했어요! \n지금 내 돈은 {user_money}원이예요!')
+@bot.command()
+async def 탈퇴(ctx):
+    with open('data_money.json', 'r') as f:
+        jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
+        money = json.loads(jstring)
+    del money[str(ctx.author)]
+    with open("data_money.json", "w+", encoding='utf-8-sig') as f:
+        json_string = json.dump(money, f, indent=2, ensure_ascii=False)
+    with open('data_money_cool.json', 'r') as f:
+        jstring = open("data_money_cool.json", "r", encoding='utf-8-sig').read()
+        money_cool = json.loads(jstring)
+    del money_cool[str(ctx.author)]
+    with open("data_money_cool.json", "w+", encoding='utf-8-sig') as f:
+        json_string = json.dump(money_cool, f, indent=2, ensure_ascii=False)
+    await ctx.send("탈퇴가 완료되었어요!")
+@bot.command()
+async def 구매(ctx, item_name):
+    with open('data_money.json', 'r') as f:
+        jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
+        money = json.loads(jstring)
+    try:
+        ababb = money[str(ctx.author)] - float(item_money[str(item_name)])
+    except:
+        await ctx.send(f'{item_name}이란 아이템이 없어요!')
+    if ababb <= float('-1'):
+        await ctx.send("이런... 돈을 더 벌고 와보세요!")
+    else:
+        float(money[str(ctx.author)]) - float(item_money[str(itme_name)])
+        증가벽돌[str(ctx.author)] += 1
+        await ctx.send("아이템이 추가됬어요!")
 bot.run(token)
 

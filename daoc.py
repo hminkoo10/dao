@@ -215,4 +215,46 @@ async def on_message(message):
                             value='\n영화제목 : ' + moviechartLi1MovieName + '\n영화평점 : ' + moviechartLi1Ratting + '점' + '\n개봉날짜 : ' + moviechartLi1openDay + '\n예매율,랭킹변동 : ' + moviechartLi1Yerating,
                             inline=False)  # 영화랭킹
         await message.channel.send(embed=embed)
+    if message.content.startswith(",축하해줘"):
+        msg = ""
+        choice = message.content.split(" ")
+        i = 1
+        while i < len(choice):
+            msg += choice[i]
+            msg += " "
+            i += 1
+        embed = discord.Embed(color=0x00ff00)
+        embed.add_field(name="축하합니다!", value="""
+        와! 정말 축하드려요!
+        **__{}을/를 하셨군요!__**
+        너무너무 축하드려요~
+        건성건성 말하는거 같지만 전혀 아니랍니다!
+        """.format(msg), inline=False)
+        embed.set_thumbnail(url="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FdkWSgw%2FbtqFMHmmuRa%2FK0MXwwW1Uns8X9f6e0jlz0%2Fimg.png")
+        randomgif = random.randrange(1,8)
+        if randomgif == 2:
+            embed = discord.Embed(color=0x00ff00)
+            embed.add_field(name="축하합니다!", value="""
+            왠지 기분이 좋은걸요!
+            격렬하게 축하해드릴게요!
+            와! 정말 축하드려요!
+            **__{}을/를 하셨군요!__**
+            너무너무 축하드려요~
+            이걸 하시다니 너무 대단해요!
+            다시 한번 축하드려요!
+            """.format(msg), inline=False)
+            embed.set_image(url="https://media3.giphy.com/media/l4FGAREbOSRLKMiNq/giphy.gif?cid=ecf05e47xjnw5p8dwf1de8dvj8nbhuvqissziikv7lwtyk3z&rid=giphy.gif")
+            embed.set_thumbnail(url="https://media2.giphy.com/media/1PMVNNKVIL8Ig/giphy.gif?cid=ecf05e47xjnw5p8dwf1de8dvj8nbhuvqissziikv7lwtyk3z&rid=giphy.gif")
+            embed.set_footer(text="정말 축하드려요!")
+        await message.channel.send(embed=embed)
+
+    if message.content.startswith(",축하해줘"):
+        await message.add_reaction("🎉")
+        if randomgif == 2:
+            await message.add_reaction("✨")
+            await message.add_reaction("🎊")
+            await message.add_reaction("❣")
+            await message.add_reaction("✔")
+            await message.add_reaction("💌")
+            await message.add_reaction("💫")
 client.run(token)
