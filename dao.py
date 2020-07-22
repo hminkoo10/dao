@@ -44,6 +44,9 @@ with open('data_money.json', 'r') as f:
 with open('data_money_cool.json', 'r') as f:
     jstring = open("data_money_cool.json", "r", encoding='utf-8-sig').read()
     money_cool = json.loads(jstring)
+with open('data_command_1.json', 'r') as f:
+    jstring = open("data_command_1.json", "r", encoding='utf-8-sig').read()
+    command_1 = json.loads(jstring)
 
 dict2 = {}
 tkdyd = []
@@ -58,7 +61,6 @@ progress = "none"
 player1 = "none"
 player2 = "none"
 player1_card1 = 0
-money_cool = {}
 player1_card2 = 0
 player1_card3 = 0
 player2_card1 = 0
@@ -70,7 +72,9 @@ player2_bat = "none"
 player1_result = "none"
 player2_result = "none"
 item_money = {'증가벽돌': '1500'}
-증가벽돌 = {}
+with open('data_증가벽돌.json', 'r') as f:
+    jstring = open("data_증가벽돌.json", "r", encoding='utf-8-sig').read()
+    증가벽돌 = json.loads(jstring)
 que = {}
 playerlist = {}
 playlist = list() #재생목록 리스트
@@ -1735,8 +1739,28 @@ async def 구매(ctx, item_name):
     if ababb <= float('-1'):
         await ctx.send("이런... 돈을 더 벌고 와보세요!")
     else:
-        float(money[str(ctx.author)]) - float(item_money[str(itme_name)])
+        float(money[str(ctx.author)]) - float(item_money[item_name])
         증가벽돌[str(ctx.author)] += 1
+        with open("data_증가벽돌.json", "w+", encoding='utf-8-sig') as f:
+            json_string = json.dump(증가벽돌, f, indent=2, ensure_ascii=False)
         await ctx.send("아이템이 추가됬어요!")
+@bot.command()
+async def 짤추가(ctx, name1, url):
+    with open('data_command_1.json', 'r') as f:
+        jstring = open("data_command_1.json", "r", encoding='utf-8-sig').read()
+        command_1 = json.loads(jstring)
+    command_1[name1] = f'{url}'
+    with open("data_command_1.json", "w+", encoding='utf-8-sig') as f:
+        json_string = json.dump(command_1, f, indent=2, ensure_ascii=False)
+    await ctx.send("완료")
+@bot.command()
+async def 짤(ctx, name):
+    with open('data_command_1.json', 'r') as f:
+        jstring = open("data_command_1.json", "r", encoding='utf-8-sig').read()
+        command_1 = json.loads(jstring)
+    embed = discord.Embed(title='짤', color=0x2ecc71)
+    urle = command_1[name]
+    embed.set_image(url=urle)
+    await ctx.send(embed=embed)
 bot.run(token)
 
