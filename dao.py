@@ -1740,7 +1740,10 @@ async def 구매(ctx, item_name):
         await ctx.send("이런... 돈을 더 벌고 와보세요!")
     else:
         float(money[str(ctx.author)]) - float(item_money[item_name])
-        증가벽돌[str(ctx.author)] += 1
+        try:
+            증가벽돌[str(ctx.author)] += float('1')
+        except:
+            증가벽돌[str(ctx.author)] = float('1')
         with open("data_증가벽돌.json", "w+", encoding='utf-8-sig') as f:
             json_string = json.dump(증가벽돌, f, indent=2, ensure_ascii=False)
         await ctx.send("아이템이 추가됬어요!")
