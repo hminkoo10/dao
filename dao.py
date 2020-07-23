@@ -1616,16 +1616,16 @@ async def 돈줘(ctx):
         with open('data_money_cool.json', 'r') as f:
             jstring = open("data_money_cool.json", "r", encoding='utf-8-sig').read()
             money_cool = json.loads(jstring)
-        abcd = float(money_cool[str(ctx.author)]) - time.time()
+        abcd = float(money_cool[str(ctx.author.id)]) - time.time()
         if float(abcd) <= float('-1800'):
             money_test = float(random.randint(0, 1000))
             with open('data_money.json', 'r') as f:
                 jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
                 money = json.loads(jstring)
-            money_money = float(money[str(ctx.author)])
+            money_money = float(money[str(ctx.author.id)])
             money_money += money_test
-            money[str(ctx.author)] = money_money
-            money_cool[str(ctx.author)] = time.time()
+            money[str(ctx.author.id)] = money_money
+            money_cool[str(ctx.author.id)] = time.time()
             with open("data_money.json", "w+", encoding='utf-8-sig') as f:
                 json_string = json.dump(money, f, indent=2, ensure_ascii=False)
             await ctx.send(f"{money_test}원을 지급했습니다!")
@@ -1641,7 +1641,7 @@ async def 돈줘(ctx):
         with open('data_money.json', 'r') as f:
             jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
             money = json.loads(jstring)
-        money[str(ctx.author)] = money_test
+        money[str(ctx.author.id)] = money_test
         money_cool[str(ctx.author)] = time.time()
         with open("data_money.json", "w+", encoding='utf-8-sig') as f:
             json_string = json.dump(money, f, indent=2, ensure_ascii=False)
@@ -1654,7 +1654,7 @@ async def 관리자_돈추가(ctx, user: discord.Member, money1):
         with open('data_money.json', 'r') as f:
             jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
             money = json.loads(jstring)
-        money[str(user)] += float(money1)
+        money[str(user.id)] += float(money1)
         with open("data_money.json", "w+", encoding='utf-8-sig') as f:
             json_string = json.dump(money, f, indent=2, ensure_ascii=False)
         await ctx.send(f"{user}님의 돈에서 {money1}원을 추가했어요!")
@@ -1664,7 +1664,7 @@ async def 관리자_돈설정(ctx, user: discord.Member, money1):
         with open('data_money.json', 'r') as f:
             jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
             money = json.loads(jstring)
-        money[str(user)] = float(money1)
+        money[str(user.id)] = float(money1)
         with open("data_money.json", "w+", encoding='utf-8-sig') as f:
             json_string = json.dump(money, f, indent=2, ensure_ascii=False)
         await ctx.send(f"{user}님의 돈에서 {money1}원으로 설정했어요!")
@@ -1674,7 +1674,7 @@ async def 관리자_돈빼기(ctx, user: discord.Member, money1):
         with open('data_money.json', 'r') as f:
             jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
             money = json.loads(jstring)
-        money[str(user)] -= float(money1)
+        money[str(user.id)] -= float(money1)
         with open("data_money.json", "w+", encoding='utf-8-sig') as f:
             json_string = json.dump(money, f, indent=2, ensure_ascii=False)
         await ctx.send(f"{user}님의 돈에서 {money1}원을 뺏어요!")
@@ -1683,47 +1683,47 @@ async def 내돈(ctx):
     with open('data_money.json', 'r') as f:
         jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
         money = json.loads(jstring)
-    user_money = money[str(ctx.author)]
+    user_money = money[str(ctx.author.id)]
     await ctx.send(f'지금 내 돈은 {user_money}원이예요!')
 @bot.command()
 async def 훔쳐보기(ctx, user: discord.Member):
     with open('data_money.json', 'r') as f:
         jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
         money = json.loads(jstring)
-    user_money = money[str(user)]
+    user_money = money[str(user.id)]
     await ctx.send(f'지금 {user}님 돈은 {user_money}원이예요!')
 @bot.command()
 async def 돈전달(ctx, user: discord.Member, money2):
     with open('data_money.json', 'r') as f:
         jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
         money = json.loads(jstring)
-    ababb = money[str(ctx.author)] - float(money2)
+    ababb = money[str(ctx.author.id)] - float(money2)
     if ababb <= float('-1'):
         await ctx.send("자기 돈보다 더 큰데요?")
     else:
-        money[str(ctx.author)] -= float(money2)
+        money[str(ctx.author.id)] -= float(money2)
         with open("data_money.json", "w+", encoding='utf-8-sig') as f:
             json_string = json.dump(money, f, indent=2, ensure_ascii=False)
         with open('data_money.json', 'r') as f:
             jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
             money = json.loads(jstring)
-        money[str(user)] += float(money2)
+        money[str(user.id)] += float(money2)
         with open("data_money.json", "w+", encoding='utf-8-sig') as f:
             json_string = json.dump(money, f, indent=2, ensure_ascii=False)
-        user_money = money[str(ctx.author)]
+        user_money = money[str(ctx.author.id)]
         await ctx.send(f'{user}님한테 {money2}원을 전달했어요! \n지금 내 돈은 {user_money}원이예요!')
 @bot.command()
 async def 탈퇴(ctx):
     with open('data_money.json', 'r') as f:
         jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
         money = json.loads(jstring)
-    del money[str(ctx.author)]
+    del money[str(ctx.author.id)]
     with open("data_money.json", "w+", encoding='utf-8-sig') as f:
         json_string = json.dump(money, f, indent=2, ensure_ascii=False)
     with open('data_money_cool.json', 'r') as f:
         jstring = open("data_money_cool.json", "r", encoding='utf-8-sig').read()
         money_cool = json.loads(jstring)
-    del money_cool[str(ctx.author)]
+    del money_cool[str(ctx.author.id)]
     with open("data_money_cool.json", "w+", encoding='utf-8-sig') as f:
         json_string = json.dump(money_cool, f, indent=2, ensure_ascii=False)
     await ctx.send("탈퇴가 완료되었어요!")
@@ -1762,8 +1762,15 @@ async def 짤(ctx, name):
         jstring = open("data_command_1.json", "r", encoding='utf-8-sig').read()
         command_1 = json.loads(jstring)
     embed = discord.Embed(title='짤', color=0x2ecc71)
-    urle = command_1[name]
+    try:
+        urle = command_1[name]
+    except:
+        await ctx.send(f"{name}이란 짤을 찾을 수 없어요!")
     embed.set_image(url=urle)
     await ctx.send(embed=embed)
+#@bot.command()
+#async def 사용(ctx, item_name):
+#    if item_name == '증가벽돌':
+        
 bot.run(token)
 
