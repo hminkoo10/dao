@@ -72,9 +72,9 @@ player2_bat = "none"
 player1_result = "none"
 player2_result = "none"
 item_money = {'증가벽돌': '1500'}
-with open('data_증가벽돌.json', 'r') as f:
-    jstring = open("data_증가벽돌.json", "r", encoding='utf-8-sig').read()
-    증가벽돌 = json.loads(jstring)
+with open('data_money_command_1.json', 'r') as f:
+    jstring = open("data_money_command_1.json", "r", encoding='utf-8-sig').read()
+    money_command_1 = json.loads(jstring)
 que = {}
 playerlist = {}
 playlist = list() #재생목록 리스트
@@ -1732,20 +1732,29 @@ async def 구매(ctx, item_name):
     with open('data_money.json', 'r') as f:
         jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
         money = json.loads(jstring)
+    with open('data_money_command_1.json', 'r') as f:
+        jstring = open("data_money_command_1.json", "r", encoding='utf-8-sig').read()
+        money_command_1 = json.loads(jstring)
     try:
         ababb = money[str(ctx.author.id)] - float(item_money[str(item_name)])
     except:
-        await ctx.send(f'{item_name}이란 아이템이 없어요!')
+        await ctx.send(f'{item_name}이란 아이템이 없거나 다오의 돈 기능을 1번도 사용하지 않았어요!\n,돈줘 를 입력 해 보세요!')
     if ababb <= float('-1'):
         await ctx.send("이런... 돈을 더 벌고 와보세요!")
     else:
-        float(money[str(ctx.author.id)]) - float(item_money[item_name])
+        print(money[str(ctx.author.id)])
+        money_test_2 = float(money[str(ctx.author.id)]) - float(item_money[item_name])
+        print(money_test_2)
+        money[str(ctx.author.id)] = money_test_2
         try:
-            증가벽돌[str(ctx.author.id)] += float('1')
+            money_command_1[str(ctx.author.id)] += float('1')
         except:
-            증가벽돌[str(ctx.author.id)] = float('1')
-        with open("data_증가벽돌.json", "w+", encoding='utf-8-sig') as f:
-            json_string = json.dump(증가벽돌, f, indent=2, ensure_ascii=False)
+            money_command_1[str(ctx.author.id)] = float('1')
+        with open("data_money_command_1.json", "w+", encoding='utf-8-sig') as f:
+            json_string = json.dump(money_command_1, f, indent=2, ensure_ascii=False)
+        with open("data_money.json", "w+", encoding='utf-8-sig') as f:
+            json_string = json.dump(money, f, indent=2, ensure_ascii=False)
+        print(money[str(ctx.author.id)])
         await ctx.send("아이템이 추가됬어요!")
 @bot.command()
 async def 짤추가(ctx, name1, url):
@@ -1768,9 +1777,36 @@ async def 짤(ctx, name):
         await ctx.send(f"{name}이란 짤을 찾을 수 없어요!")
     embed.set_image(url=urle)
     await ctx.send(embed=embed)
-#@bot.command()
-#async def 사용(ctx, item_name):
-#    if item_name == '증가벽돌':
-        
+@bot.command()
+async def 사용(ctx, item_name):
+    if item_name == '증가벽돌':
+        with open('data_money_command_1.json', 'r') as f:
+            jstring = open("data_money_command_1.json", "r", encoding='utf-8-sig').read()
+            money_command_1 = json.loads(jstring)
+        with open('data_money.json', 'r') as f:
+            jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
+            money = json.loads(jstring)
+        if money_command_1[str(ctx.author.id)] >= float('1'):
+            random_money_1 = [1,2,3,4,5,6]
+            random_money = random.choice(random_money_1)
+            if random_money == 2 or random_money == 4 or random_money == 6:
+                money_command_1[str(ctx.author.id)] -= float('1')
+                money[str(ctx.author.id)] += money[str(ctx.author.id)]
+                await ctx.send(embed=discord.Embed(title=f'와! 강화에 성공했어요!\n돈이 2배로 늘어났습니다!\n현재 내 돈은 {money[str(ctx.author.id)]}원 이예요!', color=0x2ecc71))
+                with open("data_money_command_1.json", "w+", encoding='utf-8-sig') as f:
+                    json_string = json.dump(money_command_1, f, indent=2, ensure_ascii=False)
+                with open("data_money.json", "w+", encoding='utf-8-sig') as f:
+                    json_string = json.dump(money, f, indent=2, ensure_ascii=False)
+            else:
+                money_command_1[str(ctx.author.id)] -= float('1')
+                with open("data_money_command_1.json", "w+", encoding='utf-8-sig') as f:
+                    json_string = json.dump(money_command_1, f, indent=2, ensure_ascii=False)
+                await ctx.send(embed=discord.Embed(title='이런... 강화에 실패했어요ㅜㅜ', color=0xff0000))
+        else:
+            await ctx.send("증가벽돌이 업는데 찾아오면 안돼죠!")
+    
+    else:
+        await ctx.send(f'{item_name}이란 아이템이 없는데요?')
+
 bot.run(token)
 
