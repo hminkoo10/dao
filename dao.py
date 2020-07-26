@@ -1642,7 +1642,7 @@ async def 돈줘(ctx):
             jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
             money = json.loads(jstring)
         money[str(ctx.author.id)] = money_test
-        money_cool[str(ctx.author)] = time.time()
+        money_cool[str(ctx.author.id)] = time.time()
         with open("data_money.json", "w+", encoding='utf-8-sig') as f:
             json_string = json.dump(money, f, indent=2, ensure_ascii=False)
         with open("data_money_cool.json", "w+", encoding='utf-8-sig') as f:
@@ -1733,17 +1733,17 @@ async def 구매(ctx, item_name):
         jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
         money = json.loads(jstring)
     try:
-        ababb = money[str(ctx.author)] - float(item_money[str(item_name)])
+        ababb = money[str(ctx.author.id)] - float(item_money[str(item_name)])
     except:
         await ctx.send(f'{item_name}이란 아이템이 없어요!')
     if ababb <= float('-1'):
         await ctx.send("이런... 돈을 더 벌고 와보세요!")
     else:
-        float(money[str(ctx.author)]) - float(item_money[item_name])
+        float(money[str(ctx.author.id)]) - float(item_money[item_name])
         try:
-            증가벽돌[str(ctx.author)] += float('1')
+            증가벽돌[str(ctx.author.id)] += float('1')
         except:
-            증가벽돌[str(ctx.author)] = float('1')
+            증가벽돌[str(ctx.author.id)] = float('1')
         with open("data_증가벽돌.json", "w+", encoding='utf-8-sig') as f:
             json_string = json.dump(증가벽돌, f, indent=2, ensure_ascii=False)
         await ctx.send("아이템이 추가됬어요!")
