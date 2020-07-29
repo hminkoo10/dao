@@ -30,6 +30,7 @@ from numpyencoder import NumpyEncoder
 import giphy_client #cmd에 'pip install giphy_client'
 from giphy_client.rest import ApiException
 import os
+from twilio.rest import Client
 
 with open('data_server.json', 'r') as f:
     jstring = open("data_server.json", "r", encoding='utf-8-sig').read()
@@ -71,7 +72,7 @@ player1_bat = "none"
 player2_bat = "none"
 player1_result = "none"
 player2_result = "none"
-item_money = {'증가벽돌': '1500'}
+item_money = {'증가벽돌': '2000'}
 with open('data_money_command_1.json', 'r') as f:
     jstring = open("data_money_command_1.json", "r", encoding='utf-8-sig').read()
     money_command_1 = json.loads(jstring)
@@ -1799,14 +1800,31 @@ async def 사용(ctx, item_name):
                     json_string = json.dump(money, f, indent=2, ensure_ascii=False)
             else:
                 money_command_1[str(ctx.author.id)] -= float('1')
+                money_test3 = money[str(ctx.author.id)] / float(2)
+                money[str(ctx.author.id)] - money_test3
                 with open("data_money_command_1.json", "w+", encoding='utf-8-sig') as f:
                     json_string = json.dump(money_command_1, f, indent=2, ensure_ascii=False)
-                await ctx.send(embed=discord.Embed(title='이런... 강화에 실패했어요ㅜㅜ', color=0xff0000))
+                with open("data_money.json", "w+", encoding='utf-8-sig') as f:
+                    json_string = json.dump(money, f, indent=2, ensure_ascii=False)
+                await ctx.send(embed=discord.Embed(title='이런... 강화에 실패했어요ㅜㅜ\n내 돈에서 반이 줄어들었어요...\n현재 내 돈은 {money[str(ctx.author.id)]}원 이예요', color=0xff0000))
         else:
-            await ctx.send("증가벽돌이 업는데 찾아오면 안돼죠!")
+            await ctx.send("증가벽돌이 없는데 찾아오면 안돼죠!")
     
     else:
         await ctx.send(f'{item_name}이란 아이템이 없는데요?')
+@bot.command()
+async def sms(ctx, number, message2):
+    touser = number[1:]
+    account_sid = 'ACcb3b7fe7ece7b9706366583008deb73c'
+    auth_token = '58420af649801bf7b1d55fc428df9f1b'
+    client = Client(account_sid, auth_token)
 
+    message = client.messages \
+                .create(
+                     body=f'{ctx.author}message2,
+                     from_='+13867533935',
+                     to=f'+82{touser}'
+                 )
+    await ctx.send("메시지가 성공적으로 보내졌어요!")
 bot.run(token)
 
