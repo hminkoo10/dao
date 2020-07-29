@@ -1821,7 +1821,7 @@ async def sms(ctx, number, message2):
 
     message = client.messages \
                 .create(
-                     body=f'{ctx.author}message2,
+                     body=f'{ctx.author}:{message2}',
                      from_='+13867533935',
                      to=f'+82{touser}'
                  )
