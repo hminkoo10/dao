@@ -17,7 +17,9 @@ import qrcode
 import calendar
 import smtplib
 from email.mime.text import MIMEText
+import base64
 import urllib,requests
+import operator
 from bs4 import BeautifulSoup
 import ast
 import traceback
@@ -31,6 +33,10 @@ import giphy_client #cmd에 'pip install giphy_client'
 from giphy_client.rest import ApiException
 import os
 from twilio.rest import Client
+import shutil
+from discord.utils import get
+from os import system
+
 
 with open('data_server.json', 'r') as f:
     jstring = open("data_server.json", "r", encoding='utf-8-sig').read()
@@ -49,6 +55,8 @@ with open('data_command_1.json', 'r') as f:
     jstring = open("data_command_1.json", "r", encoding='utf-8-sig').read()
     command_1 = json.loads(jstring)
 
+
+
 dict2 = {}
 tkdyd = []
 giphy_token = 'uBpiTkQ9beqY4NayRkx6sz9bMSTkRpDE'
@@ -63,6 +71,9 @@ player1 = "none"
 player2 = "none"
 player1_card1 = 0
 player1_card2 = 0
+with open('data_money_command_2.json', 'r') as f:
+    jstring = open("data_money_command_2.json", "r", encoding='utf-8-sig').read()
+    money_command_2 = json.loads(jstring)
 player1_card3 = 0
 player2_card1 = 0
 player2_card2 = 0
@@ -72,7 +83,9 @@ player1_bat = "none"
 player2_bat = "none"
 player1_result = "none"
 player2_result = "none"
-item_money = {'증가벽돌': '2000'}
+item_money = {'증가벽돌': '2000','복구시스템': '5000'}
+queues = list()
+volume = ''
 with open('data_money_command_1.json', 'r') as f:
     jstring = open("data_money_command_1.json", "r", encoding='utf-8-sig').read()
     money_command_1 = json.loads(jstring)
@@ -1736,6 +1749,9 @@ async def 구매(ctx, item_name):
     with open('data_money_command_1.json', 'r') as f:
         jstring = open("data_money_command_1.json", "r", encoding='utf-8-sig').read()
         money_command_1 = json.loads(jstring)
+    with open('data_money_command_2.json', 'r') as f:
+        jstring = open("data_money_command_2.json", "r", encoding='utf-8-sig').read()
+        money_command_2 = json.loads(jstring)
     try:
         ababb = money[str(ctx.author.id)] - float(item_money[str(item_name)])
     except:
@@ -1748,11 +1764,19 @@ async def 구매(ctx, item_name):
         print(money_test_2)
         money[str(ctx.author.id)] = money_test_2
         try:
-            money_command_1[str(ctx.author.id)] += float('1')
+            if item_name == '증가벽돌':
+                money_command_1[str(ctx.author.id)] += float('1')
+            elif item_name == '복구시스템':
+                money_command_2[str(ctx.author.id)] += float('1')
         except:
-            money_command_1[str(ctx.author.id)] = float('1')
+            if item_name == '증가벽돌':
+                money_command_1[str(ctx.author.id)] = float('1')
+            elif item_name == '증가벽돌':
+                money_command_2[str(ctx.author.id)] = float('1')
         with open("data_money_command_1.json", "w+", encoding='utf-8-sig') as f:
             json_string = json.dump(money_command_1, f, indent=2, ensure_ascii=False)
+        with open("data_money_command_2.json", "w+", encoding='utf-8-sig') as f:
+            json_string = json.dump(money_command_2, f, indent=2, ensure_ascii=False)
         with open("data_money.json", "w+", encoding='utf-8-sig') as f:
             json_string = json.dump(money, f, indent=2, ensure_ascii=False)
         print(money[str(ctx.author.id)])
@@ -1800,16 +1824,35 @@ async def 사용(ctx, item_name):
                     json_string = json.dump(money, f, indent=2, ensure_ascii=False)
             else:
                 money_command_1[str(ctx.author.id)] -= float('1')
-                money_test3 = money[str(ctx.author.id)] / float(2)
-                money[str(ctx.author.id)] - money_test3
+                asdf = money[str(ctx.author.id)] / 2
+                money[str(ctx.author.id)] -= float(asdf)
                 with open("data_money_command_1.json", "w+", encoding='utf-8-sig') as f:
                     json_string = json.dump(money_command_1, f, indent=2, ensure_ascii=False)
                 with open("data_money.json", "w+", encoding='utf-8-sig') as f:
                     json_string = json.dump(money, f, indent=2, ensure_ascii=False)
-                await ctx.send(embed=discord.Embed(title='이런... 강화에 실패했어요ㅜㅜ\n내 돈에서 반이 줄어들었어요...\n현재 내 돈은 {money[str(ctx.author.id)]}원 이예요', color=0xff0000))
+                await ctx.send(embed=discord.Embed(title=f'이런... 강화에 실패했어요ㅜㅜ\n내 돈에서 반이 줄어들었어요...\n현재 내 돈은 {money[str(ctx.author.id)]}원 이예요', color=0xff0000))
         else:
             await ctx.send("증가벽돌이 없는데 찾아오면 안돼죠!")
-    
+    elif item_name == '복구시스템':
+        with open('data_money_command_2.json', 'r') as f:
+            jstring = open("data_money_command_2.json", "r", encoding='utf-8-sig').read()
+            money_command_2 = json.loads(jstring)
+        with open('data_money.json', 'r') as f:
+            jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
+            money = json.loads(jstring)
+        with open('data_money_command_1.json', 'r') as f:
+            jstring = open("data_money_command_1.json", "r", encoding='utf-8-sig').read()
+            money_command_1 = json.loads(jstring)
+        if money_command_1[str(ctx.author.id)] >= float('1'):
+            money_command_2[str(ctx.author.id)] -= float('1')
+            ss = {"money_command_1": money_command_1[str(ctx.author.id)], "money": money[str(ctx.author.id)]}
+            s = str(ss)
+            b = s.encode("UTF-8")
+            e = base64.b64encode(b)
+            s1 = e.decode("UTF-8")
+            with open("data_money_command_2.json", "w+", encoding='utf-8-sig') as f:
+                json_string = json.dump(money_command_2, f, indent=2, ensure_ascii=False)
+            await ctx.channel.send(embed=discord.Embed(title=f'복구 암호가 생성되었어요!\n복구 암호는 {s1}이예요!', color=0x2ecc71))
     else:
         await ctx.send(f'{item_name}이란 아이템이 없는데요?')
 @bot.command()
@@ -1826,5 +1869,203 @@ async def sms(ctx, number, message2):
                      to=f'+82{touser}'
                  )
     await ctx.send("메시지가 성공적으로 보내졌어요!")
+@bot.command(pass_context=True, aliases=['j', 'joi'])
+async def 들어와(ctx):
+    try:
+        channel = ctx.message.author.voice.channel
+        voice = get(bot.voice_clients, guild=ctx.guild)
+
+        if voice and voice.is_connected():
+            return await voice.move_to(channel)
+
+        await channel.connect()
+        await ctx.send(f"봇이 {channel}로 접속하였습니다!")
+    except Exception as e:
+        await ctx.send(f"음성채널 접속 후 시도하세요!")
+
+
+@bot.command(pass_context=True, aliases=['l', 'lea'])
+async def 나가(ctx):
+    try:
+        channel = ctx.message.author.voice.channel
+        voice = get(bot.voice_clients, guild=ctx.guild)
+
+        if voice and voice.is_connected():
+            await voice.disconnect()
+            await ctx.send(f"봇이 {channel}에서 나갔습니다.")
+        else:
+            await ctx.send("봇이 음성채널에 접속 한 적이 없습니다.")
+    except Exception as e:
+        await ctx.send("봇이 음성채널에 없습니다.")
+@bot.command(pass_context=True, aliases=['pa', 'pau'])
+async def 일시정지(ctx):
+    try:
+        voice = get(bot.voice_clients, guild=ctx.guild)
+
+        if voice and voice.is_playing():
+            voice.pause()
+            await ctx.send("노래가 일시정지 되었습니다.")
+        else:
+            await ctx.send("일시정지할 노래가 없습니다.")
+    except Exception as e:
+        print('error')
+
+
+@bot.command(pass_context=True, aliases=['r', 'res'])
+async def 다시재생(ctx):
+    try:
+        voice = get(bot.voice_clients, guild=ctx.guild)
+
+        if voice and voice.is_paused():
+            print("продолжение")
+            voice.resume()
+            await ctx.send("재생 시작!")
+        else:
+            print("ERROR")
+            await ctx.send("ERROR")
+    except Exception as e:
+        print('error')
+@bot.command(pass_context=True, aliases=['v', 'vol'])
+async def 볼륨(ctx, vol: int):
+    try:
+        global volumes
+        if ctx.voice_client is None:
+            return await ctx.send("봇이 음성채널에 있지 않습니다.")
+        if vol < 0 or vol > 200:
+            await ctx.send(f"{ctx.author.mention}에 의해 불륨이 변경되었습니다.")
+            return
+        print(vol / 100)
+        ctx.voice_client.source.volume = vol / 100
+        await ctx.send(f"볼륨: {vol}%")
+        volumes = vol
+    except Exception as e:
+        print('error')
+@bot.command(pass_context=True, aliases=['c', 'clr'])
+async def 초기화(ctx):
+    global volumes
+    voice = get(bot.voice_clients, guild=ctx.guild)
+    queues.clear()
+    volumes = 15
+
+    if voice and voice.is_playing():
+        voice.stop()
+        await ctx.send("초기화 완료!")
+    else:
+        await ctx.send("초기화 상태입니다.")
+@bot.command(pass_context=True, aliases=['p', 'pla'])
+async def 재생(ctx, *url: str):
+    global volumes
+    queues.append(url)
+
+    def check_queue():
+        global current_index
+        Queue_infile = len(queues)
+        if Queue_infile > 0:
+            if current_index >= len(queues):
+                current_index = 0
+            url = queues[current_index]
+            print(queues)
+            current_index += 1
+            song_there = os.path.isfile("song.mp3")
+            try:
+                if song_there:
+                    os.remove("song.mp3")
+            except PermissionError:
+                return
+            voice = get(bot.voice_clients, guild=ctx.guild)
+
+            ydl_opts = {
+                'format': 'bestaudio/best',
+                'quiet': False,
+                'outtmpl': "./song.mp3",
+                'postprocessors': [{
+                    'key': 'FFmpegExtractAudio',
+                    'preferredcodec': 'mp3',
+                    'preferredquality': '192',
+                }],
+            }
+
+            song_search = " ".join(url)
+
+            try:
+                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                    print("загрузка\n")
+                    ydl.download([f"ytsearch1:{song_search}"])
+            except:
+                print("FALLBACK: youtube-dl does not support this URL, using Spotify (This is normal if Spotify URL)")
+                c_paths = os.path.dirname(os.path.realpath(__file__))
+                system("spotdl -ff song -f " + '"' + c_paths + '"' + " -s " + song_search)
+
+            voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue())
+            voice.source = discord.PCMVolumeTransformer(voice.source)
+            voice.source.volume = volumes / 100
+        else:
+            queues.clear()
+
+    song_there = os.path.isfile("song.mp3")
+    try:
+        if song_there:
+            os.remove("song.mp3")
+            queues.clear()
+    except PermissionError:
+        await ctx.send("오류발생!!")
+        return
+
+    await ctx.send("불러오는 중...")
+
+    voice = get(bot.voice_clients, guild=ctx.guild)
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'quiet': False,
+        'outtmpl': "./song.mp3",
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }],
+    }
+
+    song_search = " ".join(url)
+
+    try:
+        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([f"ytsearch1:{song_search}"])
+    except:
+        c_path = os.path.dirname(os.path.realpath(__file__))
+        system("spotdl -ff song -f " + '"' + c_path + '"' + " -s " + song_search)
+    queues.append(url)
+    voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue())
+    voice.source = discord.PCMVolumeTransformer(voice.source)
+    voice.source.volume = volumes / 100
+@bot.command()
+async def 테스트1(ctx):
+    ss = {'money_command_1': money_command_1[str(ctx.author.id)], 'money': money[str(ctx.author.id)]}
+    s = str(ss)
+    print(s)
+    b = s.encode("UTF-8")
+    e = base64.b64encode(b)
+    s1 = e.decode("UTF-8")
+    await ctx.send(s1)
+@bot.command()
+async def 테스트2(ctx, *, s):
+    if ctx.author.id in admin:
+        b1 = s.encode("UTF-8")
+        d = base64.b64decode(b1)
+        s2 = d.decode("UTF-8")
+        await ctx.channel.send(s2)
+@bot.command()
+async def 랭킹(ctx):
+    with open('data_money.json', 'r') as f:
+        jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
+    money = json.loads(jstring)
+    embed = discord.Embed(title="랭킹", color=0xff0000)
+    rank = dict(sorted(money.items(),key=operator.itemgetter(1), reverse=True))
+    rankkey = list(rank.keys())
+    rankvalue = list(rank.values())
+    rankoutput = ""
+    for d in range(len(rankkey)):
+        rankoutput = rankoutput + f"{d + 1}등 : {bot.get_user(int(rankkey[d])).name} - {rankvalue[d]}점\n"
+        embed.add_field(name=" ", value=f"{rankoutput}", inline=False)
+    await ctx.channel.send(embed=embed)
 bot.run(token)
 
