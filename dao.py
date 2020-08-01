@@ -2058,14 +2058,23 @@ async def 랭킹(ctx):
     with open('data_money.json', 'r') as f:
         jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
     money = json.loads(jstring)
-    embed = discord.Embed(title="랭킹", color=0xff0000)
+    embed = discord.Embed(title="랭킹\n\n\n", color=0xff0000)
     rank = dict(sorted(money.items(),key=operator.itemgetter(1), reverse=True))
+    print(rank)
     rankkey = list(rank.keys())
+    print(rankkey)
     rankvalue = list(rank.values())
+    print(rankvalue)
     rankoutput = ""
+    for d in range(min(len(rankkey), 10)):
+        rankoutput = f'돈 : {rankvalue[d]}'
+        embed.add_field(name=f"{d + 1}등 : {bot.get_user(int(rankkey[d]))}\n", value=f"{rankoutput}", inline=False)
     for d in range(len(rankkey)):
-        rankoutput = rankoutput + f"{d + 1}등 : {bot.get_user(int(rankkey[d])).name} - {rankvalue[d]}점\n"
-        embed.add_field(name=" ", value=f"{rankoutput}", inline=False)
+        print(type(rankkey[d]))
+        print(type(ctx.author.id))
+        if ctx.author.id == int(rankkey[d]):
+            rankoutput = f'돈 : {rankvalue[d]}'
+            embed.add_field(name=f"==============", value=f"\n\n\n{d + 1}등 : {bot.get_user(int(rankkey[d]))}\n돈 : {rankvalue[d]}", inline=False)        
     await ctx.channel.send(embed=embed)
 bot.run(token)
 
