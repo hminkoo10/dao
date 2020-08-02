@@ -1639,7 +1639,7 @@ async def 돈줘(ctx):
             money_cool = json.loads(jstring)
         abcd = float(money_cool[str(ctx.author.id)]) - time.time()
         if float(abcd) <= float('-1800'):
-            money_test = float(random.randint(0, 1000))
+            money_test = float(random.randint(500, 1500))
             with open('data_money.json', 'r') as f:
                 jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
                 money = json.loads(jstring)
