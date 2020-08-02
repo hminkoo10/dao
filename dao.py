@@ -1087,25 +1087,25 @@ async def on_error(event, args, **kwargs):
         exc = sys.exc_info() #sys를 활용해서 에러를 확인합니다.
         message.channel.send(str(exc[0].__name__) + "" + str(exc[1])) #그 에러를 출력합니다.
         return
-#@bot.listen()
-#async def on_message_delete(message):
-#    if message.server.id == '708518643171983422' or message.server.id == '708518643171983422' or message.server.id == '720143008804241410':
-#	await message.channel.send("메세지 삭제 감지(" + str(message.author) + "): " + message.content)
-#	return
-@bot.command()
+@bot.listen()
+async def on_message_delete(message):
+    if message.guild.id == int('701974089421553806'):
+        await bot.get_channel(int(739454908389916702)).send(f"<#{message.channel.id}>\n메세지 삭제 감지(" + str(message.author) + "): " + message.content)
+        return
+#@bot.command()
 async def on_member_leaves(member):
     if member.message.guild.id == 701974089421553806:
         await bot.get_channel(712933494489088041).send(f"{member.author.mention}님이 오셨어요! 환영 해 주세요!")
         return
-@bot.listen()
+#@bot.listen()
 async def on_guild_join(guild):
 	await guild.message.channel.send("새로운 서버에 접속!" + str(guild))
 	return
-@bot.listen()
+#@bot.listen()
 async def on_member_ban(guild, user):
 	await guild.channel.send(f"{user}님이 밴 되었습니다")
 	return
-@bot.listen()
+#@bot.listen()
 async def on_member_unban(guild, user):
 	await guild.channel.send(f"{user}님이 언밴 되었습니다")
 	return
@@ -1148,25 +1148,25 @@ async def tts(ctx, *, bom):
     await ctx.channel.send(f"{bom}\n{ctx.author.name}님이 커맨드를 사용했습니다",tts=True)
 @bot.listen()
 async def on_message(message):
-    if message.content.startswith("서버나가"):
+    if message.content.startswith(",서버나가"):
         if str(ctx.author.id) in admin:
-            imd = massage.content[4:]
-            to_leave = bot.get_guild(imd)
+            imd = massage.content[5:]
+            to_leave = bot.get_guild(int(imd))
             await bot.leave_server(to_leave)
             await message.channel.send("OK")
 @bot.command()
 async def 초대목록(ctx):
-    await (ctx.guild.id).invites()
+    await ctx.guild.id.invites()
 #@bot.command()
 #async def 언밴(ctx, user):
 #    await (ctx.guild.id).unban(user, reason=None)
 @bot.listen()
 async def on_message(message):
     if message.content.startswith(",서버초대링크생성"):
-        await (message.channel.id).invites()
+        await message.channel.id.invites()
 @bot.command()
-async def id확인(ctx, il):
-    imm = il.name
+async def id확인(ctx, il: int):
+    imm = bot.get_user(il)
     await ctx.send(str(imm))
 @bot.command()
 async def 학습(ctx, one, *, two):
@@ -1473,7 +1473,7 @@ async def on_member_join(member):
         return None
 
 @bot.listen
-async def on_member_remove(member):
+async def on_member_leave(member):
     syschannel = member.guild.system_channel.id 
     try:
         embed=discord.Embed(
@@ -1960,6 +1960,12 @@ async def 운세(ctx,*,star):
     luck = soup.find("p",{"class": "text _cs_fortune_text"}).get_text()
     luembed = discord.Embed(color=0x192131, title=ctx.author.name+"님의 운세" , description=luck)
     await ctx.channel.send(embed = luembed)
-    
+@bot.command(pass_context=True)
+async def invite(ctx):
+    invitelinknew = await ctx.message.channel.create_invite(destination = ctx.message.channel, xkcd = True, max_uses = 100)
+    embedMsg=discord.Embed(color=0xf41af4)
+    embedMsg.add_field(name="Discord Invite Link", value=invitelinknew)
+    embedMsg.set_footer(text="Discord server invited link.")
+    await ctx.send(embed=embedMsg)
 bot.run(token)
 
