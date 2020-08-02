@@ -120,7 +120,12 @@ async def main():
 
 def setup(bot):
     bot.add_cog(Corona(bot))
-
+def write(file, tup):
+    with open(f"{file}.json", "w+", encoding='utf-8-sig') as f:
+        json_string = json.dump(tup, f, indent=2, ensure_ascii=False)
+def read(file):
+    with open(f'{file}.json', 'r') as f:
+        jstring = open(f"{file}.json", "r", encoding='utf-8-sig').read()
 def insert_returns(body):
     # insert return stmt if the last expression is a expression statement
     if isinstance(body[-1], ast.Expr):
@@ -177,12 +182,14 @@ async def 도움(ctx):
     embed.add_field(name="날씨", value="``,날씨 (지역)``로 확인", inline=False)
     embed.add_field(name="번역", value="``,번역 (번역할 언어) (번역될 언어) (번역될 낱말)``로 확인\n^^ 예시 : ,번역 ko en 안녕\n값 : Hello", inline=False)
     embed.add_field(name="gif검색", value="``,gif (검색 할 내용)``로 확인", inline=False)
-    embed.add_field(name="슬로우모드(only 서버관리자", value="``,슬로우모드 (초)``로 확인", inline=False)
+    embed.add_field(name="슬로우모드(only 서버관리자)", value="``,슬로우모드 (초)``로 확인", inline=False)
+    embed.add_field(name="운세", value="``,운세 00자리``로 확인", inline=False)
+    embed.add_field(name="돈 관련", value="``,돈줘\n,랭킹\n,내돈\n,훔쳐보기 @맨션\n,구매 (증가벽돌, 복구시스템)\n,사용 증가벽돌\n,복구 (복구암호)``로 확인", inline=False)
     embed.add_field(name="다오 서포터", value="- ``https://blow.ga/팀-슷칼리토``", inline=False)
     embed.add_field(name="공지 (only 서버관리자)", value="- ``,공지 내용``", inline=False)
     embed.set_footer(text=(ctx.author.name), icon_url=ctx.author.avatar_url)
     await ctx.author.send(embed=embed)
-    embed = discord.Embed(description = "[다오 서포터 <----- 클릭!!](https://blow.ga/팀-슷칼리토)",color=0xe67e22)
+    embed = discord.Embed(description = "[다오 서포터 <----- 클릭!!](https://discord.gg/eC2v6ud)",color=0xe67e22)
     await ctx.author.send(embed=embed)
     await ctx.send("DM으로 전송했어요!")
 @bot.command()
@@ -1179,9 +1186,9 @@ async def on_message(message):
         hi = message.content[1:]
         try:
             send = dict1[hi]
+            await message.channel.send(send)
         except:
-            send = None
-        await message.channel.send(send)
+            pass
 @bot.command()
 async def 지워(ctx, text):
     if str(ctx.author.id) in admin:
@@ -1230,7 +1237,7 @@ async def 비속어확인(ctx):
     await ctx.send(file.read())
 @bot.command()
 async def 크레딧(ctx):
-    await ctx.send("음악 도움: Minibox")
+    await ctx.send("음악 도움: Minibox\n랭킹 도움: 파이어리자드")
 @bot.command()
 async def 밴처리(ctx, user:discord.Member, *, text):
     if str(ctx.author.id) in admin:
@@ -1740,6 +1747,16 @@ async def 탈퇴(ctx):
     del money_cool[str(ctx.author.id)]
     with open("data_money_cool.json", "w+", encoding='utf-8-sig') as f:
         json_string = json.dump(money_cool, f, indent=2, ensure_ascii=False)
+    with open('data_money_command_1.json', 'r') as f:
+        jstring = open("data_money_command_1.json", "r", encoding='utf-8-sig').read()
+        money_command_1 = json.loads(jstring)
+    del money_command_1[str(ctx.author.id)]
+    write('data_money_command_1', money_command_1)
+    with open('data_money_command_2', 'r') as f:
+        jstring = open("data_money_command_2.json", "r", encoding='utf-8-sig').read()
+        money_command_2 = json.loads(jstring)
+    del money_command_2[str(ctx.author.id)]
+    write('data_money_command_2', money_command_2)
     await ctx.send("탈퇴가 완료되었어요!")
 @bot.command()
 async def 구매(ctx, item_name):
@@ -1844,15 +1861,19 @@ async def 사용(ctx, item_name):
             jstring = open("data_money_command_1.json", "r", encoding='utf-8-sig').read()
             money_command_1 = json.loads(jstring)
         if money_command_1[str(ctx.author.id)] >= float('1'):
-            money_command_2[str(ctx.author.id)] -= float('1')
-            ss = {"money_command_1": money_command_1[str(ctx.author.id)], "money": money[str(ctx.author.id)]}
-            s = str(ss)
-            b = s.encode("UTF-8")
-            e = base64.b64encode(b)
-            s1 = e.decode("UTF-8")
-            with open("data_money_command_2.json", "w+", encoding='utf-8-sig') as f:
-                json_string = json.dump(money_command_2, f, indent=2, ensure_ascii=False)
-            await ctx.channel.send(embed=discord.Embed(title=f'복구 암호가 생성되었어요!\n복구 암호는 {s1}이예요!', color=0x2ecc71))
+            d = money_command_2[str(ctx.author.id)] - float('1')
+            if d >= float('-1'):
+                await ctx.send("아이템이 없는데여ㅡㅡ;")
+            else:
+                money_command_2[str(ctx.author.id)] -= float('1')
+                ss = str({"id": int(ctx.author.id), "money_command_1": money_command_1[str(ctx.author.id)], "money": money[str(ctx.author.id)]})
+                s = json.dumps(ss)
+                b = s.encode("UTF-8")
+                e = base64.b64encode(b)
+                s1 = e.decode("UTF-8")
+                with open("data_money_command_2.json", "w+", encoding='utf-8-sig') as f:
+                    json_string = json.dump(money_command_2, f, indent=2, ensure_ascii=False)
+                await ctx.channel.send(embed=discord.Embed(title=f'복구 암호가 생성되었어요!\n복구 암호는 {s1}이예요!\n정보를 잃었을때 ,복구 {s1}이라고 해 보세요!', color=0x2ecc71))
     else:
         await ctx.send(f'{item_name}이란 아이템이 없는데요?')
 @bot.command()
@@ -1869,174 +1890,6 @@ async def sms(ctx, number, message2):
                      to=f'+82{touser}'
                  )
     await ctx.send("메시지가 성공적으로 보내졌어요!")
-@bot.command(pass_context=True, aliases=['j', 'joi'])
-async def 들어와(ctx):
-    try:
-        channel = ctx.message.author.voice.channel
-        voice = get(bot.voice_clients, guild=ctx.guild)
-
-        if voice and voice.is_connected():
-            return await voice.move_to(channel)
-
-        await channel.connect()
-        await ctx.send(f"봇이 {channel}로 접속하였습니다!")
-    except Exception as e:
-        await ctx.send(f"음성채널 접속 후 시도하세요!")
-
-
-@bot.command(pass_context=True, aliases=['l', 'lea'])
-async def 나가(ctx):
-    try:
-        channel = ctx.message.author.voice.channel
-        voice = get(bot.voice_clients, guild=ctx.guild)
-
-        if voice and voice.is_connected():
-            await voice.disconnect()
-            await ctx.send(f"봇이 {channel}에서 나갔습니다.")
-        else:
-            await ctx.send("봇이 음성채널에 접속 한 적이 없습니다.")
-    except Exception as e:
-        await ctx.send("봇이 음성채널에 없습니다.")
-@bot.command(pass_context=True, aliases=['pa', 'pau'])
-async def 일시정지(ctx):
-    try:
-        voice = get(bot.voice_clients, guild=ctx.guild)
-
-        if voice and voice.is_playing():
-            voice.pause()
-            await ctx.send("노래가 일시정지 되었습니다.")
-        else:
-            await ctx.send("일시정지할 노래가 없습니다.")
-    except Exception as e:
-        print('error')
-
-
-@bot.command(pass_context=True, aliases=['r', 'res'])
-async def 다시재생(ctx):
-    try:
-        voice = get(bot.voice_clients, guild=ctx.guild)
-
-        if voice and voice.is_paused():
-            print("продолжение")
-            voice.resume()
-            await ctx.send("재생 시작!")
-        else:
-            print("ERROR")
-            await ctx.send("ERROR")
-    except Exception as e:
-        print('error')
-@bot.command(pass_context=True, aliases=['v', 'vol'])
-async def 볼륨(ctx, vol: int):
-    try:
-        global volumes
-        if ctx.voice_client is None:
-            return await ctx.send("봇이 음성채널에 있지 않습니다.")
-        if vol < 0 or vol > 200:
-            await ctx.send(f"{ctx.author.mention}에 의해 불륨이 변경되었습니다.")
-            return
-        print(vol / 100)
-        ctx.voice_client.source.volume = vol / 100
-        await ctx.send(f"볼륨: {vol}%")
-        volumes = vol
-    except Exception as e:
-        print('error')
-@bot.command(pass_context=True, aliases=['c', 'clr'])
-async def 초기화(ctx):
-    global volumes
-    voice = get(bot.voice_clients, guild=ctx.guild)
-    queues.clear()
-    volumes = 15
-
-    if voice and voice.is_playing():
-        voice.stop()
-        await ctx.send("초기화 완료!")
-    else:
-        await ctx.send("초기화 상태입니다.")
-@bot.command(pass_context=True, aliases=['p', 'pla'])
-async def 재생(ctx, *url: str):
-    global volumes
-    queues.append(url)
-
-    def check_queue():
-        global current_index
-        Queue_infile = len(queues)
-        if Queue_infile > 0:
-            if current_index >= len(queues):
-                current_index = 0
-            url = queues[current_index]
-            print(queues)
-            current_index += 1
-            song_there = os.path.isfile("song.mp3")
-            try:
-                if song_there:
-                    os.remove("song.mp3")
-            except PermissionError:
-                return
-            voice = get(bot.voice_clients, guild=ctx.guild)
-
-            ydl_opts = {
-                'format': 'bestaudio/best',
-                'quiet': False,
-                'outtmpl': "./song.mp3",
-                'postprocessors': [{
-                    'key': 'FFmpegExtractAudio',
-                    'preferredcodec': 'mp3',
-                    'preferredquality': '192',
-                }],
-            }
-
-            song_search = " ".join(url)
-
-            try:
-                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                    print("загрузка\n")
-                    ydl.download([f"ytsearch1:{song_search}"])
-            except:
-                print("FALLBACK: youtube-dl does not support this URL, using Spotify (This is normal if Spotify URL)")
-                c_paths = os.path.dirname(os.path.realpath(__file__))
-                system("spotdl -ff song -f " + '"' + c_paths + '"' + " -s " + song_search)
-
-            voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue())
-            voice.source = discord.PCMVolumeTransformer(voice.source)
-            voice.source.volume = volumes / 100
-        else:
-            queues.clear()
-
-    song_there = os.path.isfile("song.mp3")
-    try:
-        if song_there:
-            os.remove("song.mp3")
-            queues.clear()
-    except PermissionError:
-        await ctx.send("오류발생!!")
-        return
-
-    await ctx.send("불러오는 중...")
-
-    voice = get(bot.voice_clients, guild=ctx.guild)
-    ydl_opts = {
-        'format': 'bestaudio/best',
-        'quiet': False,
-        'outtmpl': "./song.mp3",
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
-        }],
-    }
-
-    song_search = " ".join(url)
-
-    try:
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([f"ytsearch1:{song_search}"])
-    except:
-        c_path = os.path.dirname(os.path.realpath(__file__))
-        system("spotdl -ff song -f " + '"' + c_path + '"' + " -s " + song_search)
-    queues.append(url)
-    voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue())
-    voice.source = discord.PCMVolumeTransformer(voice.source)
-    voice.source.volume = volumes / 100
 @bot.command()
 async def 테스트1(ctx):
     ss = {'money_command_1': money_command_1[str(ctx.author.id)], 'money': money[str(ctx.author.id)]}
@@ -2048,7 +1901,7 @@ async def 테스트1(ctx):
     await ctx.send(s1)
 @bot.command()
 async def 테스트2(ctx, *, s):
-    if ctx.author.id in admin:
+    #if int(ctx.author.id) in admin:
         b1 = s.encode("UTF-8")
         d = base64.b64decode(b1)
         s2 = d.decode("UTF-8")
@@ -2076,5 +1929,36 @@ async def 랭킹(ctx):
             rankoutput = f'돈 : {rankvalue[d]}'
             embed.add_field(name=f"==============", value=f"\n\n\n{d + 1}등 : {bot.get_user(int(rankkey[d]))}\n돈 : {rankvalue[d]}", inline=False)        
     await ctx.channel.send(embed=embed)
+@bot.command()
+async def 복구(ctx, *, s):
+    #try:
+    b1 = s.encode("UTF-8")
+    d = base64.b64decode(b1)
+    s2 = d.decode("UTF-8")
+    #information__ = s2.replace("'", "\"")
+    print(s2)
+    information = eval(eval(s2))
+    print(information)
+    print(type(information))
+    #information = dict(information_)
+    if information['id'] == int(ctx.author.id):
+        money[str(ctx.author.id)] = information['money']
+        money_command_1 = information['money_command_1']
+        write('data_money', money)
+        write('data_money_command_1', money_command_1)
+        await ctx.send("복구가 완료되었어요!")
+    else:
+        await ctx.send("코드 발급자가 아닙니다")
+    #except:
+    #    await ctx.send("올바르지 않는 코드입니다")
+@bot.command()
+async def 운세(ctx,*,star):
+    response = requests.get('https://search.naver.com/search.naver?ie=UTF-8&sm=whl_hty&query=운세 '+star)
+    readerhtml = response.text
+    soup = BeautifulSoup(readerhtml, 'lxml')
+    luck = soup.find("p",{"class": "text _cs_fortune_text"}).get_text()
+    luembed = discord.Embed(color=0x192131, title=ctx.author.name+"님의 운세" , description=luck)
+    await ctx.channel.send(embed = luembed)
+    
 bot.run(token)
 
