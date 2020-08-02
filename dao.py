@@ -573,10 +573,11 @@ async def 리로드(ctx):
 #        self.bot.reload_extension("gathongi.py")
 @bot.listen()
 async def on_message(message):
-    if message.content.startswith(",,정보"):
-        date = datatime.datatime.utcfromtimestamp(((int(message.author.id) >> 22) + 1420070400000) / 1000)
+    if message.content == ",정보":
+        import datetime
+        date = datetime.datetime.utcfromtimestamp(((int(message.author.id) >> 22) + 1420070400000) / 1000)
         embed = discord.Embed(color=0xf1c40f)
-        embed = embed.add_field(name="이름", value=message.author.name, inline=True)
+        embed = embed.add_field(name="이름", value=message.author, inline=True)
         embed = embed.add_field(name="서버닉네임", value=message.author.display_name, inline=True)
         embed = embed.add_field(name="가입일", value=str(date.year) + "년" + str(date.month) + "월" + str(date.day) + "일", inline=True)
         embed = embed.add_field(name="아이디", value=message.author.id, inline=True)
