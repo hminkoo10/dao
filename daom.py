@@ -7,6 +7,9 @@ import os
 from os import system
 import asyncio
 client = commands.Bot(command_prefix='!')
+volumes = 15
+queues = []
+PlayLst = []
 @client.command(pass_context=True, aliases=['j', 'joi'])
 async def 들어와(ctx):
     """Подключиться к текущему голосовому каналу"""

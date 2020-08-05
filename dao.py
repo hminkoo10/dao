@@ -1858,10 +1858,7 @@ async def 사용(ctx, item_name):
         with open('data_money.json', 'r') as f:
             jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
             money = json.loads(jstring)
-        with open('data_money_command_1.json', 'r') as f:
-            jstring = open("data_money_command_1.json", "r", encoding='utf-8-sig').read()
-            money_command_1 = json.loads(jstring)
-        if money_command_1[str(ctx.author.id)] >= float('1'):
+        if money_command_2[str(ctx.author.id)] <= float('1'):
             d = money_command_2[str(ctx.author.id)] - float('1')
             if d >= float('-1'):
                 await ctx.send("아이템이 없는데여ㅡㅡ;")
