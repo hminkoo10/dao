@@ -112,7 +112,6 @@ def gif_response(emotion):
         return gif[0].url
     except IndexError:
         pass
-
 async def main():
     userid = "713007296476741643"
     info = await dbkrpy.CheckVote.get_response(token,userid)
@@ -362,7 +361,7 @@ async def 주사위(ctx):
 #    try:
 #        user = await bot.wait_for('reaction_add', timeout=7, check=check)  # 반응 추가할때까지 기다리는 코드. timeout=7은 7초 기다리면 타임아웃 오류를 발생시키는걸 의미.
 #        if except asyncio.TimeoutError:
-#        await ctx.channel.send("타임 아웃!")
+#            await ctx.channel.send("타임 아웃!")
 #    else:
 #        await ctx.channel.send("오! 잘 찾아왔어요!")
 @bot.command()
@@ -1450,9 +1449,19 @@ async def 업타임(ctx):
             await ctx.send(f'```diff\n-ERROR!!-\n```')
             sss = subprocess.check_output(code, shell=True)
             await ctx.send(f"오류코드:\n```cmd\n{sss}\n```")
-@bot.listen()
-async def on_reaction_add(reaction, user):
-    await reaction.message.add_reaction(reaction.emoji)
+class reaction():
+    @bot.listen()        
+    async def on_reaction_add(reaction, user):
+        global aa
+        aaa = reaction.emoji
+        aa = aaa
+        print(aa)
+    @bot.command()
+    async def 이모지(ctx):
+        try:
+            await ctx.send(aa)
+        except:
+            pass
 @bot.command()
 async def 하트(ctx, user:discord.Member):
     info = await dbkrpy.CheckVote.get_response("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg", user.id)
@@ -1739,24 +1748,36 @@ async def 탈퇴(ctx):
     with open('data_money.json', 'r') as f:
         jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
         money = json.loads(jstring)
-    del money[str(ctx.author.id)]
+    try:
+        del money[str(ctx.author.id)]
+    except:
+        pass
     with open("data_money.json", "w+", encoding='utf-8-sig') as f:
         json_string = json.dump(money, f, indent=2, ensure_ascii=False)
     with open('data_money_cool.json', 'r') as f:
         jstring = open("data_money_cool.json", "r", encoding='utf-8-sig').read()
         money_cool = json.loads(jstring)
-    del money_cool[str(ctx.author.id)]
+    try:
+        del money_cool[str(ctx.author.id)]
+    except:
+        pass
     with open("data_money_cool.json", "w+", encoding='utf-8-sig') as f:
         json_string = json.dump(money_cool, f, indent=2, ensure_ascii=False)
     with open('data_money_command_1.json', 'r') as f:
         jstring = open("data_money_command_1.json", "r", encoding='utf-8-sig').read()
         money_command_1 = json.loads(jstring)
-    del money_command_1[str(ctx.author.id)]
+    try:
+        del money_command_1[str(ctx.author.id)]
+    except:
+        pass
     write('data_money_command_1', money_command_1)
     with open('data_money_command_2', 'r') as f:
         jstring = open("data_money_command_2.json", "r", encoding='utf-8-sig').read()
         money_command_2 = json.loads(jstring)
-    del money_command_2[str(ctx.author.id)]
+    try:
+        del money_command_2[str(ctx.author.id)]
+    except:
+        pass
     write('data_money_command_2', money_command_2)
     await ctx.send("탈퇴가 완료되었어요!")
 @bot.command()
@@ -1789,7 +1810,7 @@ async def 구매(ctx, item_name):
         except:
             if item_name == '증가벽돌':
                 money_command_1[str(ctx.author.id)] = float('1')
-            elif item_name == '증가벽돌':
+            elif item_name == '복구시스템':
                 money_command_2[str(ctx.author.id)] = float('1')
         with open("data_money_command_1.json", "w+", encoding='utf-8-sig') as f:
             json_string = json.dump(money_command_1, f, indent=2, ensure_ascii=False)
@@ -1860,11 +1881,18 @@ async def 사용(ctx, item_name):
             money = json.loads(jstring)
         if money_command_2[str(ctx.author.id)] <= float('1'):
             d = money_command_2[str(ctx.author.id)] - float('1')
-            if d >= float('-1'):
+            if d <= float('-1'):
                 await ctx.send("아이템이 없는데여ㅡㅡ;")
             else:
                 money_command_2[str(ctx.author.id)] -= float('1')
-                ss = str({"id": int(ctx.author.id), "money_command_1": money_command_1[str(ctx.author.id)], "money": money[str(ctx.author.id)]})
+                with open('data_money_command_1.json', 'r') as f:
+                    jstring = open("data_money_command_1.json", "r", encoding='utf-8-sig').read()
+                    money_command_1 = json.loads(jstring)
+                try:
+                    print(money_command_1[str(ctx.author.id)])
+                except:
+                    money_command_1[str(ctx.author.id)] = 0.0
+                ss = {'id': ctx.author.id, 'money': money[str(ctx.author.id)], 'money_command_1': money_command_1[str(ctx.author.id)]}
                 s = json.dumps(ss)
                 b = s.encode("UTF-8")
                 e = base64.b64encode(b)
@@ -1929,26 +1957,22 @@ async def 랭킹(ctx):
     await ctx.channel.send(embed=embed)
 @bot.command()
 async def 복구(ctx, *, s):
-    #try:
-    b1 = s.encode("UTF-8")
-    d = base64.b64decode(b1)
-    s2 = d.decode("UTF-8")
-    #information__ = s2.replace("'", "\"")
-    print(s2)
-    information = eval(eval(s2))
-    print(information)
-    print(type(information))
-    #information = dict(information_)
-    if information['id'] == int(ctx.author.id):
-        money[str(ctx.author.id)] = information['money']
-        money_command_1 = information['money_command_1']
-        write('data_money', money)
-        write('data_money_command_1', money_command_1)
-        await ctx.send("복구가 완료되었어요!")
-    else:
-        await ctx.send("코드 발급자가 아닙니다")
-    #except:
-    #    await ctx.send("올바르지 않는 코드입니다")
+    try:
+        b1 = s.encode("UTF-8")
+        d = base64.b64decode(b1)
+        s2 = d.decode("UTF-8")
+        print(s2, type(s2))
+        information = eval(s2)
+        if information['id'] == int(ctx.author.id):
+            money[str(ctx.author.id)] = information['money']
+            money_command_1[str(ctx.author.id)] = information['money_command_1']
+            write('data_money', money)
+            write('data_money_command_1', money_command_1)
+            await ctx.send("복구가 완료되었어요!")
+        else:
+            await ctx.send("코드 발급자가 아닙니다")
+    except:
+        await ctx.send("올바르지 않는 코드입니다")
 @bot.command()
 async def 운세(ctx,*,star):
     response = requests.get('https://search.naver.com/search.naver?ie=UTF-8&sm=whl_hty&query=운세 '+star)
