@@ -17,6 +17,9 @@ import qrcode
 import calendar
 import smtplib
 from email.mime.text import MIMEText
+from PIL import Image
+from PIL import ImageFont
+from PIL import ImageDraw 
 import base64
 import urllib,requests
 import operator
@@ -36,6 +39,8 @@ from twilio.rest import Client
 import shutil
 from discord.utils import get
 from os import system
+import shutil
+import requests
 
 
 with open('data_server.json', 'r') as f:
@@ -83,7 +88,7 @@ player1_bat = "none"
 player2_bat = "none"
 player1_result = "none"
 player2_result = "none"
-item_money = {'증가벽돌': '2000','복구시스템': '5000'}
+item_money = {'증가벽돌': '2500','복구시스템': '4000'}
 queues = list()
 volume = ''
 with open('data_money_command_1.json', 'r') as f:
@@ -145,7 +150,7 @@ async def on_ready():
     print('정상작동중...')
     #os.system("python gathongi.py")
     print('개똥이 실행 완료!')
-    messages = ["명의 사용자와 함께", "접두어 = ,", "ver.3.3.7", "개의 서버와 함께"]
+    messages = ["명의 사용자와 함께", "접두어 = ,", "ver.4.1.2", "개의 서버와 함께"]
     while True:
         if messages[0] == '명의 사용자와 함께':
             await bot.change_presence(status=discord.Status.online, activity=discord.Game(name=f",도움 | {str(len(bot.users))}명의 사용자와 함께"))
@@ -183,6 +188,7 @@ async def 도움(ctx):
     embed.add_field(name="gif검색", value="``,gif (검색 할 내용)``로 확인", inline=False)
     embed.add_field(name="슬로우모드(only 서버관리자)", value="``,슬로우모드 (초)``로 확인", inline=False)
     embed.add_field(name="운세", value="``,운세 00자리``로 확인", inline=False)
+    embed.add_field(name="사진편집", value="``,사진편집 이미지url 색갈(영어) 글``로 확인", inline=False)
     embed.add_field(name="돈 관련", value="``,돈줘\n,랭킹\n,내돈\n,훔쳐보기 @맨션\n,구매 (증가벽돌, 복구시스템)\n,사용 증가벽돌\n,복구 (복구암호)``로 확인", inline=False)
     embed.add_field(name="다오 서포터", value="- ``https://blow.ga/팀-슷칼리토``", inline=False)
     embed.add_field(name="공지 (only 서버관리자)", value="- ``,공지 내용``", inline=False)
@@ -1035,7 +1041,10 @@ async def 역할삭제(ctx, *, text):
 @bot.command(name="eval")
 async def eval_(ctx, *, code):
     if str(ctx.author.id) in admin:
-        await ctx.send(eval(code))
+        try:
+            await ctx.send(eval(code))
+        except Exception as ex:
+            await ctx.send(f'오류발생!\n에러코드:{str(ex)}')
 @bot.command()
 async def 유저수동기화(ctx, *, text):
     await text.edit(name="유저")
@@ -1318,51 +1327,35 @@ async def 구글링(ctx, *, text):
 @bot.command()
 async def eval_(ctx, *, cmd):
     if str(ctx.author.id) in admin:
-        """Evaluates input.
-        Input is interpreted as newline seperated statements.
-        If the last statement is an expression, that is the return value.
-        Usable globals:
-          - `bot`: the bot instance
-          - `discord`: the discord module
-          - `commands`: the discord.ext.commands module
-          - `ctx`: the invokation context
-          - `__import__`: the builtin `__import__` function
-        Such that `>eval 1 + 1` gives `2` as the result.
-        The following invokation will cause the bot to send the text '9'
-        to the channel of invokation and return '3' as the result of evaluating
-        >eval ```
-        a = 1 + 2
-        b = a * 2
-        await ctx.send(a + b)
-        a
-        ```
-        """
-        fn_name = "_eval_expr"
+        try:
+            fn_name = "_eval_expr"
 
-        cmd = cmd.strip("` ")
+            cmd = cmd.strip("` ")
 
     # add a layer of indentation
-        cmd = "\n".join(f"    {i}" for i in cmd.splitlines())
+            cmd = "\n".join(f"    {i}" for i in cmd.splitlines())
 
     # wrap in async def body
-        body = f"async def {fn_name}():\n{cmd}"
+            body = f"async def {fn_name}():\n{cmd}"
 
-        parsed = ast.parse(body)
-        body = parsed.body[0].body
+            parsed = ast.parse(body)
+            body = parsed.body[0].body
 
-        insert_returns(body)
+            insert_returns(body)
 
-        env = {
-            'bot': ctx.bot,
-            'discord': discord,
-            'commands': commands,
-            'ctx': ctx,
-            '__import__': __import__
-        }
-        exec(compile(parsed, filename="<ast>", mode="exec"), env)
+            env = {
+                'bot': ctx.bot,
+                'discord': discord,
+                'commands': commands,
+                'ctx': ctx,
+                '__import__': __import__
+            }
+            exec(compile(parsed, filename="<ast>", mode="exec"), env)
 
-        result = (await eval(f"{fn_name}()", env))
-        await ctx.send(result)
+            result = (await eval(f"{fn_name}()", env))
+            await ctx.send(result)
+        except Exception as ex:
+            await ctx.send(f'오류발생!\n에러내용:{str(ex)}')
 @bot.command()
 async def 수정(ctx, one, two, *, three):
     edit = await ctx.send(one)
@@ -1370,20 +1363,9 @@ async def 수정(ctx, one, two, *, three):
     await edit.edit(content=three)
 @bot.command()
 async def on_command_error(ctx, error):
-    ex = error
-    """
-    #embed = discord.Embed(
-            title='**:x: 명령어 없어 :x:**',
-            description=f"- 발신자 : <@{ctx.author.id}>\n- 수신내용 : ``{ctx.message.content}``\n- 내용 : ``{ex}``",
-            colour=discord.Colour.red()
-        )
-    #embed.set_footer(icon_url=ctx.author.avatar_url,
-                         text=f'{str(ctx.author.name)} | 새로운명령어: {ctx.message.content} | {datetime.datetime.today()}')
-    #await ctx.channel.send(embed=embed)
-    """
-    msg = ctx.message.content[4: ]
-    embed = discord.Embed(title=f"**SYSTEAM ERROR**", color = 0xff0000)
-    embed.set_footer(icon_url=ctx.author.avatar_url, text=f'{str(ctx.author.mention)}오류 실행 명령어: {ctx.message.content} | {datetime.datetime.today()}')
+    with Exception as exi:
+        ex = exi
+        await ctx.send(f'에러내용: {str(ex)}')
 @bot.command(name="exec")
 async def exec_(ctx, *, code):
     if str(ctx.author.id) in admin:
@@ -1606,10 +1588,9 @@ async def 파일생성(ctx, filee, *, text):
 async def on_message(message):
     if message.content.startswith(',gif'): #명령어
         if gif_response(message.content[5:]) != None:
-            await message.channel.send(gif_response(message.content[5:]))
+            await message.channel.send('이 기능이 삭제되었습니다(이유:19금)')
         else:
-            await message.channel.send
-            ('관련 gif를 찾지 못하였습니다.')
+            await message.channel.send('관련 gif를 찾지 못하였습니다.')
 @bot.listen()
 async def on_message(message):
     if message.content.startswith(",캡챠"):
@@ -1649,7 +1630,7 @@ async def 돈줘(ctx):
             money_cool = json.loads(jstring)
         abcd = float(money_cool[str(ctx.author.id)]) - time.time()
         if float(abcd) <= float('-1800'):
-            money_test = float(random.randint(500, 1500))
+            money_test = float(random.randint(1000, 2000))
             with open('data_money.json', 'r') as f:
                 jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
                 money = json.loads(jstring)
@@ -1668,7 +1649,7 @@ async def 돈줘(ctx):
             else:
                 await ctx.send("쿨타임이 안지났어요!\n쿨타임 : 30분")
     except:
-        money_test = float(random.randint(0, 1000))
+        money_test = float(random.randint(1000, 2000))
         with open('data_money.json', 'r') as f:
             jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
             money = json.loads(jstring)
@@ -1988,5 +1969,40 @@ async def invite(ctx):
     embedMsg.add_field(name="Discord Invite Link", value=invitelinknew)
     embedMsg.set_footer(text="Discord server invited link.")
     await ctx.send(embed=embedMsg)
+@bot.command()
+async def 도박(ctx, a, b):
+    random = random.randint(1, 100)
+
+@bot.command()
+async def 사진편집(ctx, urla, pill, *, text):
+    url = urla
+    response = requests.get(url, stream=True)
+    with open(f'{ctx.author.id}.jpg', 'wb') as out_file:
+        shutil.copyfileobj(response.raw, out_file) 
+    img = Image.open(f"{ctx.author.id}.jpg")
+    print(type(img.size))
+    draw = ImageDraw.Draw(img)
+    #font = ImageFont.load("arial.pil")
+    font_size = int(22)
+    font = ImageFont.truetype('H2GTRM.TTF', font_size)
+    w,h = font.getsize(text)
+    W = img.size[0]
+    draw.text((int((W-w)/2), img.size[1]-h*2),text,fill=pill,font=font)
+    img.save(f'{ctx.author.id}.png')
+    await ctx.send(file=discord.File(f'{ctx.author.id}.png'))
+@bot.listen()
+async def on_message(message):
+    if message.content.startswith('<@!713007296476741643>'):
+        await message.channel.send('''
+안녕하세요! 전 다오봇이예요!
+개발자는 hminkoo10#2879 님이시고, 프리픽스는 , 도움 명령어는 ,help 와 ,도움 이예요!
+명령어가 서로 다르니 조심하세요!!
+''')
+@bot.command()
+async def 다운로드(ctx, url, pjm):
+    response = requests.get(url, stream=True)
+    with open(f'{ctx.author.id}.{pjm}', 'wb') as out_file:
+        shutil.copyfileobj(response.raw, out_file)
+    await ctx.send(file=discord.File(f'{ctx.author.id}.{pjm}'))    
 bot.run(token)
 
