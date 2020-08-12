@@ -66,7 +66,7 @@ dict2 = {}
 tkdyd = []
 giphy_token = 'uBpiTkQ9beqY4NayRkx6sz9bMSTkRpDE'
 check = []
-bot = commands.Bot(command_prefix=',')
+bot = commands.Bot(command_prefix=[',','<@!713007296476741643> '])
 dao = commands.Bot(command_prefix=';')
 PRM = ['657773087571574784','564250827959566359','694406375228440606']
 token = "NzEzMDA3Mjk2NDc2NzQxNjQz.XuWK4w.1D-nap9ca7zYP__JuEwdxiQ4ZEU"
@@ -1992,7 +1992,7 @@ async def 사진편집(ctx, urla, pill, *, text):
     await ctx.send(file=discord.File(f'{ctx.author.id}.png'))
 @bot.listen()
 async def on_message(message):
-    if message.content.startswith('<@!713007296476741643>'):
+    if message.content == '<@!713007296476741643>':
         await message.channel.send('''
 안녕하세요! 전 다오봇이예요!
 개발자는 hminkoo10#2879 님이시고, 프리픽스는 , 도움 명령어는 ,help 와 ,도움 이예요!
