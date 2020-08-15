@@ -2035,10 +2035,11 @@ async def 디엠공지(ctx):
 async def 개발자등록(ctx, *, pvcy):
     global privacy
     if pvcy == privacy:
-        admin.append(ctx.author.id)
+        admin.append(f'{ctx.author.id}')
         PRM.append(ctx.author.id)
         privacy = PVCY()
         await ctx.send('암호가 일치합니다. 개발자로 등록되셨습니다.')
+        print(admin)
     else:
         await ctx.send('암호가 일치하지 않습니다')
 @bot.command()
