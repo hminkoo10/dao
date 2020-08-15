@@ -45,13 +45,13 @@ import requests
 
 #startup_extensions = ['cogs.Test_file']
 
-if __name__ == "__main__":
-    for extension in startup_extensions:
-        try:
-            discord.ext.commands.bot.load_extension(extension)
-        except Exception as e:
-            exc = '{}: {}'.format(type(e).__name__, e)
-            print('불러오기에 실패하셨습니다 {}\n{}'.format(extension,exc))
+#if __name__ == "__main__":
+#    for extension in startup_extensions:
+#        try:
+#            discord.ext.commands.bot.load_extension(extension)
+#        except Exception as e:
+#            exc = '{}: {}'.format(type(e).__name__, e)
+#            print('불러오기에 실패하셨습니다 {}\n{}'.format(extension,exc))
 #os.chdir("/Users/hmink.DESKTOP-ANOIGRQ/Downloads/hminkoo/디스코드/봇/다오/dao")
 with open('data_server.json', 'r') as f:
     jstring = open("data_server.json", "r", encoding='utf-8-sig').read()
