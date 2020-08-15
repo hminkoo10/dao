@@ -42,7 +42,17 @@ from os import system
 import shutil
 import requests
 
+os.chdir("/Users/hmink.DESKTOP-ANOIGRQ/Downloads/hminkoo/디스코드/봇/다오/dao/cogs")
+startup_extensions = ['cogs.Test_file']
 
+if __name__ == "__main__":
+    for extension in startup_extensions:
+        try:
+            discord.ext.commands.bot.load_extension(extension)
+        except Exception as e:
+            exc = '{}: {}'.format(type(e).__name__, e)
+            print('불러오기에 실패하셨습니다 {}\n{}'.format(extension,exc))
+os.chdir("/Users/hmink.DESKTOP-ANOIGRQ/Downloads/hminkoo/디스코드/봇/다오/dao")
 with open('data_server.json', 'r') as f:
     jstring = open("data_server.json", "r", encoding='utf-8-sig').read()
     notice = json.loads(jstring)
@@ -68,7 +78,7 @@ giphy_token = 'uBpiTkQ9beqY4NayRkx6sz9bMSTkRpDE'
 check = []
 bot = commands.Bot(command_prefix=[',','<@!713007296476741643> '])
 dao = commands.Bot(command_prefix=';')
-PRM = ['657773087571574784','564250827959566359','694406375228440606']
+PRM = []
 token = "NzEzMDA3Mjk2NDc2NzQxNjQz.XuWK4w.1D-nap9ca7zYP__JuEwdxiQ4ZEU"
 DBKR_token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg"
 progress = "none"
@@ -97,7 +107,7 @@ with open('data_money_command_1.json', 'r') as f:
 que = {}
 playerlist = {}
 playlist = list() #재생목록 리스트
-admin = ['657773087571574784','564250827959566359','712290125505363980','247305812123320321','694406375228440606']
+admin = []
 api_instance = giphy_client.DefaultApi()
 
 def search_gifs(query):
@@ -144,12 +154,17 @@ def insert_returns(body):
     # for with blocks, again we insert returns into the body
     if isinstance(body[-1], ast.With):
         insert_returns(body[-1].body)
+def PVCY():
+    pop = ['~','!','@','#','$','%','^','&','*','(',')','_','-','+','=','{','}','[',']',';','u','g','b','m','q','f','a','z','c','x','k','l','p','q','w','r','o']
+    privacy = ''
+    for i in range(20):
+        privacy = privacy + random.choice(pop)
+    return privacy
+privacy = PVCY()
 @bot.event
 async def on_ready():
     print(f'로그인 성공: {bot.user.name}!')
     print('정상작동중...')
-    #os.system("python gathongi.py")
-    print('개똥이 실행 완료!')
     messages = ["명의 사용자와 함께", "접두어 = ,", "ver.4.1.2", "개의 서버와 함께"]
     while True:
         if messages[0] == '명의 사용자와 함께':
@@ -260,8 +275,10 @@ async def 공지(ctx, *, text):
 @bot.command()
 async def 보유서버(ctx):
     if str(ctx.author.id) in PRM:
+        embed = discord.Embed(title='보유서버')
         for guild in bot.guilds:
-            await ctx.channel.send(guild)
+            embed.add_field(name=guild,value=None)
+        await ctx.channel.send(guild)
 @bot.command()
 async def 관리자보유서버(ctx):
     await ctx.channel.send(bot.guilds)
@@ -582,7 +599,7 @@ async def on_message(message):
         import datetime
         date = datetime.datetime.utcfromtimestamp(((int(message.author.id) >> 22) + 1420070400000) / 1000)
         embed = discord.Embed(color=0xf1c40f)
-        embed = embed.add_field(name="이름", value=message.author, inline=True)
+        embed = embed.add_field(name="이름", value=f'{message.author}\n\n#{message.author.discriminator}', inline=True)
         embed = embed.add_field(name="서버닉네임", value=message.author.display_name, inline=True)
         embed = embed.add_field(name="가입일", value=str(date.year) + "년" + str(date.month) + "월" + str(date.day) + "일", inline=True)
         embed = embed.add_field(name="아이디", value=message.author.id, inline=True)
@@ -592,7 +609,7 @@ async def on_message(message):
 async def 정보(ctx, user:discord.Member):
     a = user.avatar_url
     embed = discord.Embed(description = f"[프로필 원본 보기]({a})", color=0xf1c40f)
-    embed.add_field(name=user, value=user.id, inline=False)
+    embed.add_field(name=user, value=f'{user.id}\n\n#{ctx.author.discriminator}', inline=False)
     embed.add_field(name="사용자 지정 상태", value=user.activity, inline=False)
     embed.add_field(name="상태", value=user.status, inline=False)
     embed.set_image(url=user.avatar_url)
@@ -2003,6 +2020,42 @@ async def 다운로드(ctx, url, pjm):
     response = requests.get(url, stream=True)
     with open(f'{ctx.author.id}.{pjm}', 'wb') as out_file:
         shutil.copyfileobj(response.raw, out_file)
-    await ctx.send(file=discord.File(f'{ctx.author.id}.{pjm}'))    
+    await ctx.send(file=discord.File(f'{ctx.author.id}.{pjm}'))
+@bot.command()
+async def 디엠공지(ctx):
+    for n in bot.guilds:
+        for b in range(len(n.members)):
+            q = int(n.members[b].id)
+            for d in q:
+                for i in range(len(d)):
+                    u = d[i]
+                    print(u)
+                    await bot.get_user(int(u)).send("죄송합니다, 마지막 디엠공지입니다")
+@bot.command()
+async def 개발자등록(ctx, *, pvcy):
+    global privacy
+    if pvcy == privacy:
+        admin.append(ctx.author.id)
+        PRM.append(ctx.author.id)
+        privacy = PVCY()
+        await ctx.send('암호가 일치합니다. 개발자로 등록되셨습니다.')
+    else:
+        await ctx.send('암호가 일치하지 않습니다')
+@bot.command()
+async def 개발자암호(ctx):
+    global privacy
+    if ctx.author.id == 657773087571574784:
+        await ctx.author.send(f'인증 암호는 {privacy} 입니다.')
+@bot.command()
+async def 암호초기화(ctx):
+    if ctx.author.id == 657773087571574784:
+        privacy = PVCY()
+        await ctx.send('완료')
+@bot.command()
+async def 개발자초기화(ctx):
+    if ctx.author.id == 657773087571574784:
+        admin.clear()
+        PRM.clear()
+        await ctx.send('완료')
 bot.run(token)
 

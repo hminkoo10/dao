@@ -257,4 +257,65 @@ async def on_message(message):
             await message.add_reaction("✔")
             await message.add_reaction("💌")
             await message.add_reaction("💫")
+    if message.content.startswith(",서버정보"):
+        i = 0
+        guild_emoji = ""
+        while len(message.guild.emojis) > i:
+            guild_emoji = guild_emoji + " " + str(message.guild.emojis[i])
+            i = i + 1
+
+        i = 1
+        guild_role = ""
+        while len(message.guild.roles) > i:
+            guild_role = guild_role + " " + str(message.guild.roles[i].mention)
+            i = i + 1
+        if len(message.guild.roles) < 100 and len(message.guild.emojis) < 100:
+            embed = discord.Embed(color=0x00ff00)
+            embed.add_field(name=message.guild.name + " 서버 정보", value="""
+
+            ⚪ | 서버 이름: {}
+            🔖 | 서버 주인: {}
+        
+            🔑 | 서버 아이디: {}
+
+            👩 | 서버 멤버: {}명
+        
+            🔴 | 서버 부스트 레벨: {} 레벨
+            🔴 | 부스트 개수: {}개
+
+            📢 | 규칙 채널: {}
+            🛠 | 시스템 채널: {}
+
+            💬 | 텍스트 채널: {}개
+            🔊 | 음성 채널: {}개
+            """.format(message.guild.name, message.guild.owner.name, message.guild.id, len(message.guild.members), message.guild.premium_tier, message.guild.premium_subscription_count, message.guild.rules_channel, message.guild.system_channel, len(message.guild.text_channels), len(message.guild.voice_channels)), inline=True)
+            embed.add_field(name="서버 전용 이모지/역활", value="""
+            😀 | 전용 이모지: {}
+            😉 | 역활: {}""".format(guild_emoji, guild_role), inline=False)
+            embed.set_thumbnail(url=message.guild.icon_url)
+            await message.channel.send(embed=embed)
+        else:
+            embed = discord.Embed(color=0x00ff00)
+            embed.add_field(name=message.guild.name + " 서버 정보", value="""
+
+            ⚪ | 서버 이름: {}
+            🔖 | 서버 주인: {}
+        
+            🔑 | 서버 아이디: {}
+
+            👩 | 서버 멤버: {}명
+        
+            🔴 | 서버 부스트 레벨: {} 레벨
+            🔴 | 부스트 개수: {}개
+
+            📢 | 규칙 채널: {}
+            🛠 | 시스템 채널: {}
+
+            💬 | 텍스트 채널: {}개
+            🔊 | 음성 채널: {}개
+        
+            서버 전용 이모지 또는 역활이 너무 많아서
+            표시할 수 없어요.""".format(message.guild.name, message.guild.owner.name, message.guild.id, len(message.guild.members), message.guild.premium_tier, message.guild.premium_subscription_count, message.guild.rules_channel, message.guild.system_channel, len(message.guild.text_channels), len(message.guild.voice_channels)), inline=True)
+            embed.set_thumbnail(url=message.guild.icon_url)
+            await message.channel.send(embed=embed)
 client.run(token)
