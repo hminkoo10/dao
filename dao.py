@@ -438,7 +438,56 @@ async def 택배(ctx, user:discord.Member, *, msg):
 #async def 가위바위보()
 #    await ctx.channel.send('가위 바위 보중에 1개를 입력하세요')
 #    async def 가위()
-#        
+#
+@bot.lieten()
+async def on_message(message):
+    if message.content.startswith(',멜론차트'):
+            print(f'{message.guild.name}/{message.author} ('+ f'{message.author.id}) : {message.content}')
+            msg=await message.channel.send('멜론차트 정보를 가져오는중.......')
+            await asyncio.sleep(5)
+            await msg.delete()
+            if __name__=="__main__":
+                RANK=10
+                header={'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko'}
+                req = requests.get('https://www.melon.com/chart/index.htm', headers = header)
+                html = req.text
+                parse = BeautifulSoup(html, 'html.parser')
+                titles = parse.find_all("div", {"class": "ellipsis rank01"})
+                songs = parse.find_all("div", {"class": "ellipsis rank02"})
+                title = []
+                song = []
+                embed=discord.Embed(
+                    title="멜론차트 순위 입니다",
+                    colour=0xff00
+                )
+                for t in titles:
+                    title.append(t.find('a').text)
+                for s in songs:
+                    song.append(s.find('span', {"class": "checkEllipsis"}).text)
+                for i in range(RANK):
+                    embed.add_field(name='%3d위'%(i+1), value='%s - %s'%(title[i], song[i]), inline=False)
+                now=datetime.datetime.now()
+                embed.set_footer(icon_url=message.author.avatar_url, text=f'  {str(message.author.display_name)}에게 요청 받음 | {str(now.year)}년 {str(now.month)}월 {str(now.day)}일')
+                embed.set_thumbnail(url ="https://yt3.ggpht.com/a/AATXAJw2h2wZcZDBmQspbRxwZpYsWEz67fDx4Gir=s900-c-k-c0xffffffff-no-rj-mo")
+                await message.channel.send(embed=embed)
+    if message.content.startswith(',링크단축'):
+        msg=await message.channel.send('링크 단축하는중...')
+        await asyncio.sleep(5)
+        await msg.delete()
+        print(f'{message.author} ('+ f'{message.author.id}) : {message.content}')
+        target=message.content.split(' ')[2]
+        client_id="DqTSCjayP8uFjYJCWA3r"
+        client_secret="KsaviRkocB"
+        header = {'X-Naver-Client-Id': client_id, 'X-Naver-Client-Secret': client_secret}
+        naver = 'https://openapi.naver.com/v1/util/shorturl'
+        data = {'url': target}
+        maker=requests.post(url=naver,data=data,headers=header)
+        maker.close()
+        output=maker.json()['result']['url']
+        embed = discord.Embed(title="URL 단축기능",color=0xff00, timestamp=message.created_at)
+        embed.add_field(name="단축 링크", value=f'{output}', inline = False)
+        embed.set_footer(text=f"{message.author}", icon_url=message.author.avatar_url)
+        await message.channel.send(embed=embed)
 @bot.listen()
 async def on_message(message):
     if message.content == ",빗자루":
