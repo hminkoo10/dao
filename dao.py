@@ -439,7 +439,7 @@ async def 택배(ctx, user:discord.Member, *, msg):
 #    await ctx.channel.send('가위 바위 보중에 1개를 입력하세요')
 #    async def 가위()
 #
-@bot.lieten()
+@bot.listen()
 async def on_message(message):
     if message.content.startswith(',멜론차트'):
             print(f'{message.guild.name}/{message.author} ('+ f'{message.author.id}) : {message.content}')
