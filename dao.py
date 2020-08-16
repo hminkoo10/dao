@@ -470,6 +470,8 @@ async def on_message(message):
                 embed.set_footer(icon_url=message.author.avatar_url, text=f'  {str(message.author.display_name)}에게 요청 받음 | {str(now.year)}년 {str(now.month)}월 {str(now.day)}일')
                 embed.set_thumbnail(url ="https://yt3.ggpht.com/a/AATXAJw2h2wZcZDBmQspbRxwZpYsWEz67fDx4Gir=s900-c-k-c0xffffffff-no-rj-mo")
                 await message.channel.send(embed=embed)
+@bot.listen()
+async def on_message(message):
     if message.content.startswith(',링크단축'):
         msg=await message.channel.send('링크 단축하는중...')
         await asyncio.sleep(5)
