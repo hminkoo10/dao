@@ -269,7 +269,7 @@ async def on_message(message):
         while len(message.guild.roles) > i:
             guild_role = guild_role + " " + str(message.guild.roles[i].mention)
             i = i + 1
-        if len(message.guild.roles) < 100 and len(message.guild.emojis) < 100:
+        if len(message.guild.roles) < 30 and len(message.guild.emojis) < 30:
             embed = discord.Embed(color=0x00ff00)
             embed.add_field(name=message.guild.name + " 서버 정보", value="""
 
@@ -315,7 +315,13 @@ async def on_message(message):
             🔊 | 음성 채널: {}개
         
             서버 전용 이모지 또는 역활이 너무 많아서
-            표시할 수 없어요.""".format(message.guild.name, message.guild.owner.name, message.guild.id, len(message.guild.members), message.guild.premium_tier, message.guild.premium_subscription_count, message.guild.rules_channel, message.guild.system_channel, len(message.guild.text_channels), len(message.guild.voice_channels)), inline=True)
+            표시할 수 없어요.
+            다음 임베드로 보내드릴게요.""".format(message.guild.name, message.guild.owner.name, message.guild.id, len(message.guild.members), message.guild.premium_tier, message.guild.premium_subscription_count, message.guild.rules_channel, message.guild.system_channel, len(message.guild.text_channels), len(message.guild.voice_channels)), inline=True)
             embed.set_thumbnail(url=message.guild.icon_url)
+            await message.channel.send(embed=embed)
+            embede.add_field(name="서버 전용 이모지/역활", value="""
+            😀 | 전용 이모지: {}
+            😉 | 역활: {}""".format(guild_emoji, guild_role), inline=False)
+            embede.set_thumbnail(url=message.guild.icon_url)
             await message.channel.send(embed=embed)
 client.run(token)

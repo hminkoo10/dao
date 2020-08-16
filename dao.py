@@ -609,7 +609,7 @@ async def on_message(message):
 async def 정보(ctx, user:discord.Member):
     a = user.avatar_url
     embed = discord.Embed(description = f"[프로필 원본 보기]({a})", color=0xf1c40f)
-    embed.add_field(name=user, value=f'{user.id}\n\n#{ctx.author.discriminator}', inline=False)
+    embed.add_field(name=user, value=f'{user.id}\n\n#{user.discriminator}', inline=False)
     embed.add_field(name="사용자 지정 상태", value=user.activity, inline=False)
     embed.add_field(name="상태", value=user.status, inline=False)
     embed.set_image(url=user.avatar_url)
@@ -2036,7 +2036,7 @@ async def 개발자등록(ctx, *, pvcy):
     global privacy
     if pvcy == privacy:
         admin.append(f'{ctx.author.id}')
-        PRM.append(ctx.author.id)
+        PRM.append(f'{ctx.author.id}')
         privacy = PVCY()
         await ctx.send('암호가 일치합니다. 개발자로 등록되셨습니다.')
         print(admin)
@@ -2049,6 +2049,7 @@ async def 개발자암호(ctx):
         await ctx.author.send(f'인증 암호는 {privacy} 입니다.')
 @bot.command()
 async def 암호초기화(ctx):
+    global privacy
     if ctx.author.id == 657773087571574784:
         privacy = PVCY()
         await ctx.send('완료')
