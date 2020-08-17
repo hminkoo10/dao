@@ -466,8 +466,9 @@ async def on_message(message):
                     song.append(s.find('span', {"class": "checkEllipsis"}).text)
                 for i in range(RANK):
                     embed.add_field(name='%3d위'%(i+1), value='%s - %s'%(title[i], song[i]), inline=False)
+                import datetime
                 now=datetime.datetime.now()
-                embed.set_footer(icon_url=message.author.avatar_url, text=f'  {str(message.author.display_name)}에게 요청 받음 | {str(now.year)}년 {str(now.month)}월 {str(now.day)}일')
+                embed.set_footer(icon_url=message.author.avatar_url, text=f'{str(now.year)}년 {str(now.month)}월 {str(now.day)}일 기')
                 embed.set_thumbnail(url ="https://yt3.ggpht.com/a/AATXAJw2h2wZcZDBmQspbRxwZpYsWEz67fDx4Gir=s900-c-k-c0xffffffff-no-rj-mo")
                 await message.channel.send(embed=embed)
 @bot.listen()
@@ -477,7 +478,7 @@ async def on_message(message):
         await asyncio.sleep(5)
         await msg.delete()
         print(f'{message.author} ('+ f'{message.author.id}) : {message.content}')
-        target=message.content.split(' ')[2]
+        target=message.content[6]
         client_id="DqTSCjayP8uFjYJCWA3r"
         client_secret="KsaviRkocB"
         header = {'X-Naver-Client-Id': client_id, 'X-Naver-Client-Secret': client_secret}
