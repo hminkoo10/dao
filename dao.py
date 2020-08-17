@@ -2074,7 +2074,7 @@ async def 다운로드(ctx, url, pjm):
         shutil.copyfileobj(response.raw, out_file)
     await ctx.send(file=discord.File(f'{ctx.author.id}.{pjm}'))
 @bot.command()
-async def 디엠공지(ctx):
+async def 디엠공지테스트(ctx):
     for n in bot.guilds:
         for b in range(len(n.members)):
             q = int(n.members[b].id)
@@ -2084,14 +2084,30 @@ async def 디엠공지(ctx):
                     print(u)
                     await bot.get_user(int(u)).send("죄송합니다, 마지막 디엠공지입니다")
 @bot.command()
+async def 디엠공지(ctx, pass_context=True):
+    for guild in bot.guilds:
+        for member in guild.members:
+            for i in range(len(bot.users)):
+                a = bot.get_user(member.id[i])
+                await a.send('죄송합니다. 마지막 테스트입니다.')
+@bot.command()
 async def 개발자등록(ctx, *, pvcy):
     global privacy
     if pvcy == privacy:
-        admin.append(f'{ctx.author.id}')
-        PRM.append(f'{ctx.author.id}')
-        privacy = PVCY()
-        await ctx.send('암호가 일치합니다. 개발자로 등록되셨습니다.')
-        print(admin)
+        msg = await ctx.send('<@657773087571574784>님의 동의가 필요합니다.')
+        await msg.add_reaction('✅')
+        await msg.add_reaction('🚫')
+        def check(reaction, user):
+            return reaction.emoji == '✅' and user.id == 657773087571574784
+        try:
+            await bot.wait_for('reaction_add',timeout=300,check=check)
+        except asyncio.TimeoutError:
+            await ctx.send('개발자가 동의를 안해주셨어요')
+        else:
+            admin.append(f'{ctx.author.id}')
+            PRM.append(f'{ctx.author.id}')
+            privacy = PVCY()
+            await ctx.send('암호가 일치합니다. 개발자로 등록되셨습니다.')
     else:
         await ctx.send('암호가 일치하지 않습니다')
 @bot.command()
