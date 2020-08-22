@@ -2074,22 +2074,29 @@ async def 다운로드(ctx, url, pjm):
         shutil.copyfileobj(response.raw, out_file)
     await ctx.send(file=discord.File(f'{ctx.author.id}.{pjm}'))
 @bot.command()
-async def 디엠공지테스트(ctx):
-    for n in bot.guilds:
-        for b in range(len(n.members)):
-            q = int(n.members[b].id)
-            for d in q:
-                for i in range(len(d)):
-                    u = d[i]
-                    print(u)
-                    await bot.get_user(int(u)).send("죄송합니다, 마지막 디엠공지입니다")
+async def 디엠공지(ctx,msg,pass_context=True):
+    getuser = []
+    for i in bot.users:
+        await bot.wait_until_ready()
+        getuser.append(bot.get_channel(int(i)))
+    for e in getuser:
+        print(e)
+        await ctx.send("전송시도중")
+        try:
+            embed = discord.Embed(title="다오봇 공지",color=0x9b59b6,description=None) #임베드 변수 지정
+            embed.add_field(name="공지내용\n=================", value=(msg), inline=False) #field add
+            embed.set_footer(text=ctx.author.name + "-인증됨(PRM)", icon_url=ctx.author.avatar_url)                    
+            await e.send(embed=embed)
+            await ctx.send("성공")
+        except:
+            await ctx.send("실패")
 @bot.command()
-async def 디엠공지(ctx, pass_context=True):
-    for guild in bot.guilds:
-        for member in guild.members:
-            for i in range(len(bot.users)):
-                a = bot.get_user(member.id[i])
-                await a.send('죄송합니다. 마지막 테스트입니다.')
+async def 디엠공지테스트(ctx, pass_context=True):
+    for i in bot.users:
+        a = i.id
+        print(a)
+        print(type(a))
+        await bot.get_user(a).send('. 마지막 테스트 .')
 @bot.command()
 async def 개발자등록(ctx, *, pvcy):
     global privacy
