@@ -15,6 +15,7 @@ import datetime as pydatetime
 from captcha.image import ImageCaptcha
 import qrcode
 import calendar
+from gtts import gTTS
 import smtplib
 from email.mime.text import MIMEText
 from PIL import Image
@@ -2134,5 +2135,22 @@ async def 개발자초기화(ctx):
         admin.clear()
         PRM.clear()
         await ctx.send('완료')
+
+@bot.command()
+async def speech(ctx, key, msg):
+    tts = gTTS(text=msg, lang=key)
+    tts.save(f'{ctx.author.id}.mp3')
+    await ctx.send(file=discord.File(f'{ctx.author.id}.mp3'))
+    if ctx.author.voice.channel == None:
+        channel = ctx.author.voice.channel
+    if ctx.voice_client is not None:
+        vc = await ctx.voice_client.move_to(channel)
+    else:
+        channel = ctx.author.voice.channel
+        vc = await channel.connect()
+    vc.play(discord.FFmpegPCMAudio(f'{ctx.author.id}.mp3'), after=lambda e: print('done', e))
+    while (vc.is_playing()==1):
+        pass
+    await ctx.voice_client.disconnect()
 bot.run(token)
 
