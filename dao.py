@@ -207,6 +207,7 @@ async def 도움(ctx):
     embed.add_field(name="운세", value="``,운세 00자리``로 확인", inline=False)
     embed.add_field(name="사진편집", value="``,사진편집 이미지url 색갈(영어) 글``로 확인", inline=False)
     embed.add_field(name="돈 관련", value="``,돈줘\n,랭킹\n,내돈\n,훔쳐보기 @맨션\n,구매 (증가벽돌, 복구시스템)\n,사용 증가벽돌\n,복구 (복구암호)``로 확인", inline=False)
+    embed.add_field(name="Text To Speech(음성채널에 대신 말해줌)", value="음성채널에 접속 후 ``,speech text``로 확인", inline=False)
     embed.add_field(name="다오 서포터", value="- ``https://blow.ga/팀-슷칼리토``", inline=False)
     embed.add_field(name="공지 (only 서버관리자)", value="- ``,공지 내용``", inline=False)
     embed.set_footer(text=(ctx.author.name), icon_url=ctx.author.avatar_url)
@@ -2163,5 +2164,6 @@ async def speech(ctx, *, msg):
     while (vc.is_playing()==1):
         pass
     await ctx.voice_client.disconnect()
+    os.remove(f'{ctx.author.id}.mp3')
 bot.run(token)
 
