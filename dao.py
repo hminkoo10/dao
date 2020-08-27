@@ -8,6 +8,7 @@ from discord.ext import commands
 import random
 import dbkrpy
 import turtle
+from boto3 import client
 import turtle as t
 import os
 import asyncio
@@ -2137,8 +2138,18 @@ async def 개발자초기화(ctx):
         await ctx.send('완료')
 
 @bot.command()
-async def speech(ctx, key, msg):
-    tts = gTTS(text=msg, lang=key)
+async def speech(ctx, *, msg):
+    import re
+    pkor = re.compile('[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]')
+    peng = re.compile('[a-z|A-Z]')
+    mkor = pkor.search(msg)
+    meng = peng.search(msg)
+    if mkor and meng:
+        tts = gTTS(text=msg, slow=False, lang='en')
+    elif mkor and not meng:
+        tts = gTTS(text=msg, slow=False, lang='ko')
+    else:
+        tts = gTTS(text=msg, slow=False, lang='en')
     tts.save(f'{ctx.author.id}.mp3')
     await ctx.send(file=discord.File(f'{ctx.author.id}.mp3'))
     if ctx.author.voice.channel == None:
