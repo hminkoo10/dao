@@ -167,7 +167,7 @@ privacy = PVCY()
 async def on_ready():
     print(f'로그인 성공: {bot.user.name}!')
     print('정상작동중...')
-    messages = ["명의 사용자와 함께", "접두어 = ,", "ver.4.1.2", "개의 서버와 함께"]
+    messages = ["명의 사용자와 함께", "접두어 = ,", "ver.4.6.1", "개의 서버와 함께"]
     while True:
         if messages[0] == '명의 사용자와 함께':
             await bot.change_presence(status=discord.Status.online, activity=discord.Game(name=f",도움 | {str(len(bot.users))}명의 사용자와 함께"))
