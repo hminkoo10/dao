@@ -328,5 +328,5 @@ async def on_message(message):
             await message.channel.send(embed=embed)
     if message.content.startswith(',업데이트'):
         Bot = koreanbots.Client(client, 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg')
-        await message.channel.send(f'업데이트를 완료했어요!\n현재 서버 수{len(client.guilds)}')
+        await message.channel.send(f'업데이트를 완료했어요!\n현재 서버 수 : {len(client.guilds)}')
 client.run(token)

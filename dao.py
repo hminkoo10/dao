@@ -186,38 +186,31 @@ async def 건의링크(ctx):
     await ctx.channel.send('https://discord.gg/PKGMwSB')
 @bot.command()
 async def 도움(ctx):
-    embed = discord.Embed(title="도움말",color=0xe67e22,description="서버 관리봇, 뮤직봇, 도박, 음악 모든게 다 있는, 다오.접두어:,") #임베드 변수 지정
-    embed.add_field(name="초대링크", value="- ``,초대링크, 초대코드``로 확인", inline=False) #field add
-    embed.add_field(name="보유서버", value="- ``,보유서버``로 확인", inline=False)#field add
+    embed = discord.Embed(title="도움말",color=0x00ffae,description="서버 관리봇, 뮤직봇, 도박, 음악 모든게 다 있는, 디노.접두어:,") #임베드 변수 지정
+    embed.add_field(name="초대링크", value="- ``,초대``로 확인", inline=False) #field add
     embed.add_field(name="매시지 삭제", value="- ``,삭제 (수)``로 확인", inline=False)
     embed.add_field(name="모두 삭제", value="- ``,clear``로 확인", inline=False)
-    embed.add_field(name="메시지 전달", value="-``,dm @맨션 내용``으로 확인", inline=False)
-    embed.add_field(name="출석체크", value="- ``출석체크, ㅊㅊ``으로 확인 ``출석 리스트``로 확인", inline=False)
+    embed.add_field(name="출석체크(불완전)", value="- ``출석체크, ㅊㅊ``으로 확인 ``출석 리스트``로 확인", inline=False)
     embed.add_field(name="정보", value="- ``,정보(맨션)``로 확인", inline=False)
     embed.add_field(name="타이머", value="- ``,타이머 (초) (제목)``로 확인", inline=False)
     embed.add_field(name="DM보내기", value="- ``,우체국 @맨션 내용``로 확인", inline=False)
-    embed.add_field(name="학습기능", value="``학습 (1) (2)``를 하고 ``,(1)``로 확인",inline=False)
+    embed.add_field(name="학습기능", value="``,학습 (1) (2)``를 하고 ``,(1)``로 확인",inline=False)
     embed.add_field(name="코로나 현황", value="``,코로나현황``로 확인",inline=False)
     embed.add_field(name="16진수 변환", value="``,color (빨강) (파랑) (노랑)``로 확인",inline=False)
-    embed.add_field(name="영화순위(상위 10개)", value="``,영화순위``로 확인", inline=False)
+    embed.add_field(name="영화순위(상위 10개)(네이버 api업데이트로 인해 작동하지 않음)", value="``,영화순위``로 확인", inline=False)
     embed.add_field(name="날씨", value="``,날씨 (지역)``로 확인", inline=False)
     embed.add_field(name="번역", value="``,번역 (번역할 언어) (번역될 언어) (번역될 낱말)``로 확인\n^^ 예시 : ,번역 ko en 안녕\n값 : Hello", inline=False)
-    embed.add_field(name="gif검색", value="``,gif (검색 할 내용)``로 확인", inline=False)
     embed.add_field(name="슬로우모드(only 서버관리자)", value="``,슬로우모드 (초)``로 확인", inline=False)
     embed.add_field(name="운세", value="``,운세 00자리``로 확인", inline=False)
     embed.add_field(name="사진편집", value="``,사진편집 이미지url 색갈(영어) 글``로 확인", inline=False)
     embed.add_field(name="돈 관련", value="``,돈줘\n,랭킹\n,내돈\n,훔쳐보기 @맨션\n,구매 (증가벽돌, 복구시스템)\n,사용 증가벽돌\n,복구 (복구암호)``로 확인", inline=False)
     embed.add_field(name="Text To Speech(음성채널에 대신 말해줌)", value="음성채널에 접속 후 ``,speech text``로 확인", inline=False)
-    embed.add_field(name="다오 서포터", value="- ``https://blow.ga/팀-슷칼리토``", inline=False)
-    embed.add_field(name="공지 (only 서버관리자)", value="- ``,공지 내용``", inline=False)
+    embed.add_field(name="디노 서포터", value="- ``https://discord.gg/zwzXuVz``", inline=False)
     embed.set_footer(text=(ctx.author.name), icon_url=ctx.author.avatar_url)
     await ctx.author.send(embed=embed)
-    embed = discord.Embed(description = "[다오 서포터 <----- 클릭!!](https://discord.gg/eC2v6ud)",color=0xe67e22)
+    embed = discord.Embed(description = "[디노 서포터 <----- 클릭!!](https://discord.gg/zwzXuVz)",color=0x00ffae)
     await ctx.author.send(embed=embed)
     await ctx.send("DM으로 전송했어요!")
-@bot.command()
-async def 갸우뚱(ctx):
-    await ctx.channel.send('***(갸우뚱?)*** 난 크시가 아니지만...')
 #@bot.command()
 #class DBKRinfo(commands.Cog):
 #
@@ -238,7 +231,7 @@ async def 사랑해(ctx):
     await ctx.channel.send('근데... 사랑하면 좋아요즘 주세요!')
 @bot.command()
 async def 초대(ctx):
-    embed = discord.Embed(description = f"[다오봇 초대링크](https://discord.com/api/oauth2/authorize?client_id=713007296476741643&permissions=8&scope=bot)", color=0xf1c40f)
+    embed = discord.Embed(description = f"[디노봇 초대링크](https://discord.com/api/oauth2/authorize?client_id=713007296476741643&permissions=8&scope=bot)", color=0xf1c40f)
     embed.set_image(url="https://cdn.discordapp.com/attachments/702088239502065704/718732359704248380/3e5bae5149803302.png")
     await ctx.send(embed=embed)
     await ctx.sned("QR코드가 포함되어 있습니다!")
@@ -306,13 +299,13 @@ async def on_ready(message):
         author = bot.get_user(int(657773087571574784))
         choice = message.content.split(" ")
         msg = message.content[4: ]
-        msgsender = message.author.display_name
-        msgguild = message.guild
+        msgsender = message.author
+        msgguild = message.guild.name
         msgchannel = message.channel.name
 
         if msg[0:4] == "http" or msg[0:5] == "https" or msg[0:3] == "www":
             embed = discord.Embed(color=0x00ff00)
-            embed.add_field(name="다오봇 건의", value="""
+            embed.add_field(name="디노봇 건의", value="""
             건의장이 전송되지 않았습니다!
             건의장 미전송 사유: 링크 사용
             """, inline=False)
@@ -320,7 +313,7 @@ async def on_ready(message):
             await message.channel.send(embed=embed)
         elif msg == "":
             embed = discord.Embed(color=0x00ff00)
-            embed.add_field(name="다오봇 건의", value="""
+            embed.add_field(name="디노봇 건의", value="""
             건의장이 전송되지 않았습니다!
             건의장 미전송 사유: 내용 없음
             """, inline=False)
@@ -328,7 +321,7 @@ async def on_ready(message):
             await message.channel.send(embed=embed)
         else:
             embed = discord.Embed(color=0x00ff00)
-            embed.add_field(name="다오봇 건의", value="""
+            embed.add_field(name="디노봇 건의", value="""
             피슝! 건의장이 도착했어요!
             건의장 내용: {}
             건의한 사람: {}
@@ -339,7 +332,7 @@ async def on_ready(message):
             await author.send(embed=embed)
 
             embed = discord.Embed(color=0x00ff00)
-            embed.add_field(name="다오봇 건의", value="""
+            embed.add_field(name="디노봇 건의", value="""
             건의장이 정상적으로 전송되었습니다!
             건의장 내용: {}
             건의한 사람: {}
@@ -354,7 +347,7 @@ async def 건의(ctx, *, msg):
     file = open("건의.txt", "a+")
     file.write(str("\n") + str(ctx.author) + str(":") + str(msg))
     file.close
-    await ctx.send(str(msg) + str("라고 발빠른 다오가 전해줬어요!"))
+    await ctx.send(str(msg) + str("라고 발빠른 디노가 전해줬어요!"))
 @bot.command()
 async def 건의장초기화(ctx):
     file = open("건의.txt", "w")
@@ -551,7 +544,7 @@ async def 공지보내기(ctx, *, msg, pass_context=True):
         for e in getchannel:
                 await ctx.send("전송시도중")
                 try:
-                    embed = discord.Embed(title="다오봇 공지",color=0x9b59b6,description=None) #임베드 변수 지정
+                    embed = discord.Embed(title="디노봇 공지",color=discord.Color.gold(),description=None) #임베드 변수 지정
                     embed.add_field(name="공지내용\n=================", value=(msg), inline=False) #field add
                     embed.set_footer(text=ctx.author.name + "-인증됨(PRM)", icon_url=ctx.author.avatar_url)
                     await e.send(embed=embed)
@@ -625,7 +618,7 @@ async def on_message(message):
 @bot.listen()
 async def on_message(message):
     if message.content.startswith("출석 리스트"):
-        finalcheck = "다오봇"
+        finalcheck = "디노봇"
         for i in check:
             finalcheck = finalcheck + ", " + (i)
         embed = discord.Embed(color=0xf1c40f)
@@ -728,7 +721,7 @@ async def 제곱(ctx, one, two):
 async def on_message(message):
     if message.content.startswith(",도박도움") or message.content.startswith(",도박방법"):
         embed = discord.Embed(color=0x00ff00)
-        embed.add_field(name="다오봇 도박 방법!", value="""
+        embed.add_field(name="디노봇 도박 방법!", value="""
         지금부터 도박하는 방법에 대해 말씀드릴게요!
         
         이 게임은 뽑은 카드의 수를 합쳐 나오는 수의 일의 자리가 큰 사람이 이기는 게임입니다!
@@ -771,7 +764,7 @@ async def on_message(message):
             
             progress = "invite"
             embed = discord.Embed(color=0x00ff00)
-            embed.add_field(name="다요봇 도박", value="""
+            embed.add_field(name="디노봇 도박", value="""
             {}님께서 {}님께 도박을 신청하였습니다.
             도박 신청을 수락하시려면 '**예**'를 입력해 주시고 거절하시려면 '**아니요**'를 입력해 주세요.
 
@@ -780,7 +773,7 @@ async def on_message(message):
             await message.channel.send(embed=embed)
         else:
             embed = discord.Embed(color=0x00ff00)
-            embed.add_field(name="다오봇 도박", value="""
+            embed.add_field(name="디노봇 도박", value="""
             현재 다른 플레이어들의 초대 및 게임이 진행중입니다.
             """, inline=False)
             await message.channel.send(embed=embed)
@@ -789,7 +782,7 @@ async def on_message(message):
         if progress == "invite":
             if message.author.display_name == player2:
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="다오봇 도박", value="""
+                embed.add_field(name="디노봇 도박", value="""
                 도박 신청이 거부되었습니다.
                 """, inline=False)
                 await message.channel.send(embed=embed)
@@ -810,7 +803,7 @@ async def on_message(message):
         if progress == "one_more_card":
             if message.author.display_name == player1 or message.author.display_name == player2:
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="다오봇 도박", value="""
+                embed.add_field(name="디노봇 도박", value="""
                 **서버**에서 **'배팅 <배팅할 랜지 코인(숫자만 입력)>'**을 입력하여 배팅을 해주세요.
                 """, inline=False)
                 await message.author.send(embed=embed)
@@ -819,13 +812,13 @@ async def on_message(message):
         if progress == "invite":
             if message.author.display_name == player2:
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="다오봇 도박", value="""
+                embed.add_field(name="디노봇 도박", value="""
                 도박 신청이 수락되었습니다.
                 """, inline=False)
                 await message.channel.send(embed=embed)
                 progress = "card"
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="다오봇 도박", value="""
+                embed.add_field(name="디노봇 도박", value="""
                 ',카드 뽑기'를 입력하여 카드를 뽑으세요!
                 """, inline=False)
                 await message.channel.send(embed=embed)
@@ -838,12 +831,12 @@ async def on_message(message):
                 else:
                     progress = "one_more_card_1"
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="다오봇 도박", value="""
+                embed.add_field(name="디노봇 도박", value="""
                 한번 더 뽑은 당신의 카드는 {} 입니다!
                 """.format(player1_card3), inline=False)
                 await message.author.send(embed=embed)
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="다오봇 도박", value="""
+                embed.add_field(name="디노봇 도박", value="""
                 **서버**에서 **'배팅 <배팅할 랜지 코인(숫자만 입력)>'**을 입력하여 배팅을 해주세요.
                 """, inline=False)
                 await message.author.send(embed=embed)
@@ -855,12 +848,12 @@ async def on_message(message):
                 else:
                     progress = "one_more_card_1"
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="다오봇 도박", value="""
+                embed.add_field(name="디노봇 도박", value="""
                 한번 더 뽑은 당신의 카드는 {} 입니다!
                 """.format(player2_card3), inline=False)
                 await message.author.send(embed=embed)
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="다오봇 도박", value="""
+                embed.add_field(name="디노봇 도박", value="""
                 **서버**에서 **'배팅 <배팅할 랜지 코인(숫자만 입력)>'**을 입력하여 배팅을 해주세요.
                 """, inline=False)
                 await message.author.send(embed=embed)
@@ -878,7 +871,7 @@ async def on_message(message):
                 else:
                     progress = "card_1"
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="다오봇 도박", value="""
+                embed.add_field(name="디노봇 도박", value="""
                 당신의 카드는 {}, {} 입니다!
                 """.format(player1_card1, player1_card2), inline=False)
                 await message.author.send(embed=embed)
@@ -892,12 +885,12 @@ async def on_message(message):
                 else:
                     progress = "card_1"
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="다오봇 도박", value="""
+                embed.add_field(name="디노봇 도박", value="""
                 당신의 카드는 {}, {} 입니다!
                 """.format(player2_card1, player2_card2), inline=False)
                 await message.author.send(embed=embed)
         embed = discord.Embed(color=0x00ff00)
-        embed.add_field(name="다오봇 도박", value="""
+        embed.add_field(name="디노봇 도박", value="""
         한 장 더 뽑으시려면 '**예**'를 입력해 주시고 바로 베팅을 하시려면 '**아니요**'를 입력해 주세요.
         """, inline=False)
         await message.author.send(embed=embed)
@@ -908,17 +901,17 @@ async def on_message(message):
                 choice = message.content.split(" ")
                 player1_bat = choice[1]
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="다오봇 도박", value="""
+                embed.add_field(name="디노봇 도박", value="""
                 {}님께서 랜지 코인 {}개를 배팅하셨습니다.
                 """.format(player1, player1_bat), inline=False)
                 await message.channel.send(embed=embed)
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="다오봇 도박", value="""
+                embed.add_field(name="디노봇 도박", value="""
                 랜지 코인 {}개가 정상적으로 배팅되었습니다.
                 """.format(player1_bat), inline=False)
                 await message.author.send(embed=embed)
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="다오봇 도박", value="도박 결과를 입력해 누가 승리했는지 확인하세요!", inline=False)
+                embed.add_field(name="디노봇 도박", value="도박 결과를 입력해 누가 승리했는지 확인하세요!", inline=False)
                 await message.author.send(embed=embed)
                 if progress == "bat_1":
                     progress = "result"
@@ -928,17 +921,17 @@ async def on_message(message):
                 choice = message.content.split(" ")
                 player2_bat = choice[1]
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="다오봇 도박", value="""
+                embed.add_field(name="디노봇 도박", value="""
                 {}님께서 랜지 코인 {}개를 배팅하셨습니다.
                 """.format(player2, player2_bat), inline=False)
                 await message.channel.send(embed=embed)
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="다오봇 도박", value="""
+                embed.add_field(name="디노봇 도박", value="""
                 랜지 코인 {}개가 정상적으로 배팅되었습니다.
                 """.format(player2_bat), inline=False)
                 await message.author.send(embed=embed)
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="다오봇 도박", value="도박 결과를 입력해 누가 승리했는지 확인하세요!", inline=False)
+                embed.add_field(name="디노봇 도박", value="도박 결과를 입력해 누가 승리했는지 확인하세요!", inline=False)
                 await message.author.send(embed=embed)
                 if progress == "bat_1":
                     progress = "result"
@@ -950,7 +943,7 @@ async def on_message(message):
             if player1_bat != 0 and player2_bat != 0:
                 progress = "none"
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="다오봇 도박", value="""
+                embed.add_field(name="디노봇 도박", value="""
                 3초 뒤 결과가 공개됩니다.
                 """, inline=False)
                 await message.channel.send(embed=embed)
@@ -960,26 +953,26 @@ async def on_message(message):
                 player2_result = player2_card1 + player2_card2 + player2_card3
                 player2_result = player2_result % 10
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="다오봇 도박", value="""
+                embed.add_field(name="디노봇 도박", value="""
                 {}님의 카드는 {}, {}, {} 입니다.
                 """.format(player1, player1_card1, player1_card2, player1_card3), inline=False)
                 await message.channel.send(embed=embed)
                 embed = discord.Embed(color=0x00ff00)
-                embed.add_field(name="다오봇 도박", value="""
+                embed.add_field(name="디노봇 도박", value="""
                 {}님의 카드는 {}, {}, {} 입니다.
                 """.format(player2, player2_card1, player2_card2, player2_card3), inline=False)
                 await message.channel.send(embed=embed)
                 if player1_result > player2_result:
                     embed = discord.Embed(color=0x00ff00)
-                    embed.add_field(name="다오봇 도박", value="{}님의 승리입니다! 축하드립니다 {}님!".format(player1, player1), inline=False)
+                    embed.add_field(name="디노봇 도박", value="{}님의 승리입니다! 축하드립니다 {}님!".format(player1, player1), inline=False)
                     await message.channel.send(embed=embed)
                 if player1_result < player2_result:
                     embed = discord.Embed(color=0x00ff00)
-                    embed.add_field(name="다오봇 도박", value="{}님의 승리입니다! 축하드립니다 {}님!".format(player2, player2), inline=False)
+                    embed.add_field(name="디노봇 도박", value="{}님의 승리입니다! 축하드립니다 {}님!".format(player2, player2), inline=False)
                     await message.channel.send(embed=embed)
                 if player1_result == player2_result:
                     embed = discord.Embed(color=0x00ff00)
-                    embed.add_field(name="다오봇 도박", value="무승부입니다 ㅠ.ㅠ 배팅한 코인의 반을 서로 가져갑니다.", inline=False)
+                    embed.add_field(name="디노봇 도박", value="무승부입니다 ㅠ.ㅠ 배팅한 코인의 반을 서로 가져갑니다.", inline=False)
                     await message.channel.send(embed=embed)
                 progress = "none"
                 player1 = "none"
@@ -1059,9 +1052,9 @@ async def 확인(ctx):
 #            info = await dbkrpy.CheckVote.get_response("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg", message.author.id)
 #            dbkr = dbkrpy.CheckVote(info)
 #            yee = dbkr.check
-#            embed = discord.Embed(description = "[[광고]다오를 초대해주세요!](https://discord.com/oauth2/authorize?client_id=713007296476741643&scope=bot&permissions=8)", color=0xff0000)
+#            embed = discord.Embed(description = "[[광고]디노를 초대해주세요!](https://discord.com/oauth2/authorize?client_id=713007296476741643&scope=bot&permissions=8)", color=0xff0000)
 #            await message.channel.send(embed=embed)
-#            embed = discord.Embed(description = "[[광고]다오한테 좋아요를 눌러주세요!](https://koreanbots.dev/bots/713007296476741643)", color=0xff0000)
+#            embed = discord.Embed(description = "[[광고]디노한테 좋아요를 눌러주세요!](https://koreanbots.dev/bots/713007296476741643)", color=0xff0000)
 #            await message.channel.send(embed=embed)
 @bot.command()
 async def 핑(ctx):
@@ -1346,8 +1339,8 @@ async def 메일(ctx, mail, *, text):
     s.starttls()
     s.login('discord.dao.bot.0564.hminkoo10@gmail.com', 'orqikrcirwvzrwgv')
     msg = MIMEText(f'{ctx.author} : {text}')
-    msg['Subject'] = f'안녕하세요 디스코드 다오봇입니다 {ctx.author}님이 메일을 전해달라고 하네요'
-    s.sendmail("discord.dao.bot.0564.hminkoo10@gmail.com", f"{mail}\n위 메시지는 디스코드에서 다오가 보낸 메시지 입니다", msg.as_string())
+    msg['Subject'] = f'안녕하세요 디스코드 디노봇입니다 {ctx.author}님이 메일을 전해달라고 하네요'
+    s.sendmail("discord.dao.bot.0564.hminkoo10@gmail.com", f"{mail}\n위 메시지는 디스코드에서 디노가 보낸 메시지 입니다", msg.as_string())
     s.quit()
     await ctx.send(f"{mail}님 한테 {text}라고 {ctx.author.mention}님이 메일을 전달했어요!")
 @bot.command()
@@ -1561,7 +1554,7 @@ async def 전체공지(ctx, *, msg):
         print("실패..")
 @bot.listen()
 async def on_message(message):
-    if message.content.startswith("다오야 "):
+    if message.content.startswith("디노야 "):
                 pingpongurl = "https://builder.pingpong.us/api/builder/5ea0f0cbe4b0e921afb16f6d/integration/v0.2/custom"
                 pingpongauth = "Basic a2V5OjFhMzJlOGQxM2U3MWM2YTMyYWUwNjkyZDZkOTczNjhj" 
                 msg = message.content[4:]
@@ -1847,7 +1840,7 @@ async def 구매(ctx, item_name):
     try:
         ababb = money[str(ctx.author.id)] - int(item_money[str(item_name)])
     except:
-        await ctx.send(f'{item_name}이란 아이템이 없거나 다오의 돈 기능을 1번도 사용하지 않았어요!\n,돈줘 를 입력 해 보세요!')
+        await ctx.send(f'{item_name}이란 아이템이 없거나 디노의 돈 기능을 1번도 사용하지 않았어요!\n,돈줘 를 입력 해 보세요!')
     if ababb <= int('-1'):
         await ctx.send("이런... 돈을 더 벌고 와보세요!")
     else:
@@ -2066,7 +2059,7 @@ async def 사진편집(ctx, urla, pill, *, text):
 async def on_message(message):
     if message.content == '<@!713007296476741643>':
         await message.channel.send('''
-안녕하세요! 전 다오봇이예요!
+안녕하세요! 전 디봇이예요!
 개발자는 hminkoo10#2879 님이시고, 프리픽스는 , 도움 명령어는 ,help 와 ,도움 이예요!
 명령어가 서로 다르니 조심하세요!!
 ''')
@@ -2086,7 +2079,7 @@ async def 디엠공지(ctx,msg,pass_context=True):
         print(e)
         await ctx.send("전송시도중")
         try:
-            embed = discord.Embed(title="다오봇 공지",color=0x9b59b6,description=None) #임베드 변수 지정
+            embed = discord.Embed(title="디노봇 공지",color=0x9b59b6,description=None) #임베드 변수 지정
             embed.add_field(name="공지내용\n=================", value=(msg), inline=False) #field add
             embed.set_footer(text=ctx.author.name + "-인증됨(PRM)", icon_url=ctx.author.avatar_url)                    
             await e.send(embed=embed)
