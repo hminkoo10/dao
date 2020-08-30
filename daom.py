@@ -166,7 +166,7 @@ async def 재생(ctx, *, url):
         url_id = url_t[int(z)]
         v = pafy.new(url_id)
         url_title = v.title
-        print(url_title)
+        url = v.title
     else:
         search = SearchVideos(url, offset = 1, mode = "json", max_results = 1)
         o = eval(search.result())["search_result"]
