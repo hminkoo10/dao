@@ -7,7 +7,6 @@ import time
 import subprocess
 import imaplib
 import urllib.request
-import request
 from bs4 import BeautifulSoup
 from youtubesearchpython import SearchVideos
 import re
@@ -262,6 +261,6 @@ async def 재생(ctx, *, url):
     await asyncio.sleep(10)
     embedt = discord.Embed(title=f'{url_title}재생중!!',color=0x00c8ff)
     embedt.set_image(url=f'https://i.ytimg.com/vi/{url_id}/hqdefault.jpg')
-    embedt.set_footer(text='다른노래가 나올 경우엔 ,s 을 하시고 다시 플래이를 해 주세요')
+    embedt.set_footer(text='다른노래가 나올 경우엔 ,s 을 하시고 다시 플래이를 해 주세요. 그래도 안될 경우엔 ,도움 을 입력해 서포트 서버로 가 주시길 바랍니다.')
     await c.edit(embed=embedt)
 client.run("NzEzMDA3Mjk2NDc2NzQxNjQz.XuWK4w.1D-nap9ca7zYP__JuEwdxiQ4ZEU")
