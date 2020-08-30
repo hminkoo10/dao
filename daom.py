@@ -258,7 +258,7 @@ async def 재생(ctx, *, url):
     embed = discord.Embed(title=f'{url_title}재생준비중!!',color=0x00c8ff)
     embed.set_image(url=f'https://i.ytimg.com/vi/{url_id}/hqdefault.jpg')
     c = await ctx.send(embed=embed)
-    await asyncio.sleep(10)
+    await asyncio.sleep(5.5)
     embedt = discord.Embed(title=f'{url_title}재생중!!',color=0x00c8ff)
     embedt.set_image(url=f'https://i.ytimg.com/vi/{url_id}/hqdefault.jpg')
     embedt.set_footer(text='다른노래가 나올 경우엔 ,s 을 하시고 다시 플래이를 해 주세요. 그래도 안될 경우엔 ,도움 을 입력해 서포트 서버로 가 주시길 바랍니다.')
