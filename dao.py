@@ -1311,7 +1311,7 @@ async def 비속어확인(ctx):
     await ctx.send(file.read())
 @bot.command()
 async def 크레딧(ctx):
-    await ctx.send("음악 도움: Minibox\n랭킹 도움: 파이어리자드")
+    await ctx.send("랭킹 도움: 파이어리자드")
 @bot.command()
 async def 밴처리(ctx, user:discord.Member, *, text):
     if str(ctx.author.id) in admin:
