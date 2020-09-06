@@ -122,7 +122,8 @@ async def 나가(msg):
 @bot.command(pass_context=True, aliases=['p', 'pla']) #재생
 async def 재생(ctx, *, url):
     try:
-        os.system(pf[0])
+        os.remove(pf[0])
+        pf.remove(pf[0])
     except:
         pass
     async with ctx.typing():

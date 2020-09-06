@@ -2158,5 +2158,11 @@ async def speech(ctx, *, msg):
         pass
     await ctx.voice_client.disconnect()
     os.remove(f'{ctx.author.id}.mp3')
+@bot.command()
+async def 쿨타임(ctx):
+    with open('data_money_cool.json', 'r') as f:
+        jstring = open("data_money_cool.json", "r", encoding='utf-8-sig').read()
+        money_cool = json.loads(jstring)
+    await ctx.send(f'지금 내 쿨타임이 {money_cool[str(ctx.author.id)] % 60}분 남았어요!')
 bot.run(token)
 
