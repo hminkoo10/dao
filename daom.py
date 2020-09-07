@@ -122,6 +122,15 @@ async def 나가(msg):
 @bot.command(pass_context=True, aliases=['p', 'pla']) #재생
 async def 재생(ctx, *, url):
     try:
+        await ctx.voice_client.disconnect()
+    except:
+        pass
+    channel = ctx.author.voice.channel
+    try:
+        ss = await channel.connect()
+    except:
+        pass
+    try:
         os.remove(pf[0])
         pf.remove(pf[0])
     except:
