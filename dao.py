@@ -1168,8 +1168,8 @@ async def on_error(event, args, **kwargs):
         return
 @bot.listen()
 async def on_message_delete(message):
-    if message.guild.id == int('701974089421553806'):
-        await bot.get_channel(int(739454908389916702)).send(f"<#{message.channel.id}>\n메세지 삭제 감지(" + str(message.author) + "): " + message.content)
+    if message.guild.id == int('753048689399824384'):
+        await bot.get_channel(int(753048689399824384)).send(f"<#{message.channel.id}>\n메세지 삭제 감지(" + str(message.author) + "): " + message.content)
         return
 #@bot.command()
 async def on_member_leaves(member):
