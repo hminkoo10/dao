@@ -68,6 +68,9 @@ with open('data_money.json', 'r') as f:
 with open('data_money_cool.json', 'r') as f:
     jstring = open("data_money_cool.json", "r", encoding='utf-8-sig').read()
     money_cool = json.loads(jstring)
+with open('data_server_cool.json', 'r') as f:
+    jstring = open("data_server_cool.json", "r", encoding='utf-8-sig').read()
+    server_cool = json.loads(jstring)
 with open('data_command_1.json', 'r') as f:
     jstring = open("data_command_1.json", "r", encoding='utf-8-sig').read()
     command_1 = json.loads(jstring)
@@ -111,6 +114,9 @@ playerlist = {}
 playlist = list() #재생목록 리스트
 admin = []
 api_instance = giphy_client.DefaultApi()
+with open('data_server_invite.json', 'r') as f:
+    jstring = open("data_server_invite.json", "r", encoding='utf-8-sig').read()
+    server_invite = json.loads(jstring)
 
 def search_gifs(query):
     try:
@@ -234,7 +240,7 @@ async def 초대(ctx):
     embed = discord.Embed(description = f"[디노봇 초대링크](https://discord.com/api/oauth2/authorize?client_id=713007296476741643&permissions=8&scope=bot)", color=0xf1c40f)
     embed.set_image(url="https://cdn.discordapp.com/attachments/702088239502065704/718732359704248380/3e5bae5149803302.png")
     await ctx.send(embed=embed)
-    await ctx.sned("QR코드가 포함되어 있습니다!")
+    await ctx.send("QR코드가 포함되어 있습니다!")
 @bot.command()
 async def 테스트(ctx, *, text):
     for guild in bot.guild, member:
@@ -412,7 +418,7 @@ async def 우체국(ctx, user:discord.Member, *, msg):
     embed.add_field(name="보낸 서버 이름", value=ctx.message.guild.name, inline=False)
     embed.add_field(name="보낸 채널 이름", value=ctx.message.channel.name, inline=False)
     embed.add_field(name="전할 내용", value=msg)
-    embed.set_author(name=f"작성일:{first_date}", icon_url="https://cdn.discordapp.com/attachments/717305319390445569/718425698292989962/68cf02c49ae96c340e0c7430959a64da.png")
+    embed.set_author(name=f"작성일:{first_date}", icon_url=bot.user.avatar_url)
     embed.set_footer(text=(f"작성일:{first_date}"), icon_url=ctx.author.avatar_url)
     await user.send(ctx.message.author.mention, embed=embed)
     await ctx.send("우체부가 아주 잘 전해준다고 했어요!")
@@ -1693,8 +1699,8 @@ async def 돈줘(ctx):
         with open('data_money_cool.json', 'r') as f:
             jstring = open("data_money_cool.json", "r", encoding='utf-8-sig').read()
             money_cool = json.loads(jstring)
-        abcd = int(money_cool[str(ctx.author.id)]) - int(time.time())
-        if int(abcd) <= int('-1800'):
+        abcd = int(time.time()) - int(money_cool[str(ctx.author.id)])
+        if int(abcd) >= int('1800'):
             money_test = int(random.randint(1000, 2000))
             with open('data_money.json', 'r') as f:
                 jstring = open("data_money.json", "r", encoding='utf-8-sig').read()
@@ -2163,6 +2169,73 @@ async def 쿨타임(ctx):
     with open('data_money_cool.json', 'r') as f:
         jstring = open("data_money_cool.json", "r", encoding='utf-8-sig').read()
         money_cool = json.loads(jstring)
-    await ctx.send(f'지금 내 쿨타임이 {money_cool[str(ctx.author.id)] % 60}분 남았어요!')
+    a = int(time.time()) - int(money_cool[str(ctx.author.id)])
+    b = int(a) // 60
+    await ctx.send(f'지금 내 쿨타임이 {30 - int(b)}분 남았어요!')
+@bot.command()
+async def 홍보(ctx):
+    with open('data_server_cool.json', 'r') as f:
+        jstring = open("data_server_cool.json", "r", encoding='utf-8-sig').read()
+        server_cool = json.loads(jstring)
+    with open('data_server_invite.json', 'r') as f:
+        jstring = open("data_server_invite.json", "r", encoding='utf-8-sig').read()
+        server_invite = json.loads(jstring)
+    if ctx.guild.owner.id != ctx.author.id:
+        await ctx.send(f'{ctx.guild.owner}님이 아닙니다')
+        return
+    try:
+        e = server_cool[str(ctx.guilld.id)]
+        print(e)
+    except:
+        server_cool[str(ctx.guild.id)] = 0
+    a = int(time.time()) - int(server_cool[str(ctx.guild.id)])
+    if int(a) >= int(86400):
+        invitelinknew = await ctx.message.channel.create_invite(destination = ctx.message.channel, xkcd = True, max_uses = 10)
+        embed = discord.Embed(title=f'{ctx.guild.name}서버에 초대합니다!',color=discord.Color.blue())
+        embed.add_field(name=f"{ctx.guild.name}서버 초대링크", value=invitelinknew)
+        embed.set_footer(text='홍보를 비허용하실땐 ,홍보거부 를 하시고, 허용하실땐 ,홍보허용 을 입력 해 주세요', icon_url=ctx.guild.icon_url)
+        for i in bot.guilds:
+            for j in i.channels:
+                if j.name == '홍보':
+                    if str(j.type) == 'text':
+                        try:
+                            print(server_invite[str(i.id)])
+                            print(i.id)
+                            e = server_invite[str(i.id)]
+                            print(e)
+                        except:
+                            server_invite[str(i.id)] = 0
+                        if server_invite[str(i.id)] == 0:
+                            await j.send(embed=embed)
+                        else:
+                            pass
+                else:
+                    pass
+    else:
+        await ctx.send('앗! 쿨타임이 안지났어요! 내일 다시 시도 해 보세요!')
+    write('data_server_cool',server_invite)
+    write('data_server_invite',server_invite)
+@bot.command()
+async def 홍보허용(ctx):
+    if ctx.guild.owner.id == ctx.author.id:
+        with open('data_server_invite.json', 'r') as f:
+            jstring = open("data_server_invite.json", "r", encoding='utf-8-sig').read()
+            server_invite = json.loads(jstring)
+        server_invite[str(ctx.guild.id)] = 0
+        write('data_server_invite',server_invite)
+        await ctx.send('완료!')
+    else:
+        await ctx.send('서버소유자가 아닙니다')
+@bot.command()
+async def 홍보거부(ctx):
+    if ctx.guild.owner.id == ctx.author.id:
+        with open('data_server_invite.json', 'r') as f:
+            jstring = open("data_server_invite.json", "r", encoding='utf-8-sig').read()
+            server_invite = json.loads(jstring)
+        server_invite[str(ctx.guild.id)] = 1
+        write('data_server_invite',server_invite)
+        await ctx.send('완료!')
+    else:
+        await ctx.send('서버소유자가 아닙니다')
 bot.run(token)
 
