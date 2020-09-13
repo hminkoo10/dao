@@ -2192,6 +2192,7 @@ async def 홍보(ctx):
         server_cool[str(ctx.guild.id)] = 0
     a = int(time.time()) - int(server_cool[str(ctx.guild.id)])
     if int(a) >= int(86400):
+        server_cool[str(ctx.guild.id)] = int(time.time())
         invitelinknew = await ctx.message.channel.create_invite(destination = ctx.message.channel, xkcd = True, max_uses = 10)
         embed = discord.Embed(title=f'{ctx.guild.name}서버에 초대합니다!',color=discord.Color.blue())
         embed.add_field(name=f"{ctx.guild.name}서버 초대링크", value=invitelinknew)
