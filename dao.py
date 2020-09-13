@@ -2216,7 +2216,7 @@ async def 홍보(ctx):
                     pass
     else:
         await ctx.send('앗! 쿨타임이 안지났어요! 내일 다시 시도 해 보세요!')
-    write('data_server_cool',server_invite)
+    write('data_server_cool',server_cool)
     write('data_server_invite',server_invite)
 @bot.command()
 async def 홍보허용(ctx):
