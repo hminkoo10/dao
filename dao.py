@@ -119,6 +119,10 @@ api_instance = giphy_client.DefaultApi()
 with open('data_server_invite.json', 'r') as f:
     jstring = open("data_server_invite.json", "r", encoding='utf-8-sig').read()
     server_invite = json.loads(jstring)
+with open('data_server_cool.json', 'r') as f:
+    jstring = open("data_server_cool.json", "r", encoding='utf-8-sig').read()
+    server_cool = json.loads(jstring)
+
 
 def search_gifs(query):
     try:
