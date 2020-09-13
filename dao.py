@@ -6,6 +6,7 @@ import time
 import openpyxl
 from discord.ext import commands
 import random
+from shellvaluepy.info import shell
 import dbkrpy
 import turtle
 from boto3 import client
@@ -27,6 +28,7 @@ import urllib,requests
 import operator
 from bs4 import BeautifulSoup
 import ast
+import uptimes.uptimes
 import traceback
 import sys
 from googletrans import Translator
@@ -1488,7 +1490,7 @@ async def 업타임text(self, ctx):
     elif uptime < 60:
         await ctx.send(f'{uptime}초 동안 작동됨')
 @bot.command()
-async def 업타임(ctx):
+async def 업타임즈(ctx):
     if str(ctx.author.id) in admin:
         embed = discord.Embed(title="checking... <a:loadding:726965248762052708>", color=0xff0000)
         zzzzz = await ctx.send(embed=embed)
@@ -2237,5 +2239,18 @@ async def 홍보거부(ctx):
         await ctx.send('완료!')
     else:
         await ctx.send('서버소유자가 아닙니다')
+@bot.command()
+async def 업타임(ctx):
+    nowtime = uptimes.uptimes.uptimes()
+    odays = nowtime.split(' ')[0]
+    ohours = nowtime.split(' ')[2]
+    omin = nowtime.split(' ')[4]
+    osec = nowtime.split(' ')[6]
+
+    days = odays[2:len(odays)-2]
+    hours = ohours[2:len(ohours)-2]
+    minutes = omin[2:len(omin)-2]
+    seconds = osec[2:len(osec)-2]
+    await ctx.send(f'저는 {days}일, {hours}시간 {minutes}분 {seconds}초 동안 작동됐어요!')
 bot.run(token)
 
