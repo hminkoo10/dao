@@ -70,9 +70,6 @@ with open('data_money.json', 'r') as f:
 with open('data_money_cool.json', 'r') as f:
     jstring = open("data_money_cool.json", "r", encoding='utf-8-sig').read()
     money_cool = json.loads(jstring)
-with open('data_server_cool.json', 'r') as f:
-    jstring = open("data_server_cool.json", "r", encoding='utf-8-sig').read()
-    server_cool = json.loads(jstring)
 with open('data_command_1.json', 'r') as f:
     jstring = open("data_command_1.json", "r", encoding='utf-8-sig').read()
     command_1 = json.loads(jstring)
@@ -2190,11 +2187,12 @@ async def 홍보(ctx):
         await ctx.send(f'{ctx.guild.owner}님이 아닙니다')
         return
     try:
-        e = server_cool[str(ctx.guilld.id)]
+        e = server_cool[str(ctx.guild.id)]
         print(e)
     except:
         server_cool[str(ctx.guild.id)] = 0
     a = int(time.time()) - int(server_cool[str(ctx.guild.id)])
+    print(a)
     if int(a) >= int(86400):
         server_cool[str(ctx.guild.id)] = int(time.time())
         invitelinknew = await ctx.message.channel.create_invite(destination = ctx.message.channel, xkcd = True, max_uses = 10)
@@ -2220,8 +2218,10 @@ async def 홍보(ctx):
                     pass
     else:
         await ctx.send('앗! 쿨타임이 안지났어요! 내일 다시 시도 해 보세요!')
-    write('data_server_cool',server_cool)
-    write('data_server_invite',server_invite)
+    with open("data_server_cool.json", "w+", encoding='utf-8-sig') as f:
+        json_string = json.dump(server_cool, f, indent=2, ensure_ascii=False)
+    with open("data_server_invite.json", "w+", encoding='utf-8-sig') as f:
+        json_string = json.dump(server_invite, f, indent=2, ensure_ascii=False)
 @bot.command()
 async def 홍보허용(ctx):
     if ctx.guild.owner.id == ctx.author.id:
