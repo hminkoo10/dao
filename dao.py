@@ -620,7 +620,7 @@ async def on_message(message):
 
 @bot.listen()
 async def on_message(message):
-    if message.content.startswith("출첵") or message.content.startswith("ㅊㅊ") or message.content.startswith("출석체크"):
+    if message.content.startswith(",출첵") or message.content.startswith(",ㅊㅊ") or message.content.startswith(",출석체크"):
         if str(message.author.name) in check:
             await message.channel.send("이미 출석체크를 했습니다")
         else:
@@ -2267,22 +2267,12 @@ async def 업타임(ctx):
 @bot.command()
 async def 프리픽스(ctx):
     await ctx.send(',접두사확인 으로 이 서버에 접두사를 확인 가능하고, ,접두사변경 으로 섭장만 접두사를 변경 가능합니다')
-@bot.command()
-async def 접두사변경(ctx,info):
-    global bot
-    global prefixList
-    if ctx.guild.owner.id == ctx.author.id:
-        with open('prefixes.json', 'r') as f:
-            jstring = open("prefixes.json", "r", encoding='utf-8-sig').read()
-            prefixList = json.loads(jstring)
-        prefixList[str(ctx.guild.id)] = info
-        write('prefixes',prefixList)
-        #default_prefix = ","
-        async def prefix2(bot, message):
-            return prefixList.get(str(message.guild.id), ",")
-        bot = commands.Bot(command_prefix=prefix2)
-        await ctx.send('완료!')
-    else:
-        await ctx.send('섭장이 아니예요!')
+@bot.command(name="접두사", pass_context=True)
+async def _prefix(ctx, new_prefix):
+    if ctx.guild.owner.id != ctx.author.id:
+        return
+    prefixList[str(ctx.guild.id)] = new_prefix
+    write('prefixes',prefixList)
+    await ctx.send('완료!\n일부 명령어는 적용돼지 않습니다')
 bot.run(token)
 
