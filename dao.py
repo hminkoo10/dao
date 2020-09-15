@@ -46,7 +46,6 @@ from os import system
 import shutil
 import requests
 
-
 #startup_extensions = ['cogs.Test_file']
 
 #if __name__ == "__main__":
@@ -80,7 +79,13 @@ dict2 = {}
 tkdyd = []
 giphy_token = 'uBpiTkQ9beqY4NayRkx6sz9bMSTkRpDE'
 check = []
-bot = commands.Bot(command_prefix=[',','<@!713007296476741643> '])
+with open('prefixes.json', 'r') as f:
+    jstring = open("prefixes.json", "r", encoding='utf-8-sig').read()
+    prefixList = json.loads(jstring)
+default_prefix = ","
+async def prefix(bot, message):
+    return prefixList.get(str(message.guild.id), ",")
+bot = commands.Bot(command_prefix=prefix)
 dao = commands.Bot(command_prefix=';')
 PRM = []
 token = "NzEzMDA3Mjk2NDc2NzQxNjQz.XuWK4w.1D-nap9ca7zYP__JuEwdxiQ4ZEU"
@@ -211,9 +216,11 @@ async def 도움(ctx):
     embed.add_field(name="번역", value="``,번역 (번역할 언어) (번역될 언어) (번역될 낱말)``로 확인\n^^ 예시 : ,번역 ko en 안녕\n값 : Hello", inline=False)
     embed.add_field(name="슬로우모드(only 서버관리자)", value="``,슬로우모드 (초)``로 확인", inline=False)
     embed.add_field(name="운세", value="``,운세 00자리``로 확인", inline=False)
+    embed.add_field(name="홍보", value="``,홍보``(홍보 채널에 보내짐)로 확인", inline=False)
     embed.add_field(name="사진편집", value="``,사진편집 이미지url 색갈(영어) 글``로 확인", inline=False)
     embed.add_field(name="돈 관련", value="``,돈줘\n,랭킹\n,내돈\n,훔쳐보기 @맨션\n,구매 (증가벽돌, 복구시스템)\n,사용 증가벽돌\n,복구 (복구암호)``로 확인", inline=False)
     embed.add_field(name="Text To Speech(음성채널에 대신 말해줌)", value="음성채널에 접속 후 ``,speech text``로 확인", inline=False)
+    embed.add_field(name="접두사", value="``,프리픽스``로 확인", inline=False)
     embed.add_field(name="디노 서포터", value="- ``https://discord.gg/zwzXuVz``", inline=False)
     embed.set_footer(text=(ctx.author.name), icon_url=ctx.author.avatar_url)
     await ctx.author.send(embed=embed)
@@ -2257,5 +2264,25 @@ async def 업타임(ctx):
     minutes = omin[2:len(omin)-2]
     seconds = osec[2:len(osec)-2]
     await ctx.send(f'저는 {days}일, {hours}시간 {minutes}분 {seconds}초 동안 작동됐어요!')
+@bot.command()
+async def 프리픽스(ctx):
+    await ctx.send(',접두사확인 으로 이 서버에 접두사를 확인 가능하고, ,접두사변경 으로 섭장만 접두사를 변경 가능합니다')
+@bot.command()
+async def 접두사변경(ctx,info):
+    global bot
+    global prefixList
+    if ctx.guild.owner.id == ctx.author.id:
+        with open('prefixes.json', 'r') as f:
+            jstring = open("prefixes.json", "r", encoding='utf-8-sig').read()
+            prefixList = json.loads(jstring)
+        prefixList[str(ctx.guild.id)] = info
+        write('prefixes',prefixList)
+        #default_prefix = ","
+        async def prefix2(bot, message):
+            return prefixList.get(str(message.guild.id), ",")
+        bot = commands.Bot(command_prefix=prefix2)
+        await ctx.send('완료!')
+    else:
+        await ctx.send('섭장이 아니예요!')
 bot.run(token)
 
