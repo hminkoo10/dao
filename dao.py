@@ -2267,7 +2267,7 @@ async def 업타임(ctx):
     await ctx.send(f'저는 {days}일, {hours}시간 {minutes}분 {seconds}초 동안 작동됐어요!')
 @bot.command()
 async def 프리픽스(ctx):
-    await ctx.send(',접두사확인 으로 이 서버에 접두사를 확인 가능하고, ,접두사변경 으로 섭장만 접두사를 변경 가능합니다')
+    await ctx.send(',접두사확인 으로 이 서버에 접두사를 확인 가능하고, ,접두사변경(프리픽스 ,확정) 으로 섭장만 접두사를 변경 가능합니다')
 @bot.command(name="접두사등록", pass_context=True)
 async def _prefix(ctx, new_prefix):
     if ctx.guild.owner.id != ctx.author.id:
@@ -2275,12 +2275,14 @@ async def _prefix(ctx, new_prefix):
     prefixList[str(ctx.guild.id)] = new_prefix
     write('prefixes',prefixList)
     await ctx.send('완료!\n일부 명령어는 적용돼지 않습니다')
-@bot.command(name="접두사확인", pass_context=True)
-async def _prefixes(ctx):
+@bot.listen()
+async def on_message(message):
+    if not message.content.startswith(',접두사확인'):
+        return
     with open('prefixes.json', 'r') as f:
         jstring = open("prefixes.json", "r", encoding='utf-8-sig').read()
         prefixList = json.loads(jstring)
-    await ctx.send(f'이 서버의 프리픽스는 {prefixList[str(ctx.guild.id)]}')
+    await message.channel.send(f'이 서버의 프리픽스는 {prefixList[str(ctx.guild.id)]}')
 @bot.command()
 async def ascii(ctx, *, text):
     ascii_banner = pyfiglet.figlet_format(text)
