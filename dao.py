@@ -10,6 +10,7 @@ from shellvaluepy.info import shell
 import dbkrpy
 import turtle
 from boto3 import client
+import pyfiglet
 import turtle as t
 import os
 import asyncio
@@ -2274,5 +2275,9 @@ async def _prefix(ctx, new_prefix):
     prefixList[str(ctx.guild.id)] = new_prefix
     write('prefixes',prefixList)
     await ctx.send('완료!\n일부 명령어는 적용돼지 않습니다')
+@bot.command()
+async def ascii(ctx, text):
+    ascii_banner = pyfiglet.figlet_format(text)
+    await ctx.send(f'```\n{ascii_banner}\n```')
 bot.run(token)
 
