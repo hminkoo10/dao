@@ -2282,7 +2282,7 @@ async def on_message(message):
     with open('prefixes.json', 'r') as f:
         jstring = open("prefixes.json", "r", encoding='utf-8-sig').read()
         prefixList = json.loads(jstring)
-    await message.channel.send(f'이 서버의 프리픽스는 {prefixList[str(ctx.guild.id)]}')
+    await message.channel.send(f'이 서버의 프리픽스는 {prefixList[str(message.guild.id)]}')
 @bot.command()
 async def ascii(ctx, *, text):
     ascii_banner = pyfiglet.figlet_format(text)
