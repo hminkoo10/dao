@@ -144,6 +144,8 @@ def gif_response(emotion):
         return gif[0].url
     except IndexError:
         pass
+def randomcolor():
+    return random.randint(0x0,0xffffff)
 async def main():
     userid = "713007296476741643"
     info = await dbkrpy.CheckVote.get_response(token,userid)
@@ -201,7 +203,7 @@ async def 건의링크(ctx):
     await ctx.channel.send('https://discord.gg/PKGMwSB')
 @bot.command()
 async def 도움(ctx):
-    embed = discord.Embed(title="도움말",color=0x00ffae,description="서버 관리봇, 뮤직봇, 도박, 음악 모든게 다 있는, 디노.접두어:,") #임베드 변수 지정
+    embed = discord.Embed(title="도움말",color=randomcolor(),description="서버 관리봇, 뮤직봇, 도박, 음악 모든게 다 있는, 디노.접두어:,") #임베드 변수 지정
     embed.add_field(name="초대링크", value="- ``,초대``로 확인", inline=False) #field add
     embed.add_field(name="매시지 삭제", value="- ``,삭제 (수)``로 확인", inline=False)
     embed.add_field(name="모두 삭제", value="- ``,clear``로 확인", inline=False)
@@ -2287,5 +2289,6 @@ async def on_message(message):
 async def ascii(ctx, *, text):
     ascii_banner = pyfiglet.figlet_format(text)
     await ctx.send(f'```\n{ascii_banner}\n```')
+
 bot.run(token)
 
