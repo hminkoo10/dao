@@ -86,7 +86,7 @@ with open('prefixes.json', 'r') as f:
 default_prefix = ","
 async def prefix(bot, message):
     return prefixList.get(str(message.guild.id), ",")
-bot = commands.Bot(command_prefix=prefix)
+bot = commands.Bot(command_prefix=prefix,owner_id=657773087571574784)
 dao = commands.Bot(command_prefix=';')
 PRM = []
 token = "NzEzMDA3Mjk2NDc2NzQxNjQz.XuWK4w.1D-nap9ca7zYP__JuEwdxiQ4ZEU"
@@ -1548,7 +1548,7 @@ async def on_member_join(member):
         return None
 
 @bot.listen
-async def on_member_leave(member):
+async def on_member_remove(member):
     syschannel = member.guild.system_channel.id 
     try:
         embed=discord.Embed(
