@@ -312,8 +312,8 @@ async def clear(ctx):
         await ctx.channel.purge(limit=1000000000000000)
     else:
         await ctx.channel.send('메시지 관리권한이 없습니다(요구권한 : 메시지관리 권한)')
-@bot.command()
-async def on_ready(message):
+@bot.listen()
+async def on_message(message):
     if message.content.startswith(",건의"):
         author = bot.get_user(int(657773087571574784))
         choice = message.content.split(" ")
@@ -323,7 +323,7 @@ async def on_ready(message):
         msgchannel = message.channel.name
 
         if msg[0:4] == "http" or msg[0:5] == "https" or msg[0:3] == "www":
-            embed = discord.Embed(color=0x00ff00)
+            embed = discord.Embed(color=0xff0000)
             embed.add_field(name="디노봇 건의", value="""
             건의장이 전송되지 않았습니다!
             건의장 미전송 사유: 링크 사용
@@ -331,7 +331,7 @@ async def on_ready(message):
             embed.set_thumbnail(url="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FdhFXEV%2FbtqEOaCVWlv%2FxbKPxv8Mskgsvlf3jwiEIK%2Fimg.png")
             await message.channel.send(embed=embed)
         elif msg == "":
-            embed = discord.Embed(color=0x00ff00)
+            embed = discord.Embed(color=0xff0000)
             embed.add_field(name="디노봇 건의", value="""
             건의장이 전송되지 않았습니다!
             건의장 미전송 사유: 내용 없음
@@ -366,7 +366,7 @@ async def 건의(ctx, *, msg):
     file = open("건의.txt", "a+")
     file.write(str("\n") + str(ctx.author) + str(":") + str(msg))
     file.close
-    await ctx.send(str(msg) + str("라고 발빠른 디노가 전해줬어요!"))
+    #await ctx.send(str(msg) + str("라고 발빠른 디노가 전해줬어요!"))
 @bot.command()
 async def 건의장초기화(ctx):
     file = open("건의.txt", "w")
