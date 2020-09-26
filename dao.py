@@ -1797,6 +1797,9 @@ async def 돈전달(ctx, user: discord.Member, money2):
     if ababb <= int('-1'):
         await ctx.send("자기 돈보다 더 큰데요?")
     else:
+        if money2 <= 0:
+            await ctx.send('1이상의 정수를 입력 해 주세요!')
+            return
         money[str(ctx.author.id)] -= int(money2)
         with open("data_money.json", "w+", encoding='utf-8-sig') as f:
             json_string = json.dump(money, f, indent=2, ensure_ascii=False)
@@ -2289,6 +2292,20 @@ async def on_message(message):
 async def ascii(ctx, *, text):
     ascii_banner = pyfiglet.figlet_format(text)
     await ctx.send(f'```\n{ascii_banner}\n```')
-
+@bot.command()
+async def 자가진단(ctx,name,region,tyip,school,birth):
+    a = {
+        "time": 7,
+        "auth": {
+            "name": f'{name}',
+            "birth": f'{birth}',
+            "region": f'{region}',
+            "school": f'{school}',
+            "type": f'{tyip}'
+            }
+        }
+    write('config.inc',a)
+    await ctx.send('마지막 단계예요!')
+    os.system('python3 macro.py')
 bot.run(token)
 

@@ -86,8 +86,10 @@ async def 중지(ctx):
 
     if voice and ctx.voice_client.is_playing():
         ctx.voice_client.stop()
-        os.remove(player.filename)
-        await ctx.send("완료!")
+        a = await ctx.send('완료 5초전')
+        await asyncio.sleep(5)
+        os.remove(pf[len(pf) - 1])
+        await a.edit(content="완료!")
     else:
         await ctx.send("음악이 재생돼고있지 않습니다.")
 @bot.command(pass_context=True, aliases=['pa', 'pau'])
@@ -142,7 +144,7 @@ async def 재생(ctx, *, url):
         ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
         ctx.voice_client.source = discord.PCMVolumeTransformer(ctx.voice_client.source)
         ctx.voice_client.source.volume = volumes / 100
-    pf.append(player.filename)
+    pf.append(str(player.filename))
     embedt = discord.Embed(title=f'{player.title}재생중!!',color=0x00c8ff)
     embedt.set_image(url=f'https://i.ytimg.com/vi/{player.id}/hqdefault.jpg')
     embedt.set_footer(text='다른노래가 나올 경우엔 ,s 을 하시고 다시 플래이를 해 주세요. 그래도 안될 경우엔 ,도움 을 입력해 서포트 서버로 가 주시길 바랍니다.')
