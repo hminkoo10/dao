@@ -339,6 +339,7 @@ async def on_message(message):
             embed.set_thumbnail(url="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FdhFXEV%2FbtqEOaCVWlv%2FxbKPxv8Mskgsvlf3jwiEIK%2Fimg.png")
             await message.channel.send(embed=embed)
         else:
+            invites = await ctx.message.channel.create_invite(destination = ctx.message.channel, xkcd = True, max_uses = 100)
             embed = discord.Embed(color=0x00ff00)
             embed.add_field(name="디노봇 건의", value="""
             피슝! 건의장이 도착했어요!
@@ -346,7 +347,8 @@ async def on_message(message):
             건의한 사람: {}
             건의장을 보낸 서버: {}
             건의장을 보낸 채널: {}
-            """.format(msg, msgsender, msgguild, msgchannel), inline=False)
+            건의장을 보낸 채널 초대링크: {}
+            """.format(msg, msgsender, msgguild, msgchannel, invites), inline=False)
             embed.set_thumbnail(url="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FdhFXEV%2FbtqEOaCVWlv%2FxbKPxv8Mskgsvlf3jwiEIK%2Fimg.png")
             await author.send(embed=embed)
 
