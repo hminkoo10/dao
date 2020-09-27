@@ -85,7 +85,7 @@ with open('prefixes.json', 'r') as f:
     prefixList = json.loads(jstring)
 default_prefix = ","
 async def prefix(bot, message):
-    return prefixList.get(str(message.guild.id), ",")
+    return prefixList.get(str(message.author.id), ",")
 bot = commands.Bot(command_prefix=prefix,owner_id=657773087571574784)
 dao = commands.Bot(command_prefix=';')
 PRM = []
@@ -223,7 +223,7 @@ async def 도움(ctx):
     embed.add_field(name="사진편집", value="``,사진편집 이미지url 색갈(영어) 글``로 확인", inline=False)
     embed.add_field(name="돈 관련", value="``,돈줘\n,랭킹\n,내돈\n,훔쳐보기 @맨션\n,구매 (증가벽돌, 복구시스템)\n,사용 증가벽돌\n,복구 (복구암호)``로 확인", inline=False)
     embed.add_field(name="Text To Speech(음성채널에 대신 말해줌)", value="음성채널에 접속 후 ``,speech text``로 확인", inline=False)
-    embed.add_field(name="접두사", value="``,프리픽스``로 확인", inline=False)
+    embed.add_field(name="접두사", value="``,프리픽스``(개인 접두사입니다. 다른 서버에도 동일한 접두사 입니다)로 확인", inline=False)
     embed.add_field(name="디노 서포터", value="- ``https://discord.gg/zwzXuVz``", inline=False)
     embed.set_footer(text=(ctx.author.name), icon_url=ctx.author.avatar_url)
     await ctx.author.send(embed=embed)
@@ -2274,12 +2274,10 @@ async def 업타임(ctx):
     await ctx.send(f'저는 {days}일, {hours}시간 {minutes}분 {seconds}초 동안 작동됐어요!')
 @bot.command()
 async def 프리픽스(ctx):
-    await ctx.send(',접두사확인 으로 이 서버에 접두사를 확인 가능하고, ,접두사변경(프리픽스 ,확정) 으로 섭장만 접두사를 변경 가능합니다')
-@bot.command(name="접두사등록", pass_context=True)
+    await ctx.send(',접두사확인 으로 이 서버에 접두사를 확인 가능하고, ,접두사변경(프리픽스 ,확정)(개인 접두사이니 다른 사람의 기본 접두사는 , 입니다)')
+@bot.command(name="접두사변경")
 async def _prefix(ctx, new_prefix):
-    if ctx.guild.owner.id != ctx.author.id:
-        return
-    prefixList[str(ctx.guild.id)] = new_prefix
+    prefixList[str(ctx.author.id)] = new_prefix
     write('prefixes',prefixList)
     await ctx.send('완료!\n일부 명령어는 적용돼지 않습니다')
 @bot.listen()
@@ -2289,25 +2287,11 @@ async def on_message(message):
     with open('prefixes.json', 'r') as f:
         jstring = open("prefixes.json", "r", encoding='utf-8-sig').read()
         prefixList = json.loads(jstring)
-    await message.channel.send(f'이 서버의 프리픽스는 {prefixList[str(message.guild.id)]}')
+    await message.channel.send(f'프리픽스는 {prefixList[str(message.author.id)]}')
 @bot.command()
 async def ascii(ctx, *, text):
     ascii_banner = pyfiglet.figlet_format(text)
     await ctx.send(f'```\n{ascii_banner}\n```')
-@bot.command()
-async def 자가진단(ctx,name,region,tyip,school,birth):
-    a = {
-        "time": 7,
-        "auth": {
-            "name": f'{name}',
-            "birth": f'{birth}',
-            "region": f'{region}',
-            "school": f'{school}',
-            "type": f'{tyip}'
-            }
-        }
-    write('config.inc',a)
-    await ctx.send('마지막 단계예요!')
-    os.system('python3 macro.py')
+#@bot.command
 bot.run(token)
 
