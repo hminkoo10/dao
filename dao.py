@@ -75,7 +75,7 @@ with open('data_command_1.json', 'r') as f:
     command_1 = json.loads(jstring)
 
 
-
+typed = {}
 dict2 = {}
 tkdyd = []
 giphy_token = 'uBpiTkQ9beqY4NayRkx6sz9bMSTkRpDE'
@@ -184,7 +184,7 @@ privacy = PVCY()
 async def on_ready():
     print(f'로그인 성공: {bot.user.name}!')
     print('정상작동중...')
-    messages = ["명의 사용자와 함께", "접두어 = ,", "ver.4.6.1", "개의 서버와 함께"]
+    messages = ["명의 사용자와 함께", "접두어 = ,", "ver.4.7.1", "개의 서버와 함께"]
     while True:
         if messages[0] == '명의 사용자와 함께':
             await bot.change_presence(status=discord.Status.online, activity=discord.Game(name=f",도움 | {str(len(bot.users))}명의 사용자와 함께"))
@@ -223,6 +223,7 @@ async def 도움(ctx):
     embed.add_field(name="사진편집", value="``,사진편집 이미지url 색갈(영어) 글``로 확인", inline=False)
     embed.add_field(name="돈 관련", value="``,돈줘\n,랭킹\n,내돈\n,훔쳐보기 @맨션\n,구매 (증가벽돌, 복구시스템)\n,사용 증가벽돌\n,복구 (복구암호)``로 확인", inline=False)
     embed.add_field(name="Text To Speech(음성채널에 대신 말해줌)", value="음성채널에 접속 후 ``,speech text``로 확인", inline=False)
+    embed.add_field(name="사용량", value="``,사용량``로 확인", inline=False)
     embed.add_field(name="접두사", value="``,프리픽스``(개인 접두사입니다. 다른 서버에도 동일한 접두사 입니다)로 확인", inline=False)
     embed.add_field(name="디노 서포터", value="- ``https://discord.gg/zwzXuVz``", inline=False)
     embed.set_footer(text=(ctx.author.name), icon_url=ctx.author.avatar_url)
@@ -2292,6 +2293,45 @@ async def on_message(message):
 async def ascii(ctx, *, text):
     ascii_banner = pyfiglet.figlet_format(text)
     await ctx.send(f'```\n{ascii_banner}\n```')
-#@bot.command
+@bot.command()
+async def 사용량(ctx):
+    
+    import matplotlib.pyplot as plt
+    jstring = open("typinged.json", "r", encoding='utf-8-sig').read()
+    typed = json.loads(jstring)
+    a = list(typed.keys())
+    b = list(typed.values())
+    if len(a) >= 6:
+        c = True
+        e = a.copy()
+        while c:
+            d = str(e[0])
+            del typed[str(d)]
+            if len(e) == 6:
+                c = False
+                break
+            else:
+                del e[0]
+        write('typinged',typed)
+    a = list(typed.keys())
+    b = list(typed.values())
+    plt.plot(a,b)
+    plt.savefig(f'{ctx.author.id}.png', dpi=300)
+    plt.clf()
+    await ctx.send(file=discord.File(f'{ctx.author.id}.png'))
+@bot.listen()
+async def on_message(message):
+    import datetime
+    jstring = open("typinged.json", "r", encoding='utf-8-sig').read()
+    typed = json.loads(jstring)
+    if message.content.startswith(prefixList.get(str(message.author.id), ",")):
+        jstring = open("typinged.json", "r", encoding='utf-8-sig').read()
+        typed = json.loads(jstring)
+        try:
+            typed[str(datetime.date.today())] += 1
+        except:
+            await message.author.send('오늘의 첫 사용자 입니다!')
+            typed[str(datetime.date.today())] = 1
+        write('typinged',typed)
 bot.run(token)
 
