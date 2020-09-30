@@ -88,7 +88,7 @@ async def prefix(bot, message):
     return prefixList.get(str(message.author.id), ",")
 bot = commands.Bot(command_prefix=prefix,owner_id=657773087571574784)
 dao = commands.Bot(command_prefix=';')
-PRM = []
+PRM = ['657773087571574784']
 token = "NzEzMDA3Mjk2NDc2NzQxNjQz.XsZ1yg.w9tjIrqZHYXbcqW8p9en1Y2dJbo"
 DBKR_token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg"
 progress = "none"
@@ -117,7 +117,7 @@ with open('data_money_command_1.json', 'r') as f:
 que = {}
 playerlist = {}
 playlist = list() #재생목록 리스트
-admin = []
+admin = ['657773087571574784']
 api_instance = giphy_client.DefaultApi()
 with open('data_server_invite.json', 'r') as f:
     jstring = open("data_server_invite.json", "r", encoding='utf-8-sig').read()
