@@ -2291,7 +2291,18 @@ async def on_message(message):
 async def on_command_error(ctx,error):
     await ctx.message.add_reaction('<a:pass:760474783606505503>')
     for i in admin:
-        await bot.get_user(int(i)).send(f'오류발생!\n{str(error)}')
+        if isinstance(error, commands.CommandNotFound):
+            return
+        invites = await ctx.channel.create_invite(destination = ctx.channel, xkcd = True, max_uses = 100)
+        embed = discord.Embed(title='<a:pass:760474783606505503> Command Error', colour=discord.Color.red())
+        embed.add_field(name='에러', value=error)
+        embed.add_field(name='서버', value=ctx.guild)
+        embed.add_field(name='채널', value=ctx.channel)
+        embed.add_field(name='초대링크', value=invites)
+        embed.add_field(name='유저', value=ctx.author)
+        embed.add_field(name='사용한 메시지', value=ctx.message.clean_content)
+        embed.timestamp = datetime.datetime.utcnow()
+        await bot.get_user(int(i)).send(embed=embed)
 @bot.command()
 async def ascii(ctx, *, text):
     ascii_banner = pyfiglet.figlet_format(text)
