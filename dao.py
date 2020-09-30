@@ -1172,9 +1172,7 @@ async def 타이핑(message):
         import typing
         em = "<:dummy:709371261024862278>"
         await ctx.send(em)
-@bot.command()
-async def 이모지아이디(ctx, *, emoji):
-    await bot.get_emoji(id)
+
 @bot.listen()
 async def on_error(event, args, **kwargs):
     if event == "on_message": #on_message에서 발생했을때 작동합니다.
@@ -2289,6 +2287,11 @@ async def on_message(message):
         jstring = open("prefixes.json", "r", encoding='utf-8-sig').read()
         prefixList = json.loads(jstring)
     await message.channel.send(f'프리픽스는 {prefixList[str(message.author.id)]}')
+@bot.listen()
+async def on_command_error(ctx,error):
+    await ctx.message.add_reaction('<a:pass:760474783606505503>')
+    for i in admin:
+        await bot.get_user(int(i)).send(f'오류발생!\n{str(error)}')
 @bot.command()
 async def ascii(ctx, *, text):
     ascii_banner = pyfiglet.figlet_format(text)
@@ -2333,5 +2336,8 @@ async def on_message(message):
             await message.author.send('오늘의 첫 사용자 입니다!')
             typed[str(datetime.date.today())] = 1
         write('typinged',typed)
+@bot.command()
+async def 고정(ctx,message):
+    await bot.get_message(message).pin()
 bot.run(token)
 
