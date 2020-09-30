@@ -2301,15 +2301,15 @@ async def on_command_error(ctx,error):
         embed.add_field(name='초대링크', value=invites)
         embed.add_field(name='유저', value=ctx.author)
         embed.add_field(name='사용한 메시지', value=ctx.message.clean_content)
-        embed.timestamp = datetime.datetime.utcnow()
+        embed.timestamp = datetime.utcnow()
         await bot.get_user(int(i)).send(embed=embed)
 @bot.command()
 async def ascii(ctx, *, text):
     ascii_banner = pyfiglet.figlet_format(text)
     await ctx.send(f'```\n{ascii_banner}\n```')
-@bot.command()
+@bot.command(name="사용량")
 async def 사용량(ctx):
-    
+    print('테스트')
     import matplotlib.pyplot as plt
     jstring = open("typinged.json", "r", encoding='utf-8-sig').read()
     typed = json.loads(jstring)
