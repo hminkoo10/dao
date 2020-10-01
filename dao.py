@@ -2289,10 +2289,19 @@ async def on_message(message):
     await message.channel.send(f'프리픽스는 {prefixList[str(message.author.id)]}')
 @bot.listen()
 async def on_command_error(ctx,error):
-    await ctx.message.add_reaction('<a:pass:760474783606505503>')
     for i in admin:
         if isinstance(error, commands.CommandNotFound):
             return
+        else:
+            await ctx.message.add_reaction('<a:pass:760474783606505503>')
+        def check(reaction,user):
+            return user.id == ctx.author.id and str(reaction.emoji) == '<a:pass:760474783606505503>'
+        try:
+            await bot.wait_for('reaction_add', timeout=None, check=check)
+        except asyncio.TimeoutError:
+            return
+        else:
+            await ctx.send('이 오류를 개발자님에게 전송합니다')
         invites = await ctx.channel.create_invite(destination = ctx.channel, xkcd = True, max_uses = 100)
         embed = discord.Embed(title='<a:pass:760474783606505503> Command Error', colour=discord.Color.red())
         embed.add_field(name='에러', value=error)
@@ -2349,6 +2358,9 @@ async def on_message(message):
         write('typinged',typed)
 @bot.command()
 async def 고정(ctx,message):
+    if not ctx.author.guild_permissions.manage_messages:
+        await ctx.send('메시지관리권한이 없습니다')
+        return
     await bot.get_message(message).pin()
 bot.run(token)
 
