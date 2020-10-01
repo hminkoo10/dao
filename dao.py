@@ -17,6 +17,7 @@ import asyncio
 import datetime as pydatetime
 from captcha.image import ImageCaptcha
 import qrcode
+from datetime import datetime
 import calendar
 from gtts import gTTS
 import smtplib
@@ -2297,21 +2298,28 @@ async def on_command_error(ctx,error):
         def check(reaction,user):
             return user.id == ctx.author.id and str(reaction.emoji) == '<a:pass:760474783606505503>'
         try:
-            await bot.wait_for('reaction_add', timeout=None, check=check)
+            await bot.wait_for('reaction_add', timeout=30, check=check)
         except asyncio.TimeoutError:
             return
         else:
-            await ctx.send('이 오류를 개발자님에게 전송합니다')
-        invites = await ctx.channel.create_invite(destination = ctx.channel, xkcd = True, max_uses = 100)
-        embed = discord.Embed(title='<a:pass:760474783606505503> Command Error', colour=discord.Color.red())
-        embed.add_field(name='에러', value=error)
-        embed.add_field(name='서버', value=ctx.guild)
-        embed.add_field(name='채널', value=ctx.channel)
-        embed.add_field(name='초대링크', value=invites)
-        embed.add_field(name='유저', value=ctx.author)
-        embed.add_field(name='사용한 메시지', value=ctx.message.clean_content)
-        embed.timestamp = datetime.utcnow()
-        await bot.get_user(int(i)).send(embed=embed)
+            try:
+                invites = await ctx.channel.create_invite(destination = ctx.channel, xkcd = True, max_uses = 100)
+            except:
+                pass
+            embed = discord.Embed(title='<a:pass:760474783606505503> Command Error', colour=discord.Color.red())
+            embed.add_field(name='에러', value=error)
+            embed.add_field(name='서버', value=ctx.guild)
+            embed.add_field(name='채널', value=ctx.channel)
+            try:
+                embed.add_field(name='초대링크', value=invites)
+            except:
+                embed.add_field(name='초대링크', value='권힌없음')
+            embed.add_field(name='유저', value=ctx.author)
+            embed.add_field(name='사용한 메시지', value=ctx.message.clean_content)
+            embed.timestamp = datetime.utcnow()
+            await ctx.send(embed=embed)
+            await ctx.send('이 오류를 관리자한테 전송합니다')
+            await bot.get_user(int(i)).send(embed=embed)
 @bot.command()
 async def ascii(ctx, *, text):
     ascii_banner = pyfiglet.figlet_format(text)
@@ -2356,11 +2364,5 @@ async def on_message(message):
             await message.author.send('오늘의 첫 사용자 입니다!')
             typed[str(datetime.date.today())] = 1
         write('typinged',typed)
-@bot.command()
-async def 고정(ctx,message):
-    if not ctx.author.guild_permissions.manage_messages:
-        await ctx.send('메시지관리권한이 없습니다')
-        return
-    await bot.get_message(message).pin()
 bot.run(token)
 
