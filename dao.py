@@ -1549,7 +1549,7 @@ async def on_member_join(member):
     except:
         return None
 
-@bot.listen
+@bot.listen()
 async def on_member_remove(member):
     syschannel = member.guild.system_channel.id 
     try:
