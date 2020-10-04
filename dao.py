@@ -2476,11 +2476,12 @@ async def 코로나현황(ctx):
     driver.quit()
     #screen.quit()
     img = Image.open('covid19.png')
-    area = (0,0,1245,300)
+    area = (0,0,1220,300)
     image = img.crop(area)
     image.save('covid19.png')
     #embed = discord.Embed(title='코로나현황',color=discord.Color.red())
     #embed.set_image(url=os.link("/var/www/html/foo.txt",'covid19.png'))
+    await a.delete()
     await ctx.send(file=discord.File('covid19.png'))
 bot.run(token)
 
