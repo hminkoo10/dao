@@ -2456,6 +2456,7 @@ async def on_message(message):
         write('typinged',typed)
 @bot.command()
 async def 코로나현황(ctx):
+    a = await ctx.send(embed=discord.Embed(title='잠시만 기다려주세요. 정보를 가져오는중입니다'))
     #screen = get_screen_shot(
     #    url='https://search.naver.com/search.naver?ie=UTF-8&sm=whl_hty&query=%EC%BD%94%EB%A1%9C%EB%82%98%ED%98%84%ED%99%A9',
     #    filename='covid19.png',
@@ -2475,9 +2476,11 @@ async def 코로나현황(ctx):
     driver.quit()
     #screen.quit()
     img = Image.open('covid19.png')
-    area = (0,0,1270,300)
+    area = (0,0,1245,300)
     image = img.crop(area)
     image.save('covid19.png')
-    await ctx.send(file=discord.File('covid19.png'))
+    #embed = discord.Embed(title='코로나현황',color=discord.Color.red())
+    #embed.set_image(url=os.link("/var/www/html/foo.txt",'covid19.png'))
+    await a.edit(file=discord.File('covid19.png'))
 bot.run(token)
 
