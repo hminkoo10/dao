@@ -46,6 +46,8 @@ import shutil
 from discord.utils import get
 from os import system
 import shutil
+from subprocess import Popen, PIPE
+from selenium import webdriver
 import requests
 
 #startup_extensions = ['cogs.Test_file']
@@ -62,6 +64,8 @@ with open('data_server.json', 'r') as f:
     jstring = open("data_server.json", "r", encoding='utf-8-sig').read()
     notice = json.loads(jstring)
 channel = list()
+abspath = lambda *p: os.path.abspath(os.path.join(*p))
+ROOT = abspath(os.path.dirname(__file__))
 with open('data_learn.json', 'r') as f:
     jstring = open("data_learn.json", "r", encoding='utf-8-sig').read()
     dict1 = json.loads(jstring)
@@ -79,6 +83,9 @@ with open('data_command_1.json', 'r') as f:
 typed = {}
 dict2 = {}
 tkdyd = []
+INTENTS = discord.Intents.default()
+INTENTS.members = True
+INTENTS.presences = True
 giphy_token = 'uBpiTkQ9beqY4NayRkx6sz9bMSTkRpDE'
 check = []
 with open('prefixes.json', 'r') as f:
@@ -87,7 +94,7 @@ with open('prefixes.json', 'r') as f:
 default_prefix = ","
 async def prefix(bot, message):
     return prefixList.get(str(message.author.id), ",")
-bot = commands.Bot(command_prefix=prefix,owner_id=657773087571574784)
+bot = commands.Bot(command_prefix=prefix,owner_id=657773087571574784,intents=INTENTS)
 dao = commands.Bot(command_prefix=';')
 PRM = ['657773087571574784']
 token = "NzEzMDA3Mjk2NDc2NzQxNjQz.XsZ1yg.w9tjIrqZHYXbcqW8p9en1Y2dJbo"
@@ -127,7 +134,90 @@ with open('data_server_cool.json', 'r') as f:
     jstring = open("data_server_cool.json", "r", encoding='utf-8-sig').read()
     server_cool = json.loads(jstring)
 
+def execute_command(command):
+    result = Popen(command, shell=True, stdout=PIPE).stdout.read()
+    if len(result) > 0 and not result.isspace():
+        raise Exception(result)
 
+
+def do_screen_capturing(url, screen_path, width, height):
+    print("Capturing screen..")
+    driver = webdriver.PhantomJS()
+    # it save service log file in same directory
+    # if you want to have log file stored else where
+    # initialize the webdriver.PhantomJS() as
+    # driver = webdriver.PhantomJS(service_log_path='/var/log/phantomjs/ghostdriver.log')
+    driver.set_script_timeout(30)
+    if width and height:
+        driver.set_window_size(width, height)
+    driver.get(url)
+    driver.save_screenshot(screen_path)
+
+
+def do_crop(params):
+    print("Croping captured image..")
+    command = [
+        'convert',
+        params['screen_path'],
+        '-crop', '%sx%s+0+0' % (params['width'], params['height']),
+        params['crop_path']
+    ]
+    execute_command(' '.join(command))
+
+
+def do_thumbnail(params):
+    print("Generating thumbnail from croped captured image..")
+    command = [
+        'convert',
+        params['crop_path'],
+        '-filter', 'Lanczos',
+        '-thumbnail', '%sx%s' % (params['width'], params['height']),
+        params['thumbnail_path']
+    ]
+    execute_command(' '.join(command))
+
+
+def get_screen_shot(**kwargs):
+    url = kwargs['url']
+    width = int(kwargs.get('width', 1024)) # screen width to capture
+    height = int(kwargs.get('height', 768)) # screen height to capture
+    filename = kwargs.get('filename', 'screen.png') # file name e.g. screen.png
+    path = kwargs.get('path', ROOT) # directory path to store screen
+
+    crop = kwargs.get('crop', False) # crop the captured screen
+    crop_width = int(kwargs.get('crop_width', width)) # the width of crop screen
+    crop_height = int(kwargs.get('crop_height', height)) # the height of crop screen
+    crop_replace = kwargs.get('crop_replace', False) # does crop image replace original screen capture?
+
+    thumbnail = kwargs.get('thumbnail', False) # generate thumbnail from screen, requires crop=True
+    thumbnail_width = int(kwargs.get('thumbnail_width', width)) # the width of thumbnail
+    thumbnail_height = int(kwargs.get('thumbnail_height', height)) # the height of thumbnail
+    thumbnail_replace = kwargs.get('thumbnail_replace', False) # does thumbnail image replace crop image?
+
+    screen_path = abspath(path, filename)
+    crop_path = thumbnail_path = screen_path
+
+    if thumbnail and not crop:
+        raise Exception('Thumnail generation requires crop image, set crop=True')
+
+    do_screen_capturing(url, screen_path, width, height)
+
+    if crop:
+        if not crop_replace:
+            crop_path = abspath(path, 'crop_'+filename)
+        params = {
+            'width': crop_width, 'height': crop_height,
+            'crop_path': crop_path, 'screen_path': screen_path}
+        do_crop(params)
+
+        if thumbnail:
+            if not thumbnail_replace:
+                thumbnail_path = abspath(path, 'thumbnail_'+filename)
+            params = {
+                'width': thumbnail_width, 'height': thumbnail_height,
+                'thumbnail_path': thumbnail_path, 'crop_path': crop_path}
+            do_thumbnail(params)
+    return screen_path, crop_path, thumbnail_path
 def search_gifs(query):
     try:
         return api_instance.gifs_search_get(giphy_token, query,
@@ -300,7 +390,7 @@ async def 보유서버(ctx):
 async def 관리자보유서버(ctx):
     await ctx.channel.send(bot.guilds)
 @bot.command()
-async def 말해(ctx, *, text):
+async def 말해(ctx,*,text):
     await ctx.channel.send(f"{text}\n``{ctx.author.name}님이 따라하라고 명령했습니다``")
 @bot.command()
 async def 삭제(ctx, *, amount=999999999999999999999):
@@ -2298,7 +2388,7 @@ async def on_command_error(ctx,error):
         def check(reaction,user):
             return user.id == ctx.author.id and str(reaction.emoji) == '<a:pass:760474783606505503>'
         try:
-            await bot.wait_for('reaction_add', timeout=30, check=check)
+            await bot.wait_for('reaction_add', timeout=18, check=check)
         except asyncio.TimeoutError:
             return
         else:
@@ -2364,5 +2454,30 @@ async def on_message(message):
             await message.author.send('오늘의 첫 사용자 입니다!')
             typed[str(datetime.date.today())] = 1
         write('typinged',typed)
+@bot.command()
+async def 코로나현황(ctx):
+    #screen = get_screen_shot(
+    #    url='https://search.naver.com/search.naver?ie=UTF-8&sm=whl_hty&query=%EC%BD%94%EB%A1%9C%EB%82%98%ED%98%84%ED%99%A9',
+    #    filename='covid19.png',
+    #    crop=True, crop_replace=False,
+    #    thumbnail=True, thumbnail_replace=False,
+    #    thumbnail_width=500, thumbnail_height=50,
+    #)
+    DRIVER = 'chromedriver'
+    driver = webdriver.Chrome(DRIVER)
+    driver.get('https://search.naver.com/search.naver?ie=UTF-8&sm=whl_hty&query=%EC%BD%94%EB%A1%9C%EB%82%98%ED%98%84%ED%99%A9#')
+    #driver.get('https://coronaboard.kr')
+    driver.execute_script("window.scrollTo(1000, 1150)")
+    #driver.execute_script("window.scrollTo(0, 300)")
+    driver.execute_script('document.body.style.zoom = "180%"')
+    #driver.execute_script('document.body.style.zoom = "125%"')
+    screenshot = driver.save_screenshot('covid19.png')
+    driver.quit()
+    #screen.quit()
+    img = Image.open('covid19.png')
+    area = (0,0,1270,300)
+    image = img.crop(area)
+    image.save('covid19.png')
+    await ctx.send(file=discord.File('covid19.png'))
 bot.run(token)
 
