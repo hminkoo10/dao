@@ -2465,8 +2465,9 @@ async def 코로나현황(ctx):
     #    thumbnail_width=500, thumbnail_height=50,
     #)
     DRIVER = 'chromedriver'
+    from webdriver_manager.chrome import ChromeDriverManager
     #driver = webdriver.Chrome(DRIVER)
-    driver = webdriver.Chrome(executable_path="/home/streamsets/crawlingExe/chromedriver",chrome_options=webdriver.ChromeOptions())
+    driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(),chrome_options=webdriver.ChromeOptions())
     driver.get('https://search.naver.com/search.naver?ie=UTF-8&sm=whl_hty&query=%EC%BD%94%EB%A1%9C%EB%82%98%ED%98%84%ED%99%A9#')
     #driver.get('https://coronaboard.kr')
     driver.execute_script("window.scrollTo(1000, 1150)")
