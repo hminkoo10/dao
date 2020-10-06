@@ -2466,6 +2466,8 @@ async def 코로나현황(ctx):
     #)
     DRIVER = 'chromedriver'
     import platform
+    from selenium.webdriver.common.keys import Keys
+    from selenium.webdriver.chrome.options import Options
     #driver = webdriver.Chrome(DRIVER)
     if platform.system() == "Windows":
         driver = webdriver.Chrome()
