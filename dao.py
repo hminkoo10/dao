@@ -2477,7 +2477,7 @@ async def 코로나현황(ctx):
         driver = webdriver.Chrome(executable_path='/usr/bin/chromedriver',chrome_options=chromeOptions)
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('--disable-gpu')
-        chrome_options.add_argument("window-size=1024,768")
+        chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--no-sandbox")
     driver.get('https://search.naver.com/search.naver?ie=UTF-8&sm=whl_hty&query=%EC%BD%94%EB%A1%9C%EB%82%98%ED%98%84%ED%99%A9#')
     #driver.get('https://coronaboard.kr')
