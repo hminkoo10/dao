@@ -2470,7 +2470,9 @@ async def 코로나현황(ctx):
     if platform.system() == "Windows":
         driver = webdriver.Chrome()
     elif platform.system() == "Linux":
-        driver = webdriver.Chrome(executable_path='/usr/bin/chromedriver',chrome_options=webdriver.ChromeOptions())
+        chromeOptions = Options()
+        chromeOptions.headless = True
+        driver = webdriver.Chrome(executable_path='/usr/bin/chromedriver',chrome_options=chromeOptions)
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('--disable-gpu')
         chrome_options.add_argument("window-size=1024,768")
