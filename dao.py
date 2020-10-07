@@ -2468,32 +2468,43 @@ async def 코로나현황(ctx):
     import platform
     from selenium.webdriver.common.keys import Keys
     from selenium.webdriver.chrome.options import Options
+    import urllib.parse
+    BASE = 'https://mini.s-shot.ru/1024x0/JPEG/1024/Z100/?' # you can modify size, format, zoom
+    url = 'https://corona-live.com/'#or whatever link you need
+    url = urllib.parse.quote_plus(url) #service needs link to be joined in encoded format
+    path = 'covid19.png'
+    response = requests.get(BASE + url, stream=True)
+
+    if response.status_code == 200:
+        with open(path, 'wb') as file:
+            for chunk in response:
+                file.write(chunk)
     #driver = webdriver.Chrome(DRIVER)
-    if platform.system() == "Windows":
-        driver = webdriver.Chrome()
-    elif platform.system() == "Linux":
-        from pyvirtualdisplay import Display
-        display = Display(visible=0, size=(800, 600))
-        display.start()
-        driver = webdriver.Chrome(executable_path='/usr/bin/chromedriver',chrome_options=Options())
-        chrome_options.add_argument('--no-startup-window')
-        chrome_options.add_argument('--headless')
-        display.stop()
+    #if platform.system() == "Windows":
+        #driver = webdriver.Chrome()
+    #elif platform.system() == "Linux":
+        #from pyvirtualdisplay import Display
+        #display = Display(visible=0, size=(800, 600))
+        #display.start()
+        #driver = webdriver.Chrome(executable_path='/usr/bin/chromedriver',chrome_options=Options())
+        #chrome_options.add_argument('--no-startup-window')
+        ##chrome_options.add_argument('--headless')
+        #display.stop()
         #chrome_options.add_argument("--disable-dev-shm-usage")
         #chrome_options.add_argument("--no-sandbox")
-    driver.get('https://search.naver.com/search.naver?ie=UTF-8&sm=whl_hty&query=%EC%BD%94%EB%A1%9C%EB%82%98%ED%98%84%ED%99%A9#')
+    #driver.get('https://search.naver.com/search.naver?ie=UTF-8&sm=whl_hty&query=%EC%BD%94%EB%A1%9C%EB%82%98%ED%98%84%ED%99%A9#')
     #driver.get('https://coronaboard.kr')
-    driver.execute_script("window.scrollTo(1000, 1150)")
+    #driver.execute_script("window.scrollTo(1000, 1150)")
     #driver.execute_script("window.scrollTo(0, 300)")
-    driver.execute_script('document.body.style.zoom = "180%"')
+    #driver.execute_script('document.body.style.zoom = "180%"')
     #driver.execute_script('document.body.style.zoom = "125%"')
-    screenshot = driver.save_screenshot('covid19.png')
-    driver.quit()
+    #screenshot = driver.save_screenshot('covid19.png')
+    #driver.quit()
     #screen.quit()
-    img = Image.open('covid19.png')
-    area = (0,0,1000,300)
-    image = img.crop(area)
-    image.save('covid19.png')
+    #img = Image.open('covid19.png')
+    #area = (0,0,1000,300)
+    #image = img.crop(area)
+    #image.save('covid19.png')
     #embed = discord.Embed(title='코로나현황',color=discord.Color.red())
     #embed.set_image(url=os.link("/var/www/html/foo.txt",'covid19.png'))
     await a.delete()
