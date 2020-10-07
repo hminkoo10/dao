@@ -2473,7 +2473,7 @@ async def 코로나현황(ctx):
         driver = webdriver.Chrome()
     elif platform.system() == "Linux":
         from pyvirtualdisplay import Display
-        display = Display(visible=0, size=(800, 800))  
+        display = Display(visible=0, size=(800, 600))
         display.start()
         driver = webdriver.Chrome(executable_path='/usr/bin/chromedriver',chrome_options=Options())
         chrome_options.add_argument('--no-startup-window')
