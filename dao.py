@@ -93,7 +93,11 @@ with open('prefixes.json', 'r') as f:
     prefixList = json.loads(jstring)
 default_prefix = ","
 async def prefix(bot, message):
-    return prefixList.get(str(message.author.id), ",")
+    import platform
+    if platform.system() == "linux":
+        return prefixList.get(str(message.author.id), ",")
+    else:
+        return prefixList.get(str(message.author.id), ".")
 bot = commands.Bot(command_prefix=prefix,owner_id=657773087571574784,intents=INTENTS)
 dao = commands.Bot(command_prefix=';')
 PRM = ['657773087571574784']
@@ -2370,6 +2374,11 @@ async def _prefix(ctx, new_prefix):
     prefixList[str(ctx.author.id)] = new_prefix
     write('prefixes',prefixList)
     await ctx.send('완료!\n일부 명령어는 적용돼지 않습니다')
+@bot.command(name="접두사삭제")
+async def _prefixes(ctx):
+    del prefixList[str(ctx.author.id)]
+    write('prefixes',prefixList)
+    await ctx.send('완료!')
 @bot.listen()
 async def on_message(message):
     if not message.content.startswith(',접두사확인'):
@@ -2505,9 +2514,11 @@ async def 코로나현황(ctx):
     area = (250,150,750,500)
     image = img.crop(area)
     image.save('covid19.png')
-    #embed = discord.Embed(title='코로나현황',color=discord.Color.red())
-    #embed.set_image(url=os.link("/var/www/html/foo.txt",'covid19.png'))
+    file = discord.File("covid19.png",filename="covid19.png")
+    embed = discord.Embed(title='코로나현황',color=discord.Color.green())
+    embed.set_image(url='attachment://covid19.png')
     await a.delete()
-    await ctx.send(file=discord.File('covid19.png'))
+    await ctx.send(file=file,embed=embed)
+    #await ctx.send(file=discord.File('covid19.png'))
 bot.run(token)
 
