@@ -9,6 +9,7 @@ import random
 from shellvaluepy.info import shell
 import dbkrpy
 import turtle
+import math
 from boto3 import client
 import pyfiglet
 import turtle as t
@@ -118,6 +119,49 @@ player2_card3 = 0
 randomnum = "none"
 player1_bat = "none"
 player2_bat = "none"
+NUMBER_WORDS = {
+    0 : "zero",
+    1 : "one",
+    2 : "two",
+    3 : "three",
+    4 : "four",
+    5 : "five",
+    6 : "six",
+    7 : "seven",
+    8 : "eight",
+    9 : "nine",
+    10 : "ten",
+    11 : "eleven",
+    12 : "twelve",
+    13 : "thirteen",
+    14 : "fourteen",
+    15 : "fifteen",
+    16 : "sixteen",
+    17 : "seventeen",
+    18 : "eighteen",
+    19 : "nineteen",
+    20 : "twenty",
+    30 : "thirty",
+    40 : "forty",
+    50 : "fifty",
+    60 : "sixty",
+    70 : "seventy",
+    80 : "eighty",
+    90 : "ninety"
+}
+votekey = {
+    u':zero:': u'\U00000030\U0000FE0F\U000020E3',
+    u':one:': u'\U00000031\U0000FE0F\U000020E3',
+    u':ten:': u'\U0001F51F',
+    u':two:': u'\U00000032\U0000FE0F\U000020E3',
+    u':three:': u'\U00000033\U0000FE0F\U000020E3',
+    u':four:': u'\U00000034\U0000FE0F\U000020E3',
+    u':five:': u'\U00000035\U0000FE0F\U000020E3',
+    u':six:': u'\U00000036\U0000FE0F\U000020E3',
+    u':seven:': u'\U00000037\U0000FE0F\U000020E3',
+    u':eight:': u'\U00000038\U0000FE0F\U000020E3',
+    u':nine:': u'\U00000039\U0000FE0F\U000020E3'
+    }
 player1_result = "none"
 player2_result = "none"
 item_money = {'증가벽돌': '2500','복구시스템': '4000'}
@@ -179,6 +223,34 @@ def do_thumbnail(params):
         params['thumbnail_path']
     ]
     execute_command(' '.join(command))
+
+def inttoen(n):
+    if n == 0:
+        return "zero"
+    english_parts = []
+    ones = n % 10
+    tens = n % 100
+    hundreds = math.floor(n / 100) % 10
+    thousands = math.floor(n / 1000)
+
+    if thousands:
+        english_parts.append(int_to_english(thousands))
+        english_parts.append('thousand')
+        if not hundreds and tens:
+            english_parts.append('and')
+    if hundreds:
+        english_parts.append(NUMBER_WORDS[hundreds])
+        english_parts.append('hundred')
+        if tens:
+            english_parts.append('and')
+    if tens:
+        if tens < 20 or ones == 0:
+            english_parts.append(NUMBER_WORDS[tens])
+        else:
+            english_parts.append(NUMBER_WORDS[tens - ones])
+            english_parts.append(NUMBER_WORDS[ones])
+    return ' '.join(english_parts)
+
 
 
 def get_screen_shot(**kwargs):
@@ -2521,5 +2593,38 @@ async def 코로나현황(ctx):
     await a.delete()
     await ctx.send(file=file,embed=embed)
     #await ctx.send(file=discord.File('covid19.png'))
+@bot.command()
+async def 투표(ctx,title,*,arg):
+    now = datetime.now()
+    value = arg.split(' ')
+    if len(value) >= 9:
+        await ctx.send('투표 값은 9개까지 가능합니다')
+        return
+    embed = discord.Embed(title=title,color=discord.Color.green())
+    a = 0
+    b = list()
+    for i in value:
+        a += 1
+        c = str(a).split()
+        d = ""
+        z = ""
+        for x in c:
+            e = inttoen(int(x))
+            d = d + f':{e}: '
+            
+            z = z + f':{e}: '
+        embed.add_field(name=z, value=i, inline=False)
+        b.append(d)
+    #print(b)
+    f = ''.join(b)
+    g = f.split(' ')
+    time = str(now.year) + "년 " + str(now.month) + "월 " + str(now.day) + "일 " + str(now.hour) + "시 " + str(now.minute) + "분 " + str(now.second) + "초"
+    embed.set_footer(text="개시자 - " + str(ctx.author) + ", 개시일 - {}".format(time), icon_url=ctx.author.avatar_url)
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+    message = await ctx.send(embed=embed)
+    g.remove(g[len(g) - 1])
+    #print(g)
+    for i in g:
+        await message.add_reaction(votekey[i])
 bot.run(token)
 
