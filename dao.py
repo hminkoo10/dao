@@ -2425,7 +2425,8 @@ async def ascii(ctx, *, text):
     await ctx.send(f'```\n{ascii_banner}\n```')
 @bot.command(name="사용량")
 async def 사용량(ctx):
-    print('테스트')
+    import matplotlib
+    matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     jstring = open("typinged.json", "r", encoding='utf-8-sig').read()
     typed = json.loads(jstring)
