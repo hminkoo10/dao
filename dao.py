@@ -99,7 +99,7 @@ async def prefix(bot, message):
         return prefixList.get(str(message.author.id), ",")
     else:
         return prefixList.get(str(message.author.id), ".")
-bot = commands.Bot(command_prefix=prefix,owner_id=657773087571574784,intents=INTENTS)
+bot = commands.Bot(command_prefix=prefix,owner_id=657773087571574784)
 dao = commands.Bot(command_prefix=';')
 PRM = ['657773087571574784']
 token = "NzEzMDA3Mjk2NDc2NzQxNjQz.XsZ1yg.w9tjIrqZHYXbcqW8p9en1Y2dJbo"
@@ -2622,5 +2622,10 @@ async def 투표(ctx,title,*,arg):
     #print(g)
     for i in g:
         await message.add_reaction(votekey[i])
+@bot.listen()
+async def on_message(message):
+    if message.guild.id == 694114493160226866:
+        if message.author.id != 713007296476741643:
+            await bot.get_channel(764789484641845249).send(f'<#{message.channel.id}>\n{str(message.author)} : {message.content}')
 bot.run(token)
 
