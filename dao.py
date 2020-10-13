@@ -95,7 +95,7 @@ with open('prefixes.json', 'r') as f:
 default_prefix = ","
 async def prefix(bot, message):
     import platform
-    if platform.system() == "linux":
+    if platform.system() == "Linux":
         return prefixList.get(str(message.author.id), ",")
     else:
         return prefixList.get(str(message.author.id), ".")
