@@ -171,36 +171,5 @@ async def 반복(ctx):
             except:
                 await ctx.send('노래 재생중이 아니므로 반복을 중지합니다')
                 return
-@bot.listen()
-async def on_command_error(ctx,error):
-    for i in admin:
-        if isinstance(error, commands.CommandNotFound):
-            return
-        else:
-            await ctx.message.add_reaction('<a:pass:760474783606505503>')
-        def check(reaction,user):
-            return user.id == ctx.author.id and str(reaction.emoji) == '<a:pass:760474783606505503>'
-        try:
-            await bot.wait_for('reaction_add', timeout=18, check=check)
-        except asyncio.TimeoutError:
-            return
-        else:
-            try:
-                invites = await ctx.channel.create_invite(destination = ctx.channel, xkcd = True, max_uses = 100)
-            except:
-                pass
-            embed = discord.Embed(title='<a:pass:760474783606505503> Command Error', colour=discord.Color.red())
-            embed.add_field(name='에러', value=error)
-            embed.add_field(name='서버', value=ctx.guild)
-            embed.add_field(name='채널', value=ctx.channel)
-            try:
-                embed.add_field(name='초대링크', value=invites)
-            except:
-                embed.add_field(name='초대링크', value='권힌없음')
-            embed.add_field(name='유저', value=ctx.author)
-            embed.add_field(name='사용한 메시지', value=ctx.message.clean_content)
-            embed.timestamp = datetime.utcnow()
-            await ctx.send(embed=embed)
-            await ctx.send('이 오류를 관리자한테 전송합니다')
-            await bot.get_user(int(i)).send(embed=embed)
+
 bot.run('NzEzMDA3Mjk2NDc2NzQxNjQz.XsZ1yg.w9tjIrqZHYXbcqW8p9en1Y2dJbo')
