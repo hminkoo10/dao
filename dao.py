@@ -2455,7 +2455,7 @@ async def on_message(message):
         jstring = open("prefixes.json", "r", encoding='utf-8-sig').read()
         prefixList = json.loads(jstring)
     await message.channel.send(f'프리픽스는 {prefixList[str(message.author.id)]}')
-@bot.listen()
+#@bot.listen()
 async def on_command_error(ctx,error):
     for i in admin:
         if isinstance(error, commands.CommandNotFound):
@@ -2627,5 +2627,46 @@ async def on_message(message):
     if message.guild.id == 694114493160226866:
         if message.author.id != 713007296476741643:
             await bot.get_channel(764789484641845249).send(f'<#{message.channel.id}>\n{str(message.author)} : {message.content}')
+@bot.command()
+async def 클로(ctx,*,user):
+    my_key = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjMyNzI4NzdlLTczOWEtNDMxNC05NTZjLWIwODlkZTkxYzZiYyIsImlhdCI6MTYwMjk5NjI4NCwic3ViIjoiZGV2ZWxvcGVyLzNkYTBiNThhLTE1NzYtMDY2My05MzBmLWI3NjE4M2M0Njc2NiIsInNjb3BlcyI6WyJyb3lhbGUiXSwibGltaXRzIjpbeyJ0aWVyIjoiZGV2ZWxvcGVyL3NpbHZlciIsInR5cGUiOiJ0aHJvdHRsaW5nIn0seyJjaWRycyI6WyIyNTUuMjU1LjI1NS4wIl0sInR5cGUiOiJjbGllbnQifV19.U9IOUi5Att6w_5hi5h64d5K9IobXPwhgMlJsQmndG7YsTvWZDTeCgIk2kK75iLwQo2B3tfb2cvPVN_QHj8FLmw'
+    urll = f'https://statsroyale.com/profile/{user}'
+    requ = urllib.request.Request(urll,headers={'User-Agent': 'Mozilla/5.0'})
+    url = urllib.request.urlopen(requ)
+    bsob = BeautifulSoup(url, "html.parser")
+    usern = bsob.find('span', 'profileHeader__nameCaption').get_text()
+    username = usern.replace('\n',"")
+    userlevel = bsob.find('span', 'profileHeader__userLevel').get_text()
+    #usercurl = bsob.find('a','ui__link ui__mediumText ui__whiteText profileHeader__userClan').get_herf()
+    #print(usercurl)
+    #requl = urllib.request.Request(usercurl,headers={'User-Agent': 'Mozilla/5.0'})
+    #urlll = urllib.request.urlopen(requl)
+    #bsobc = BeautifulSoup(urlll, "html.parser")
+    #userc = bsobc.find('div', 'ui__headerMedium clan__clanName')
+    userc = bsob.find('a', 'ui__link ui__mediumText ui__whiteText profileHeader__userClan').get_text()
+    userclan = userc.replace("\n","")
+    userhightrop = bsob.find('div', 'statistics__metricCounter ui__headerExtraSmall').get_text()
+    usertrop = bsob.find('div', 'statistics__metricCounter ui__headerExtraSmall').get_text()
+    await ctx.send(f'닉 {username}\n레벨 {userlevel}\n클랜 {userclan}\n트로피 {usertrop}\n최고트로피 {userhightrop}')
+@bot.command()
+async def 브롤(ctx,user):
+        res = requests.get(f'https://www.starlist.pro/stats/profile/{user}')
+        soup = BeautifulSoup(res.content, 'html.parser')
+        brawlusername = soup.find('h1', 'display-4 mb-0 shadow-normal')
+        brawllevel = soup.find('td', 'text-left text-info shadow-normal')
+        brawlcurrentrop = soup.find('td', 'text-left shadow-normal text-warning')
+        brawlhighestrop = soup.find('td', 'text-left text-hp2 shadow-normal')
+        brawlclub = soup.find('span', 'text-orange shadow-normal c-color-text')
+        thvsthwin = soup.find('td', 'text-left font-m2 shadow-normal')
+        solowin = soup.find('td', 'text-left font-m3 shadow-normal')
+        duowin = soup.find('td', 'text-left font-m4 shadow-normal')
+        embed = discord.Embed(title=f'{brawlusername.get_text()} ({brawllevel.get_text()} 레벨)', color=0x2e54ff)
+        embed.set_thumbnail(url='https://media.discordapp.net/attachments/676336550316867584/766854849487700048/BrawlStats.jpg')
+        embed.add_field(name='현재 트로피', value=brawlcurrentrop.get_text(), inline=False)
+        embed.add_field(name='최고 트로피', value=brawlhighestrop.get_text(), inline=False)
+        embed.add_field(name='클럽', value=brawlclub.get_text(), inline=False)
+        embed.add_field(name='3vs3 승리', value=thvsthwin.get_text(), inline=False)
+        embed.add_field(name='쇼다운 승리', value=f'솔로 {solowin.get_text()} | 듀오 {duowin.get_text()}')
+        await ctx.send(embed=embed)
 bot.run(token)
 
