@@ -8,6 +8,7 @@ import os
 
 bot = commands.Bot(command_prefix=',')
 volumes = 25
+admin = ['657773087571574784']
 pf = []
 
 @bot.event
@@ -142,9 +143,64 @@ async def 재생(ctx, *, url):
         ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
         ctx.voice_client.source = discord.PCMVolumeTransformer(ctx.voice_client.source)
         ctx.voice_client.source.volume = volumes / 100
+        ctx.voice_client.source.title = url
     pf.append(player.filename)
     embedt = discord.Embed(title=f'{player.title}재생중!!',color=0x00c8ff)
     embedt.set_image(url=f'https://i.ytimg.com/vi/{player.id}/hqdefault.jpg')
     embedt.set_footer(text='다른노래가 나올 경우엔 ,s 을 하시고 다시 플래이를 해 주세요. 그래도 안될 경우엔 ,도움 을 입력해 서포트 서버로 가 주시길 바랍니다.')
     await ctx.send(embed=embedt)
+@bot.command(pass_context=True, aliases=['lo', 'loo'])
+async def 반복(ctx):
+    voice = get(bot.voice_clients, guild=ctx.guild)
+    if voice and ctx.voice_client.is_playing():
+        await ctx.message.add_reaction('<a:complete:760472208774135868>')
+        while True:
+            try:
+                if voice and ctx.voice_client.is_playing():
+                    await asyncio.sleep(4)
+                else:
+                    if not ctx.voice_client.is_connected:
+                        await ctx.send('반복이 중지되었습니다')
+                        return
+                    url = ctx.voice_client.source.title
+                    player = await YTDLSource.from_url(url)
+                    ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
+                    ctx.voice_client.source = discord.PCMVolumeTransformer(ctx.voice_client.source)
+                    ctx.voice_client.source.title = url
+                    await ctx.send('노래가 반복중입니다')
+            except:
+                await ctx.send('노래 재생중이 아니므로 반복을 중지합니다')
+                return
+@bot.listen()
+async def on_command_error(ctx,error):
+    for i in admin:
+        if isinstance(error, commands.CommandNotFound):
+            return
+        else:
+            await ctx.message.add_reaction('<a:pass:760474783606505503>')
+        def check(reaction,user):
+            return user.id == ctx.author.id and str(reaction.emoji) == '<a:pass:760474783606505503>'
+        try:
+            await bot.wait_for('reaction_add', timeout=18, check=check)
+        except asyncio.TimeoutError:
+            return
+        else:
+            try:
+                invites = await ctx.channel.create_invite(destination = ctx.channel, xkcd = True, max_uses = 100)
+            except:
+                pass
+            embed = discord.Embed(title='<a:pass:760474783606505503> Command Error', colour=discord.Color.red())
+            embed.add_field(name='에러', value=error)
+            embed.add_field(name='서버', value=ctx.guild)
+            embed.add_field(name='채널', value=ctx.channel)
+            try:
+                embed.add_field(name='초대링크', value=invites)
+            except:
+                embed.add_field(name='초대링크', value='권힌없음')
+            embed.add_field(name='유저', value=ctx.author)
+            embed.add_field(name='사용한 메시지', value=ctx.message.clean_content)
+            embed.timestamp = datetime.utcnow()
+            await ctx.send(embed=embed)
+            await ctx.send('이 오류를 관리자한테 전송합니다')
+            await bot.get_user(int(i)).send(embed=embed)
 bot.run('NzEzMDA3Mjk2NDc2NzQxNjQz.XsZ1yg.w9tjIrqZHYXbcqW8p9en1Y2dJbo')
