@@ -102,7 +102,8 @@ async def prefix(bot, message):
 bot = commands.Bot(command_prefix=prefix,owner_id=657773087571574784)
 dao = commands.Bot(command_prefix=';')
 PRM = ['657773087571574784']
-token = "NzEzMDA3Mjk2NDc2NzQxNjQz.XsZ1yg.w9tjIrqZHYXbcqW8p9en1Y2dJbo"
+jstring = open("token.json", "r", encoding='utf-8-sig').read()
+token = json.loads(jstring)
 DBKR_token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg"
 progress = "none"
 player1 = "none"
@@ -2615,7 +2616,7 @@ async def 투표(ctx,title,*,arg):
     f = ''.join(b)
     g = f.split(' ')
     time = str(now.year) + "년 " + str(now.month) + "월 " + str(now.day) + "일 " + str(now.hour) + "시 " + str(now.minute) + "분 " + str(now.second) + "초"
-    embed.set_footer(text="개시자 - " + str(ctx.author) + ", 개시일 - {}".format(time), icon_url=ctx.author.avatar_url)
+    embed.set_footer(text="게시자 - " + str(ctx.author) + ", 게시일 - {}".format(time), icon_url=ctx.author.avatar_url)
     embed.set_thumbnail(url=ctx.author.avatar_url)
     message = await ctx.send(embed=embed)
     g.remove(g[len(g) - 1])

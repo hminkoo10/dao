@@ -5,7 +5,7 @@ from youtube_search import YoutubeSearch
 from discord.utils import get
 import youtube_dl
 import os
-
+import json
 bot = commands.Bot(command_prefix=',')
 volumes = 25
 admin = ['657773087571574784']
@@ -30,9 +30,9 @@ ytdl_format_options = {
 }
 
 ffmpeg_options = {'options': '-vn'}
-
+jstring = open("token.json", "r", encoding='utf-8-sig').read()
+token = json.loads(jstring)
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
-
 class YTDLSource(discord.PCMVolumeTransformer):
     def __init__(self, source, *, data, volume=0.5):
         super().__init__(source, volume)
@@ -156,7 +156,7 @@ async def 반복(ctx):
         await ctx.message.add_reaction('<a:complete:760472208774135868>')
         while True:
             try:
-                if voice and ctx.voice_client.is_playing():
+                if voice and ctx.voice_client.is_playing() or voice and ctx.voice_client.is_paused():
                     await asyncio.sleep(4)
                 else:
                     if not ctx.voice_client.is_connected:
@@ -172,4 +172,4 @@ async def 반복(ctx):
                 await ctx.send('노래 재생중이 아니므로 반복을 중지합니다')
                 return
 
-bot.run('NzEzMDA3Mjk2NDc2NzQxNjQz.XsZ1yg.w9tjIrqZHYXbcqW8p9en1Y2dJbo')
+bot.run(token)
