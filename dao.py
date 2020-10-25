@@ -2456,7 +2456,7 @@ async def on_message(message):
         jstring = open("prefixes.json", "r", encoding='utf-8-sig').read()
         prefixList = json.loads(jstring)
     await message.channel.send(f'프리픽스는 {prefixList[str(message.author.id)]}')
-#@bot.listen()
+@bot.listen()
 async def on_command_error(ctx,error):
     for i in admin:
         if isinstance(error, commands.CommandNotFound):
