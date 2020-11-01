@@ -2669,5 +2669,26 @@ async def 브롤(ctx,user):
         embed.add_field(name='3vs3 승리', value=thvsthwin.get_text(), inline=False)
         embed.add_field(name='쇼다운 승리', value=f'솔로 {solowin.get_text()} | 듀오 {duowin.get_text()}')
         await ctx.send(embed=embed)
+@bot.command()
+async def 음악다운(ctx,ids):
+    if int(len(str(ids))) != 6:
+        if ids.find('http') == '-1':
+            await ctx.send('www.newgrounds.com/audio 에서 노래 아이디(링크에 있음)나 링크(http://포함)를 찾아주세요')
+            return
+    if ids.find('http') == '-1':
+        try:
+            a = int(ids)
+        except:
+            await ctx.send('www.newgrounds.com/audio 에서 노래 아이디(링크에 있음)나 링크(http://포함)를 찾아주세요')
+            return
+        url = f'https://www.newgrounds.com/audio/download/{ids}'
+    else:
+        a = url[-6:]
+        url = f'https://www.newgrounds.com/audio/download/{a}'
+    print(url)
+    response = requests.get(url, stream=True)
+    with open(f'{ctx.author.id}.mp3', 'wb') as out_file:
+        shutil.copyfileobj(response.raw, out_file)
+    await ctx.send(file=discord.File(f'{ctx.author.id}.mp3'))
 bot.run(token)
 
