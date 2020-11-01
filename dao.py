@@ -1431,16 +1431,25 @@ async def id확인(ctx, il: int):
     await ctx.send(str(imm))
 @bot.command()
 async def 학습(ctx, one, *, two):
-    await ctx.send('디노봇의 새로운 개발으로 인해 잠시 학습기능이 통제됩니다')
+    await ctx.send('디노봇 오류로 학습기능 통제')
     return
-    #dict1[one] = two + '\n' f'``{ctx.author}님이 알려주셨어요!``'
-    #file = open("학습기록.txt", "a+")
-    #file.write(str("\n") + str(ctx.author) + str(":") + str(one) + str(":") + str(two))
-    #file.close
-    #with open("data_learn.json", "w+", encoding='utf-8-sig') as f:
-    #    json_string = json.dump(dict1, f, indent=2, ensure_ascii=False)
-    #await ctx.send("json데이터 저장중")
-    #await ctx.send("OK")
+    a = await ctx.send('Please wait.....')
+    b = list()
+    for i in bot.commands:
+        b.append(str(i))
+    if one in b and not str(ctx.author.id) in admin:
+        await ctx.send('디노봇 커맨드 안에 가르칠 내용이 있습니다')
+        return
+    else:
+        pass
+    dict1[one] = two + '\n' f'``{ctx.author}님이 알려주셨어요!``'
+    file = open("학습기록.txt", "a+")
+    file.write(str("\n") + str(ctx.author) + str(":") + str(one) + str(":") + str(two))
+    file.close
+    with open("data_learn.json", "w+", encoding='utf-8-sig') as f:
+        json_string = json.dump(dict1, f, indent=2, ensure_ascii=False)
+    await a.edit(content="json데이터 저장중")
+    await a.edit(content="OK")
 @bot.listen()
 async def on_message(message):
     if message.content.startswith(","):
@@ -2692,5 +2701,9 @@ async def 음악다운(ctx,ids):
     with open(f'{ctx.author.id}.mp3', 'wb') as out_file:
         shutil.copyfileobj(response.raw, out_file)
     await ctx.send(file=discord.File(f'{ctx.author.id}.mp3'))
+@bot.command()
+async def 커맨드리스트테스트(ctx):
+    for i in bot.commands:
+        print(str(i))
 bot.run(token)
 
