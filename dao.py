@@ -1431,14 +1431,16 @@ async def id확인(ctx, il: int):
     await ctx.send(str(imm))
 @bot.command()
 async def 학습(ctx, one, *, two):
-    dict1[one] = two + '\n' f'``{ctx.author}님이 알려주셨어요!``'
-    file = open("학습기록.txt", "a+")
-    file.write(str("\n") + str(ctx.author) + str(":") + str(one) + str(":") + str(two))
-    file.close
-    with open("data_learn.json", "w+", encoding='utf-8-sig') as f:
-        json_string = json.dump(dict1, f, indent=2, ensure_ascii=False)
-    await ctx.send("json데이터 저장중")
-    await ctx.send("OK")
+    await ctx.send('디노봇의 새로운 개발으로 인해 잠시 학습기능이 통제됩니다')
+    return
+    #dict1[one] = two + '\n' f'``{ctx.author}님이 알려주셨어요!``'
+    #file = open("학습기록.txt", "a+")
+    #file.write(str("\n") + str(ctx.author) + str(":") + str(one) + str(":") + str(two))
+    #file.close
+    #with open("data_learn.json", "w+", encoding='utf-8-sig') as f:
+    #    json_string = json.dump(dict1, f, indent=2, ensure_ascii=False)
+    #await ctx.send("json데이터 저장중")
+    #await ctx.send("OK")
 @bot.listen()
 async def on_message(message):
     if message.content.startswith(","):
