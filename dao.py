@@ -1431,12 +1431,13 @@ async def id확인(ctx, il: int):
     await ctx.send(str(imm))
 @bot.command()
 async def 학습(ctx, one, *, two):
-    await ctx.send('디노봇 오류로 학습기능 통제')
-    return
+    #await ctx.send('디노봇 오류로 학습기능 통제')
+    #return
     a = await ctx.send('Please wait.....')
     b = list()
     for i in bot.commands:
         b.append(str(i))
+        await asyncio.sleep(0.05)
     if one in b and not str(ctx.author.id) in admin:
         await ctx.send('디노봇 커맨드 안에 가르칠 내용이 있습니다')
         return
