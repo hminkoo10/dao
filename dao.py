@@ -2711,7 +2711,7 @@ async def 검사(ctx,*,text):
     v = list(result['words'].values())
     embed = discord.Embed(title='검사결과',description=f'{result["errors"]}개 오류',color=discord.Color.green())
     embed.add_field(name='검사문장',value=f'```\n{result["original"]}\n```',inline=False)
-    embed.add_field(name='고친문장',value=f'고친문장 :\n```\n{result["checked"]}\n```',inline=False)
+    embed.add_field(name='고친문장',value=f'```\n{result["checked"]}\n```',inline=False)
     embed.add_field(name='==================================',value='틀린 단어 갯수',inline=False)
     a = 0
     for i in k:
