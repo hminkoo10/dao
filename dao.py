@@ -10,6 +10,7 @@ from shellvaluepy.info import shell
 import dbkrpy
 import turtle
 import math
+from hanspell import spell_checker
 from boto3 import client
 import pyfiglet
 import turtle as t
@@ -101,7 +102,7 @@ async def prefix(bot, message):
         return prefixList.get(str(message.author.id), ".")
 bot = commands.Bot(command_prefix=prefix,owner_id=657773087571574784)
 dao = commands.Bot(command_prefix=';')
-PRM = ['657773087571574784']
+PRM = ['657773087571574784','712290125505363980']
 jstring = open("token.json", "r", encoding='utf-8-sig').read()
 token = json.loads(jstring)
 DBKR_token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg"
@@ -392,6 +393,7 @@ async def 도움(ctx):
     embed.add_field(name="돈 관련", value="``,돈줘\n,랭킹\n,내돈\n,훔쳐보기 @맨션\n,구매 (증가벽돌, 복구시스템)\n,사용 증가벽돌\n,복구 (복구암호)``로 확인", inline=False)
     embed.add_field(name="Text To Speech(음성채널에 대신 말해줌)", value="음성채널에 접속 후 ``,speech text``로 확인", inline=False)
     embed.add_field(name="사용량", value="``,사용량``로 확인", inline=False)
+    embed.add_field(name="맞춤법확인", value="``,확인 <단어>``로 확인", inline=False)
     embed.add_field(name="접두사", value="``,프리픽스``(개인 접두사입니다. 다른 서버에도 동일한 접두사 입니다)로 확인", inline=False)
     embed.add_field(name="디노 서포터", value="- ``https://discord.gg/zwzXuVz``", inline=False)
     embed.set_footer(text=(ctx.author.name), icon_url=ctx.author.avatar_url)
@@ -2703,8 +2705,18 @@ async def 음악다운(ctx,ids):
         shutil.copyfileobj(response.raw, out_file)
     await ctx.send(file=discord.File(f'{ctx.author.id}.mp3'))
 @bot.command()
-async def 커맨드리스트테스트(ctx):
-    for i in bot.commands:
-        print(str(i))
+async def 검사(ctx,*,text):
+    result = spell_checker.check(text).as_dict()
+    k = list(result['words'].keys())
+    v = list(result['words'].values())
+    embed = discord.Embed(title='검사결과',description=f'{result["errors"]}개 오류',color=discord.Color.green())
+    embed.add_field(name='검사문장',value=f'```\n{result["original"]}\n```',inline=False)
+    embed.add_field(name='고친문장',value=f'고친문장 :\n```\n{result["checked"]}\n```',inline=False)
+    embed.add_field(name='==================================',value='틀린 단어 갯수',inline=False)
+    a = 0
+    for i in k:
+        embed.add_field(name=i,value=f'{v[a]}개',inline=False)
+        a += 1
+    await ctx.send(embed=embed)
 bot.run(token)
 
