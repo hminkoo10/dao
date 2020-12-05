@@ -100,7 +100,7 @@ async def prefix(bot, message):
         return prefixList.get(str(message.author.id), ",")
     else:
         return prefixList.get(str(message.author.id), ".")
-bot = commands.Bot(command_prefix=prefix,owner_id=657773087571574784)
+bot = commands.Bot(command_prefix=prefix,owner_id=712290125505363980)
 dao = commands.Bot(command_prefix=';')
 PRM = ['657773087571574784','712290125505363980']
 jstring = open("token.json", "r", encoding='utf-8-sig').read()
@@ -175,7 +175,7 @@ with open('data_money_command_1.json', 'r') as f:
 que = {}
 playerlist = {}
 playlist = list() #재생목록 리스트
-admin = ['657773087571574784']
+admin = ['657773087571574784','712290125505363980']
 api_instance = giphy_client.DefaultApi()
 with open('data_server_invite.json', 'r') as f:
     jstring = open("data_server_invite.json", "r", encoding='utf-8-sig').read()
@@ -473,7 +473,7 @@ async def 말해(ctx,*,text):
     await ctx.channel.send(f"{text}\n``{ctx.author.name}님이 따라하라고 명령했습니다``")
 @bot.command()
 async def 삭제(ctx, *, amount=999999999999999999999):
-    if ctx.author.guild_permissions.manage_messages:
+    if ctx.author.guild_permissions.manage_messages or str(ctx.author.id) in admin:
         await ctx.channel.purge(limit=amount)
     else:
         await ctx.channel.send('메시지 관리권한이 없습니다(요구권한 : 메시지관리 권한)')
