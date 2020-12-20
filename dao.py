@@ -2298,11 +2298,11 @@ async def 디엠공지테스트(ctx, pass_context=True):
 async def 개발자등록(ctx, *, pvcy):
     global privacy
     if pvcy == privacy:
-        msg = await ctx.send('<@657773087571574784>님의 동의가 필요합니다.')
+        msg = await ctx.send('<@712290125505363980>님의 동의가 필요합니다.')
         await msg.add_reaction('✅')
         await msg.add_reaction('🚫')
         def check(reaction, user):
-            return reaction.emoji == '✅' and user.id == 657773087571574784
+            return reaction.emoji == '✅' and user.id == 712290125505363980
         try:
             await bot.wait_for('reaction_add',timeout=300,check=check)
         except asyncio.TimeoutError:
