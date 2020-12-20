@@ -2317,17 +2317,17 @@ async def 개발자등록(ctx, *, pvcy):
 @bot.command()
 async def 개발자암호(ctx):
     global privacy
-    if ctx.author.id == 657773087571574784:
+    if ctx.author.id == 712290125505363980:
         await ctx.author.send(f'인증 암호는 {privacy} 입니다.')
 @bot.command()
 async def 암호초기화(ctx):
     global privacy
-    if ctx.author.id == 657773087571574784:
+    if ctx.author.id == 712290125505363980:
         privacy = PVCY()
         await ctx.send('완료')
 @bot.command()
 async def 개발자초기화(ctx):
-    if ctx.author.id == 657773087571574784:
+    if ctx.author.id == 712290125505363980:
         admin.clear()
         PRM.clear()
         await ctx.send('완료')
@@ -2713,5 +2713,10 @@ async def 검사(ctx,*,text):
     embed.add_field(name='검사문장',value=f'```\n{result["original"]}\n```',inline=False)
     embed.add_field(name='고친문장',value=f'```\n{result["checked"]}\n```',inline=False)
     await ctx.send(embed=embed)
+@bot.command()
+async def flasktest(ctx,*,text):
+    #text = test
+    pass
+    
 bot.run(token)
 
