@@ -102,7 +102,7 @@ async def prefix(bot, message):
         return prefixList.get(str(message.author.id), ".")
 bot = commands.Bot(command_prefix=prefix,owner_id=712290125505363980)
 dao = commands.Bot(command_prefix=';')
-PRM = ['657773087571574784','712290125505363980']
+PRM = ['657773087571574784','712290125505363980', '247305812123320321']
 jstring = open("token.json", "r", encoding='utf-8-sig').read()
 token = json.loads(jstring)
 DBKR_token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxMzAwNzI5NjQ3Njc0MTY0MyIsImlhdCI6MTU5MTEwNDk5MywiZXhwIjoxNjIyNjYyNTkzfQ.DusY04FtN-Gry0H9WP-pnLFqWkTg1TuKAyM9fzklDJedqjKk4VIpgk6SC70p1xZfQ_e08kOE_sGS-Vd5alI0U3JO3a_l2VIGZFAno2f79jU4ZRTbLKKKCEhY8eLGQ__rAawAbV8vgXrS0HWtM3fQEE23ud7DriLJAuRjn9Cgvjg"
