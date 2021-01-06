@@ -100,7 +100,7 @@ async def prefix(bot, message):
         return prefixList.get(str(message.author.id), ",")
     else:
         return prefixList.get(str(message.author.id), ".")
-bot = commands.Bot(command_prefix=prefix,owner_id=712290125505363980)
+bot = commands.Bot(command_prefix=prefix,owner_id=['712290125505363980', '247305812123320321']
 dao = commands.Bot(command_prefix=';')
 PRM = ['657773087571574784','712290125505363980', '247305812123320321']
 jstring = open("token.json", "r", encoding='utf-8-sig').read()
