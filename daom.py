@@ -6,7 +6,7 @@ from discord.utils import get
 import youtube_dl
 import os
 import json
-bot = commands.Bot(command_prefix=',')
+bot = commands.Bot(command_prefix=commands.when_mentioned_or(','))
 volumes = 25
 admin = ['657773087571574784']
 pf = []

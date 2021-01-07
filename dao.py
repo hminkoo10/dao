@@ -50,6 +50,7 @@ from os import system
 import shutil
 from subprocess import Popen, PIPE
 from selenium import webdriver
+from pretty_help import PrettyHelp,Navigation
 import requests
 
 #startup_extensions = ['cogs.Test_file']
@@ -102,6 +103,8 @@ async def prefix(bot, message):
         return prefixList.get(str(message.author.id), ".")
 bot = commands.Bot(command_prefix=prefix,owner_id=712290125505363980)
 dao = commands.Bot(command_prefix=';')
+nav = Navigation('⬅️','➡️','❌')
+bot.help_command = PrettyHelp(navigation=nav,active_time=300, no_category="다음 페이지로 넘겨주세요!", index_title="디노봇 도움말")
 PRM = ['657773087571574784','712290125505363980']
 jstring = open("token.json", "r", encoding='utf-8-sig').read()
 token = json.loads(jstring)
@@ -2717,6 +2720,11 @@ async def 검사(ctx,*,text):
 async def flasktest(ctx,*,text):
     #text = test
     pass
-    
+@bot.command(name='도움말')
+async def help_(ctx):
+    try:
+        await ctx.author.send_help()
+    except:
+        await ctx.send_help()
 bot.run(token)
 
